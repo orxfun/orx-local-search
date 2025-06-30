@@ -1,23 +1,22 @@
+use crate::{objective_value::ObjectiveValue, problem::Problem};
 use std::cmp::Ordering;
-
-use crate::{
-    objective_value::ObjectiveValue,
-    problem::{MoveOf, ObjectiveUnitOf, Problem},
-};
 
 pub struct CandidateMove<P>
 where
     P: Problem,
 {
-    pub r#move: MoveOf<P>,
-    pub objective_value: ObjectiveUnitOf<P>,
+    pub r#move: P::Move,
+    pub objective_value: <P::ObjectiveValue as ObjectiveValue>::Unit,
 }
 
 impl<P> CandidateMove<P>
 where
     P: Problem,
 {
-    pub fn new(r#move: MoveOf<P>, objective_value: ObjectiveUnitOf<P>) -> Self {
+    pub fn new(
+        r#move: P::Move,
+        objective_value: <P::ObjectiveValue as ObjectiveValue>::Unit,
+    ) -> Self {
         Self {
             r#move,
             objective_value,

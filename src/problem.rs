@@ -9,7 +9,3 @@ pub trait Problem {
 
     fn neighborhood(solution: &Self::Solution) -> impl Iterator<Item = Self::Move>;
 }
-
-pub type ObjectiveUnitOf<P> = <<P as Problem>::ObjectiveValue as ObjectiveValue>::Unit;
-
-pub type MoveOf<P> = <P as Problem>::Move;
