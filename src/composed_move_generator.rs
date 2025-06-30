@@ -27,11 +27,11 @@ where
 {
     type X = ComposedCriteria<X1, X2>;
 
-    fn moves<'a>(
+    fn moves<'a, 'b, 'c>(
         &'a mut self,
-        solution: &'a SolutionOf<Self::X>,
-        (input1, input2): InputOf<'a, Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
+        solution: &'b SolutionOf<Self::X>,
+        (input1, input2): InputOf<'c, Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a + 'b + 'c {
         let moves1 = self.0.moves(solution, input1);
         let moves2 = self.1.moves(solution, input2);
         SortedIntersectingIter::new(moves1, moves2)

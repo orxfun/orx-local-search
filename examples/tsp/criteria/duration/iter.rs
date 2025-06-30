@@ -1,3 +1,5 @@
+use std::marker::PhantomData;
+
 use crate::{
     criteria::duration::input::DurationMatrix, neighborhood::AllInsertMovesIter, problem::Tsp,
     tour::Tour,
@@ -5,16 +7,26 @@ use crate::{
 use orx_iterable::Collection;
 use orx_local_search::CandidateMove;
 
-pub struct DurationMoves<'a> {
-    tour: &'a Tour,
-    duration_matrix: &'a DurationMatrix,
+pub struct DurationMoves<'a, 'b, 'c>
+where
+    'a: 'b + 'c,
+    'b: 'c,
+{
+    p: PhantomData<&'a ()>,
+    tour: &'b Tour,
+    duration_matrix: &'c DurationMatrix,
     iter: AllInsertMovesIter,
 }
 
-impl<'a> DurationMoves<'a> {
-    pub fn new(tour: &'a Tour, duration_matrix: &'a DurationMatrix) -> Self {
+impl<'a, 'b, 'c> DurationMoves<'a, 'b, 'c>
+where
+    'a: 'b + 'c,
+    'b: 'c,
+{
+    pub fn new(tour: &'a Tour, duration_matrix: &'b DurationMatrix) -> Self {
         let iter = AllInsertMovesIter::new(tour.iter().len());
         Self {
+            p: PhantomData,
             tour,
             duration_matrix,
             iter,
@@ -22,7 +34,7 @@ impl<'a> DurationMoves<'a> {
     }
 }
 
-impl Iterator for DurationMoves<'_> {
+impl<'a, 'b, 'c> Iterator for DurationMoves<'a, 'b, 'c> {
     type Item = CandidateMove<Tsp>;
 
     fn next(&mut self) -> Option<Self::Item> {

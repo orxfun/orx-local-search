@@ -1,5 +1,5 @@
 use crate::{
-    MoveGenerator, ObjectiveValue, Problem,
+    CandidateMove, MoveGenerator, ObjectiveValue, Problem,
     criterion::{CandidateMoveOf, InputOf, SolutionOf},
     empty_criterion::criterion::EmptyCriterion,
 };
@@ -16,13 +16,13 @@ impl<P: Problem> Default for NeighborhoodGenerator<P> {
 impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
     type X = EmptyCriterion<P>;
 
-    fn moves<'a>(
-        &mut self,
-        solution: &'a SolutionOf<Self::X>,
-        _: InputOf<'a, Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
-        P::neighborhood(solution).map(|mv| {
-            crate::CandidateMove::new(mv, <P::ObjectiveValue as ObjectiveValue>::identity())
+    fn moves<'a, 'b, 'c>(
+        &'a mut self,
+        solution: &'b SolutionOf<Self::X>,
+        _: InputOf<'c, Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a + 'b + 'c {
+        P::neighborhood(solution).map(move |mv| {
+            CandidateMove::new(mv, <P::ObjectiveValue as ObjectiveValue>::identity())
         })
     }
 }
