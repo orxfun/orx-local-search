@@ -1,5 +1,5 @@
 mod criterion;
 mod input;
 mod iter;
-mod move_builder;
+mod move_generator;
 pub mod tests;

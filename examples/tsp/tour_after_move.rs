@@ -1,4 +1,4 @@
-use crate::{all_moves::AllInsertMovesIter, insert_move::InsertMove, tour::Tour};
+use crate::{insert_move::InsertMove, neighborhood::AllInsertMovesIter, tour::Tour};
 use orx_iterable::Collection;
 use orx_local_search::Move;
 use std::cmp::Ordering;

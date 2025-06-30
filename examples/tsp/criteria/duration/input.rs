@@ -1,5 +1,5 @@
 use crate::{
-    all_moves::AllInsertMovesIter, insert_move::InsertMove, tour::Tour,
+    neighborhood::AllInsertMovesIter, insert_move::InsertMove, tour::Tour,
     tour_after_move::TourAfterInsertIter,
 };
 use orx_iterable::Collection;

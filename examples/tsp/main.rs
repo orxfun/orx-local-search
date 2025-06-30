@@ -1,4 +1,4 @@
-mod all_moves;
+mod neighborhood;
 mod criteria;
 mod insert_move;
 mod problem;

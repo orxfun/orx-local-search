@@ -1,5 +1,5 @@
 use crate::{
-    all_moves::AllInsertMovesIter, criteria::duration::input::DurationMatrix, problem::Tsp,
+    neighborhood::AllInsertMovesIter, criteria::duration::input::DurationMatrix, problem::Tsp,
     tour::Tour,
 };
 use orx_local_search::CandidateMove;

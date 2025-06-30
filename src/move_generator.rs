@@ -9,5 +9,3 @@ pub trait MoveGenerator {
         input: InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>>;
 }
-
-pub type ProblemOf<M> = <<M as MoveGenerator>::X as Criterion>::Problem;
