@@ -1,6 +1,12 @@
-use crate::{all_moves::test_all_insert_moves_iter, insert_move::test_insert_move};
+use crate::{
+    all_moves::test_all_insert_moves_iter, criteria::duration, insert_move::test_insert_move,
+    tour_after_move::test_tour_after_move,
+};
 
 pub fn run() {
     test_insert_move();
     test_all_insert_moves_iter();
+    test_tour_after_move();
+
+    duration::tests::run();
 }

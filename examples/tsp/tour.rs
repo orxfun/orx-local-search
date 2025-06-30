@@ -3,9 +3,13 @@ use std::ops::{Index, IndexMut};
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Tour(Vec<usize>);
 
-impl From<Vec<usize>> for Tour {
-    fn from(sequence: Vec<usize>) -> Self {
+impl Tour {
+    pub fn new(sequence: Vec<usize>) -> Self {
         Self(sequence)
+    }
+
+    pub fn get(&self, position: usize) -> Option<usize> {
+        self.0.get(position).copied()
     }
 }
 

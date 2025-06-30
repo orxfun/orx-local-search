@@ -10,13 +10,13 @@ pub struct DurationMoves<'a> {
     iter: AllInsertMovesIter,
 }
 
-impl Iterator for DurationMoves<'_> {
-    type Item = CandidateMove<Tsp>;
+// impl Iterator for DurationMoves<'_> {
+//     type Item = CandidateMove<Tsp>;
 
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.next().map(|mv| {
-            let cost = self.duration_matrix.tour_cost(self.tour, &mv);
-            CandidateMove::new(mv, cost)
-        })
-    }
-}
+//     fn next(&mut self) -> Option<Self::Item> {
+//         self.iter.next().map(|mv| {
+//             let cost = self.duration_matrix.tour_cost(self.tour, &mv);
+//             CandidateMove::new(mv, cost)
+//         })
+//     }
+// }

@@ -2,10 +2,10 @@ use crate::tour::Tour;
 use orx_local_search::Move;
 use std::cmp::Ordering;
 
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone, Copy)]
 pub struct InsertMove {
-    current_position: usize,
-    target_position: usize,
+    pub current_position: usize,
+    pub target_position: usize,
 }
 
 impl InsertMove {
@@ -43,27 +43,27 @@ impl Move for InsertMove {
 }
 
 pub fn test_insert_move() {
-    let tour = Tour::from((0..7).collect::<Vec<_>>());
+    let tour = Tour::new((0..7).collect::<Vec<_>>());
     let mv = InsertMove {
         current_position: 2,
         target_position: 2,
     };
     let tour = mv.apply(tour);
-    assert_eq!(tour, Tour::from((0..7).collect::<Vec<_>>()));
+    assert_eq!(tour, Tour::new((0..7).collect::<Vec<_>>()));
 
-    let tour = Tour::from((0..7).collect::<Vec<_>>());
+    let tour = Tour::new((0..7).collect::<Vec<_>>());
     let mv = InsertMove {
         current_position: 1,
         target_position: 4,
     };
     let tour = mv.apply(tour);
-    assert_eq!(tour, Tour::from(vec![0, 2, 3, 4, 1, 5, 6]));
+    assert_eq!(tour, Tour::new(vec![0, 2, 3, 4, 1, 5, 6]));
 
-    let tour = Tour::from((0..7).collect::<Vec<_>>());
+    let tour = Tour::new((0..7).collect::<Vec<_>>());
     let mv = InsertMove {
         current_position: 4,
         target_position: 1,
     };
     let tour = mv.apply(tour);
-    assert_eq!(tour, Tour::from(vec![0, 4, 1, 2, 3, 5, 6]));
+    assert_eq!(tour, Tour::new(vec![0, 4, 1, 2, 3, 5, 6]));
 }
