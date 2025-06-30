@@ -8,6 +8,7 @@ mod r#move;
 mod move_generator;
 mod objective_value;
 mod problem;
+mod result;
 mod sorted_intersecting_iterator;
 
 pub use candidate_move::CandidateMove;
