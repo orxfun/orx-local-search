@@ -16,11 +16,11 @@ impl<P: Problem> Default for NeighborhoodGenerator<P> {
 impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
     type X = EmptyCriterion<P>;
 
-    fn moves<'a, 'b, 'c>(
-        &'a mut self,
-        solution: &'b SolutionOf<Self::X>,
-        _: InputOf<'c, Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a + 'b + 'c {
+    fn moves<'s, 'i>(
+        &mut self,
+        solution: &'s SolutionOf<Self::X>,
+        _: InputOf<'i, Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + '_ + 's + 'i {
         P::neighborhood(solution).map(move |mv| {
             CandidateMove::new(mv, <P::ObjectiveValue as ObjectiveValue>::identity())
         })
