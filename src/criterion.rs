@@ -8,4 +8,6 @@ pub trait Criterion {
     type Value;
 
     type MoveGenerator: MoveGenerator<X = Self>;
+
+    type AllMovesGenerator: MoveGenerator<X = Self>;
 }
