@@ -1,16 +1,19 @@
-use crate::{tour::Tour, tour_cost::TourCost};
+use crate::{
+    all_moves::AllInsertMovesIter, insert_move::InsertMove, tour::Tour, tour_cost::TourCost,
+};
+use orx_iterable::Collection;
 use orx_local_search::Problem;
 
 pub struct Tsp;
 
-// impl Problem for Tsp {
-//     type Solution = Tour;
+impl Problem for Tsp {
+    type Solution = Tour;
 
-//     type ObjectiveValue = TourCost;
+    type ObjectiveValue = TourCost;
 
-//     type Move;
+    type Move = InsertMove;
 
-//     fn neighborhood(object: &Self::Solution) -> impl Iterator<Item = Self::Move> {
-//         todo!()
-//     }
-// }
+    fn neighborhood(tour: &Self::Solution) -> impl Iterator<Item = Self::Move> {
+        AllInsertMovesIter::new(tour.iter().len())
+    }
+}
