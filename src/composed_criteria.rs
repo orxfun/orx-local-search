@@ -1,4 +1,4 @@
-use crate::criterion::Criterion;
+use crate::{composed_move_generator::ComposedMoveGenerator, criterion::Criterion};
 
 pub struct ComposedCriteria<X1, X2>(X1, X2)
 where
@@ -21,5 +21,5 @@ where
 
     type Input<'a> = (X1::Input<'a>, X2::Input<'a>);
 
-    type MoveGenerator = todo!();
+    type MoveGenerator = ComposedMoveGenerator<X1, X2>;
 }
