@@ -1,4 +1,4 @@
-use crate::{Criterion, InputOf, SolutionOf};
+use crate::{Criterion, InputOf, SolutionOf, criterion::ObjectiveUnitOf};
 
 pub struct LocalSearch<X>
 where
@@ -15,9 +15,10 @@ impl<X: Criterion> LocalSearch<X> {
     pub fn local_optimum(
         &self,
         initial_solution: SolutionOf<X>,
-        // initial_objective_value: Option<ObjectiveUnitOf<X>>,
         input: InputOf<X>,
+        initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> SolutionOf<X> {
+        // let mut best_value = initial_objective_value
         initial_solution
     }
 }

@@ -1,5 +1,7 @@
 use crate::{
-    Problem, criterion::Criterion, empty_criterion::move_generator::NeighborhoodGenerator,
+    ObjectiveValue, Problem, SolutionOf,
+    criterion::{Criterion, ObjectiveUnitOf},
+    empty_criterion::move_generator::NeighborhoodGenerator,
 };
 use std::marker::PhantomData;
 
@@ -20,5 +22,13 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
 
     fn move_generator(&self) -> Self::MoveGenerator {
         NeighborhoodGenerator::default()
+    }
+
+    fn evaluate<'a>(
+        &self,
+        _: &'a SolutionOf<Self>,
+        _: Self::Input<'a>,
+    ) -> Option<ObjectiveUnitOf<Self>> {
+        Some(<P::ObjectiveValue as ObjectiveValue>::identity())
     }
 }
