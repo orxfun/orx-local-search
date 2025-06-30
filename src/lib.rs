@@ -17,3 +17,4 @@ pub use r#move::Move;
 pub use move_generator::MoveGenerator;
 pub use objective_value::ObjectiveValue;
 pub use problem::Problem;
+pub use result::LocalSearchResult;

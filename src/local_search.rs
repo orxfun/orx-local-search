@@ -1,4 +1,4 @@
-use crate::{Criterion, InputOf, SolutionOf, criterion::ObjectiveUnitOf};
+use crate::{Criterion, InputOf, LocalSearchResult, SolutionOf, criterion::ObjectiveUnitOf};
 
 pub struct LocalSearch<X>
 where
@@ -17,24 +17,29 @@ impl<X: Criterion> LocalSearch<X> {
         }
     }
 
-    pub fn local_optimum(
-        &self,
+    pub fn local_optimum<'a>(
+        &'a self,
         initial_solution: SolutionOf<X>,
-        input: InputOf<'_, X>,
+        input: InputOf<'a, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
-    ) -> SolutionOf<X> {
-        let mut best_value = match initial_objective_value {
-            Some(x) => {
-                // abc
-                Some(x)
+    ) -> LocalSearchResult<X> {
+        let initial_value = match initial_objective_value.is_some() {
+            true => {
+                debug_assert_eq!(
+                    &initial_objective_value,
+                    &self.criterion.evaluate(&initial_solution, input)
+                );
+                initial_objective_value
             }
-            None => {
-                // abcdef
+            false => self.criterion.evaluate(&initial_solution, input),
+        };
+
+        match initial_value {
+            None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
+            Some(mut best_value) => {
+                // abc
                 todo!()
             }
-        };
-        // let mut best_value = initial_objective_value
-        //     .unwrap_or_else(|| self.criterion.evaluate(&initial_solution, input));
-        initial_solution
+        }
     }
 }

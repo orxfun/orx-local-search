@@ -33,7 +33,7 @@ where
 
     fn evaluate<'a>(
         &self,
-        solution: &'a SolutionOf<Self>,
+        solution: &SolutionOf<Self>,
         (input1, input2): Self::Input<'a>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         self.0.evaluate(solution, input1).and_then(|value1| {

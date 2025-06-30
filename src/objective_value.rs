@@ -1,5 +1,7 @@
+use std::fmt::Debug;
+
 pub trait ObjectiveValue {
-    type Unit;
+    type Unit: Debug + PartialEq + Eq;
 
     fn identity() -> Self::Unit;
 
