@@ -21,27 +21,31 @@ impl<X: Criterion> LocalSearch<X> {
     }
 
     fn next_best_move<'a>(
-        &mut self,
+        &self,
         solution: &'a SolutionOf<X>,
         input: InputOf<'a, X>,
         mut best_value: ObjectiveUnitOf<X>,
     ) -> Option<CandidateMoveOf<X>> {
         let mut best_move = None;
-        for candidate in self.move_generator.moves(solution, input) {
-            if candidate.objective_value < best_value {
-                best_value = candidate.objective_value;
-                best_move = Some(candidate);
-            }
-        }
+        // for candidate in self.move_generator.moves(solution, input) {
+        //     if candidate.objective_value < best_value {
+        //         best_value = candidate.objective_value;
+        //         best_move = Some(candidate);
+        //     }
+        // }
         best_move
     }
 
-    pub fn local_optimum(
-        &self,
+    pub fn local_optimum<'a>(
+        &mut self,
         initial_solution: SolutionOf<X>,
-        input: InputOf<'_, X>,
+        input: InputOf<'a, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
-    ) -> LocalSearchResult<X> {
+    ) -> LocalSearchResult<X>
+    where
+        Self: 'a,
+        SolutionOf<X>: 'a,
+    {
         let initial_value = match initial_objective_value.is_some() {
             true => {
                 debug_assert_eq!(
@@ -56,7 +60,15 @@ impl<X: Criterion> LocalSearch<X> {
         match initial_value {
             None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
             Some(mut best_value) => {
-                // abc
+                // let solution = initial_solution;
+                let x: Vec<_> = self
+                    .move_generator
+                    .moves(&initial_solution, input)
+                    .collect();
+                // let aaa = self.next_best_move(&solution, input, best_value);
+                // while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
+                //     //
+                // }
                 todo!()
             }
         }

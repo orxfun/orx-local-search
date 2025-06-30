@@ -5,7 +5,7 @@ use crate::{
 pub trait Criterion {
     type Problem: Problem;
 
-    type Input<'a>;
+    type Input<'a>: Copy;
 
     type MoveGenerator: MoveGenerator<X = Self>;
 

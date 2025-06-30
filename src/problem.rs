@@ -1,7 +1,7 @@
 use crate::{r#move::Move, objective_value::ObjectiveValue};
 
-pub trait Problem {
-    type Solution;
+pub trait Problem: 'static {
+    type Solution: Clone;
 
     type ObjectiveValue: ObjectiveValue;
 
