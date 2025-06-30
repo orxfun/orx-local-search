@@ -1,5 +1,5 @@
 use crate::{
-    neighborhood::AllInsertMovesIter, insert_move::InsertMove, tour::Tour, tour_cost::TourCost,
+    insert_move::InsertMove, neighborhood::AllInsertMovesIter, tour::Tour, tour_cost::TourCost,
 };
 use orx_iterable::Collection;
 use orx_local_search::Problem;

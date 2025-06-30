@@ -1,6 +1,4 @@
-use crate::{insert_move::InsertMove, neighborhood::AllInsertMovesIter, tour::Tour};
-use orx_iterable::Collection;
-use orx_local_search::Move;
+use crate::{insert_move::InsertMove, tour::Tour};
 use std::cmp::Ordering;
 
 pub enum TourAfterInsertIter<'a> {
@@ -72,15 +70,5 @@ impl Iterator for MoveToLeft<'_> {
         };
         self.p += 1;
         city
-    }
-}
-
-pub fn test_tour_after_move() {
-    let tour = Tour::new(vec![1, 3, 5, 2, 0, 4]);
-
-    for mv in AllInsertMovesIter::new(tour.iter().len()) {
-        let new_tour = Tour::new(TourAfterInsertIter::new(mv, &tour).collect());
-        let expected_tour = mv.apply(tour.clone());
-        assert_eq!(new_tour, expected_tour);
     }
 }

@@ -14,6 +14,6 @@ impl Criterion for Duration {
     type MoveGenerator = DurationMoveGenerator;
 
     fn move_generator(&self) -> Self::MoveGenerator {
-        todo!()
+        DurationMoveGenerator
     }
 }
