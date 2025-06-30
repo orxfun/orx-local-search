@@ -7,21 +7,17 @@ pub struct LocalSearch<X>
 where
     X: Criterion,
 {
-    criterion: X,
     move_generator: X::MoveGenerator,
 }
 
 impl<X: Criterion> LocalSearch<X> {
-    pub fn new(criterion: X) -> Self {
-        let move_generator = criterion.move_generator();
-        Self {
-            criterion,
-            move_generator,
-        }
+    pub fn new() -> Self {
+        let move_generator = X::move_generator();
+        Self { move_generator }
     }
 
     fn next_best_move<'a>(
-        &mut self,
+        &'a mut self,
         solution: &'a SolutionOf<X>,
         input: InputOf<'a, X>,
         mut best_value: ObjectiveUnitOf<X>,
@@ -37,40 +33,39 @@ impl<X: Criterion> LocalSearch<X> {
     }
 
     pub fn local_optimum<'a>(
-        &mut self,
+        &'a mut self,
         initial_solution: SolutionOf<X>,
         input: InputOf<'a, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
-    ) -> LocalSearchResult<X>
-    where
-        Self: 'a,
-        SolutionOf<X>: 'a,
-    {
-        // let initial_value = match initial_objective_value.is_some() {
-        //     true => {
-        //         debug_assert_eq!(
-        //             &initial_objective_value,
-        //             &self.criterion.evaluate(&initial_solution, input)
-        //         );
-        //         initial_objective_value
-        //     }
-        //     false => self.criterion.evaluate(&initial_solution, input),
-        // };
+    ) -> LocalSearchResult<X> {
+        let initial_value = match initial_objective_value.is_some() {
+            true => {
+                debug_assert_eq!(
+                    &initial_objective_value,
+                    &X::evaluate(&initial_solution, input)
+                );
+                initial_objective_value
+            }
+            false => X::evaluate(&initial_solution, input),
+        };
 
-        // match initial_value {
-        //     None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
-        //     Some(mut best_value) => {
-        //         let solution = initial_solution;
-        //         while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
-        //             //
-        //         }
-        //         LocalSearchResult::LocalOptimum {
-        //             solution,
-        //             value: best_value,
-        //         }
-        //     }
-        // }
-
-        todo!()
+        match initial_value {
+            None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
+            Some(mut best_value) => {
+                let solution = initial_solution;
+                {
+                    let solution = solution.clone();
+                    // let x = self.next_best_move(&solution, input, best_value);
+                    // drop(x);
+                }
+                // while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
+                //     //
+                // }
+                LocalSearchResult::LocalOptimum {
+                    solution,
+                    value: best_value,
+                }
+            }
+        }
     }
 }

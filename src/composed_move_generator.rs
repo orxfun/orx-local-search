@@ -28,7 +28,7 @@ where
     type X = ComposedCriteria<X1, X2>;
 
     fn moves<'a>(
-        &mut self,
+        &'a mut self,
         solution: &'a SolutionOf<Self::X>,
         (input1, input2): InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {

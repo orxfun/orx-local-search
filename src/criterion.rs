@@ -9,12 +9,11 @@ pub trait Criterion {
 
     type MoveGenerator: MoveGenerator<X = Self>;
 
-    fn move_generator(&self) -> Self::MoveGenerator;
+    fn move_generator() -> Self::MoveGenerator;
 
     fn evaluate<'a>(
-        &self,
         solution: &SolutionOf<Self>,
-        input: &'a Self::Input<'a>,
+        input: Self::Input<'a>,
     ) -> Option<ObjectiveUnitOf<Self>>;
 }
 

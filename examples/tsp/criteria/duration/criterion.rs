@@ -13,14 +13,13 @@ impl Criterion for Duration {
 
     type MoveGenerator = DurationMoveGenerator;
 
-    fn move_generator(&self) -> Self::MoveGenerator {
+    fn move_generator() -> Self::MoveGenerator {
         DurationMoveGenerator
     }
 
     fn evaluate<'a>(
-        &self,
         tour: &'a SolutionOf<Self>,
-        duration_matrix: &'a Self::Input<'a>,
+        duration_matrix: Self::Input<'a>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         Some(duration_matrix.tour_cost(tour))
     }

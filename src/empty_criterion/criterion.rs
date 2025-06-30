@@ -20,15 +20,11 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
 
     type MoveGenerator = NeighborhoodGenerator<P>;
 
-    fn move_generator(&self) -> Self::MoveGenerator {
+    fn move_generator() -> Self::MoveGenerator {
         NeighborhoodGenerator::default()
     }
 
-    fn evaluate<'a>(
-        &self,
-        _: &'a SolutionOf<Self>,
-        _: &'a Self::Input<'a>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
+    fn evaluate<'a>(_: &'a SolutionOf<Self>, _: Self::Input<'a>) -> Option<ObjectiveUnitOf<Self>> {
         Some(<P::ObjectiveValue as ObjectiveValue>::identity())
     }
 }
