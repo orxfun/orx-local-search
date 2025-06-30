@@ -3,7 +3,7 @@ mod composed_criteria;
 mod composed_move_generator;
 mod criterion;
 mod empty_criterion;
-mod local_search;
+// mod local_search;
 mod r#move;
 mod move_generator;
 mod objective_value;
