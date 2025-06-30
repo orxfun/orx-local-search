@@ -15,6 +15,9 @@ where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>,
 {
+    pub fn new(move_generator1: X1::MoveGenerator, move_generator2: X2::MoveGenerator) -> Self {
+        Self(move_generator1, move_generator2)
+    }
 }
 
 impl<X1, X2> MoveGenerator for ComposedMoveGenerator<X1, X2>

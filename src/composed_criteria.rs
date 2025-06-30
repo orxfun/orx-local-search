@@ -22,4 +22,8 @@ where
     type Input<'a> = (X1::Input<'a>, X2::Input<'a>);
 
     type MoveGenerator = ComposedMoveGenerator<X1, X2>;
+
+    fn move_generator(&self) -> Self::MoveGenerator {
+        ComposedMoveGenerator::new(self.0.move_generator(), self.1.move_generator())
+    }
 }

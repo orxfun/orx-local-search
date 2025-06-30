@@ -6,6 +6,8 @@ pub trait Criterion {
     type Input<'a>;
 
     type MoveGenerator: MoveGenerator<X = Self>;
+
+    fn move_generator(&self) -> Self::MoveGenerator;
 }
 
 pub type CandidateMoveOf<X> = CandidateMove<<X as Criterion>::Problem>;
