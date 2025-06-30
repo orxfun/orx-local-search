@@ -1,3 +1,4 @@
+mod all_moves;
 mod criteria;
 mod insert_move;
 mod problem;

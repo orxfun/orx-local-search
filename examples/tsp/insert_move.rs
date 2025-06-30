@@ -8,6 +8,15 @@ pub struct InsertMove {
     target_position: usize,
 }
 
+impl InsertMove {
+    pub fn new(current_position: usize, target_position: usize) -> Self {
+        Self {
+            current_position,
+            target_position,
+        }
+    }
+}
+
 impl Move for InsertMove {
     type On = Tour;
 
