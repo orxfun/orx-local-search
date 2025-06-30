@@ -19,8 +19,9 @@ impl Criterion for Duration {
 
     fn evaluate<'a>(
         &self,
-        solution: &'a SolutionOf<Self>,
-        input: Self::Input<'a>,
+        tour: &'a SolutionOf<Self>,
+        duration_matrix: &'a DurationMatrix,
     ) -> Option<ObjectiveUnitOf<Self>> {
+        Some(duration_matrix.tour_cost(tour))
     }
 }

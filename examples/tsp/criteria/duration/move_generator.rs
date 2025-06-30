@@ -9,7 +9,7 @@ impl MoveGenerator for DurationMoveGenerator {
     fn moves<'a>(
         &mut self,
         tour: &'a SolutionOf<Self::X>,
-        duration_matrix: InputOf<'a, Self::X>,
+        duration_matrix: &'a InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
         DurationMoves::new(tour, duration_matrix)
     }

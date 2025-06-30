@@ -39,38 +39,40 @@ impl<X: Criterion> LocalSearch<X> {
     pub fn local_optimum<'a>(
         &mut self,
         initial_solution: SolutionOf<X>,
-        input: InputOf<'a, X>,
+        input: &'a InputOf<'a, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X>
     where
         Self: 'a,
         SolutionOf<X>: 'a,
     {
-        let initial_value = match initial_objective_value.is_some() {
-            true => {
-                debug_assert_eq!(
-                    &initial_objective_value,
-                    &self.criterion.evaluate(&initial_solution, input)
-                );
-                initial_objective_value
-            }
-            false => self.criterion.evaluate(&initial_solution, input),
-        };
+        todo!()
 
-        match initial_value {
-            None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
-            Some(mut best_value) => {
-                // let solution = initial_solution;
-                let x: Vec<_> = self
-                    .move_generator
-                    .moves(&initial_solution, input)
-                    .collect();
-                // let aaa = self.next_best_move(&solution, input, best_value);
-                // while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
-                //     //
-                // }
-                todo!()
-            }
-        }
+        // let initial_value = match initial_objective_value.is_some() {
+        //     true => {
+        //         debug_assert_eq!(
+        //             &initial_objective_value,
+        //             &self.criterion.evaluate(&initial_solution, input)
+        //         );
+        //         initial_objective_value
+        //     }
+        //     false => self.criterion.evaluate(&initial_solution, input),
+        // };
+
+        // match initial_value {
+        //     None => LocalSearchResult::InfeasibleInitialSolution { initial_solution },
+        //     Some(mut best_value) => {
+        //         // let solution = initial_solution;
+        //         let x: Vec<_> = self
+        //             .move_generator
+        //             .moves(&initial_solution, input)
+        //             .collect();
+        //         // let aaa = self.next_best_move(&solution, input, best_value);
+        //         // while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
+        //         //     //
+        //         // }
+        //         todo!()
+        //     }
+        // }
     }
 }
