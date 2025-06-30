@@ -12,6 +12,6 @@ pub trait Criterion {
 
 pub type CandidateMoveOf<X> = CandidateMove<<X as Criterion>::Problem>;
 
-pub type ObjectOf<X> = <<X as Criterion>::Problem as Problem>::Object;
+pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
 
 pub type InputOf<'a, X> = <X as Criterion>::Input<'a>;

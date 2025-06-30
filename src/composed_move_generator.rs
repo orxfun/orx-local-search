@@ -1,6 +1,6 @@
 use crate::{
     composed_criteria::ComposedCriteria,
-    criterion::{CandidateMoveOf, Criterion, InputOf, ObjectOf},
+    criterion::{CandidateMoveOf, Criterion, InputOf, SolutionOf},
     move_generator::MoveGenerator,
     sorted_intersecting_iterator::SortedIntersectingIter,
 };
@@ -29,7 +29,7 @@ where
 
     fn moves<'a>(
         &mut self,
-        object: &ObjectOf<Self::X>,
+        object: &SolutionOf<Self::X>,
         (input1, input2): InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
         let moves1 = self.0.moves(object, input1);
