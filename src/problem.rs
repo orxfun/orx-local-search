@@ -1,11 +1,11 @@
 use crate::r#move::Move;
 
 pub trait Problem {
-    type On;
+    type Object;
 
     type Value;
 
     type Move: Move;
 
-    fn all_moves(object: &Self::On) -> impl Iterator<Item = Self::Move>;
+    fn neighborhood(object: &Self::Object) -> impl Iterator<Item = Self::Move>;
 }
