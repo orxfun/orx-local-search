@@ -21,18 +21,18 @@ impl<X: Criterion> LocalSearch<X> {
     }
 
     fn next_best_move<'a>(
-        &self,
+        &mut self,
         solution: &'a SolutionOf<X>,
-        input: InputOf<'a, X>,
+        input: &'a InputOf<'a, X>,
         mut best_value: ObjectiveUnitOf<X>,
     ) -> Option<CandidateMoveOf<X>> {
         let mut best_move = None;
-        // for candidate in self.move_generator.moves(solution, input) {
-        //     if candidate.objective_value < best_value {
-        //         best_value = candidate.objective_value;
-        //         best_move = Some(candidate);
-        //     }
-        // }
+        for candidate in self.move_generator.moves(solution, input) {
+            if candidate.objective_value < best_value {
+                best_value = candidate.objective_value;
+                best_move = Some(candidate);
+            }
+        }
         best_move
     }
 
