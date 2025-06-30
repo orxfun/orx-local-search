@@ -17,10 +17,12 @@ impl<X: Criterion> LocalSearch<X> {
         }
     }
 
-    pub fn local_optimum<'a>(
-        &'a self,
+    // fn next_best_move(&self)
+
+    pub fn local_optimum(
+        &self,
         initial_solution: SolutionOf<X>,
-        input: InputOf<'a, X>,
+        input: InputOf<'_, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X> {
         let initial_value = match initial_objective_value.is_some() {
