@@ -1,13 +1,11 @@
-use crate::{criterion::Criterion, r#move::Move};
+use crate::{criterion::Criterion, problem::Problem};
 
 pub trait MoveGenerator {
     type X: Criterion;
 
-    type Move: Move;
-
     fn moves<'a>(
         &mut self,
-        object: &<Self::X as Criterion>::On,
+        object: &<<Self::X as Criterion>::Problem as Problem>::On,
         input: <Self::X as Criterion>::Input<'a>,
-    ) -> impl Iterator<Item = Self::Move>;
+    ) -> impl Iterator<Item = <<Self::X as Criterion>::Problem as Problem>::Move>;
 }

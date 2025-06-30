@@ -1,13 +1,9 @@
-use crate::{r#move::Move, move_generator::MoveGenerator};
+use crate::{move_generator::MoveGenerator, problem::Problem};
 
 pub trait Criterion {
-    type On;
+    type Problem: Problem;
 
     type Input<'a>;
 
-    type Value;
-
     type MoveGenerator: MoveGenerator<X = Self>;
-
-    type AllMovesGenerator: MoveGenerator<X = Self>;
 }
