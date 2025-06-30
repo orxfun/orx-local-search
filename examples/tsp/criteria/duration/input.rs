@@ -1,9 +1,5 @@
-use crate::{
-    insert_move::InsertMove, neighborhood::AllInsertMovesIter, tour::Tour,
-    tour_after_move::TourAfterInsertIter,
-};
+use crate::{insert_move::InsertMove, tour::Tour, tour_after_move::TourAfterInsertIter};
 use orx_iterable::Collection;
-use orx_local_search::Move;
 
 pub struct DurationMatrix(Vec<Vec<u64>>);
 
