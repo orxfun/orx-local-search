@@ -1,0 +1,28 @@
+use crate::{
+    MoveGenerator, ObjectiveValue, Problem,
+    criterion::{CandidateMoveOf, InputOf, SolutionOf},
+    empty_criterion::criterion::EmptyCriterion,
+};
+use std::marker::PhantomData;
+
+pub struct NeighborhoodGenerator<P: Problem>(PhantomData<P>);
+
+impl<P: Problem> Default for NeighborhoodGenerator<P> {
+    fn default() -> Self {
+        Self(PhantomData)
+    }
+}
+
+impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
+    type X = EmptyCriterion<P>;
+
+    fn moves<'a>(
+        &mut self,
+        solution: &SolutionOf<Self::X>,
+        _: InputOf<'a, Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
+        P::neighborhood(solution).map(|mv| {
+            crate::CandidateMove::new(mv, <P::ObjectiveValue as ObjectiveValue>::identity())
+        })
+    }
+}
