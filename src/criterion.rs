@@ -14,7 +14,7 @@ pub trait Criterion {
     fn evaluate<'a>(
         &self,
         solution: &SolutionOf<Self>,
-        input: Self::Input<'a>,
+        input: &'a Self::Input<'a>,
     ) -> Option<ObjectiveUnitOf<Self>>;
 }
 

@@ -27,7 +27,7 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
     fn evaluate<'a>(
         &self,
         _: &'a SolutionOf<Self>,
-        _: Self::Input<'a>,
+        _: &'a Self::Input<'a>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         Some(<P::ObjectiveValue as ObjectiveValue>::identity())
     }
