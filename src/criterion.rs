@@ -1,4 +1,4 @@
-use crate::r#move::Move;
+use crate::{r#move::Move, move_generator::MoveGenerator};
 
 pub trait Criterion {
     type On;
@@ -7,11 +7,5 @@ pub trait Criterion {
 
     type Value;
 
-    type Move: Move<On = Self::On>;
-
-    fn moves<'a>(
-        &self,
-        object: Self::On,
-        input: Self::Input<'a>,
-    ) -> impl Iterator<Item = Self::Move>;
+    type MoveGenerator: MoveGenerator<X = Self>;
 }
