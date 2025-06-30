@@ -6,6 +6,17 @@ where
     I2: Iterator<Item = I1::Item>,
     I1::Item: Ord;
 
+impl<I1, I2> SortedIntersectingIter<I1, I2>
+where
+    I1: Iterator,
+    I2: Iterator<Item = I1::Item>,
+    I1::Item: Ord,
+{
+    pub fn new(iter1: I1, iter2: I2) -> Self {
+        Self(iter1, iter2)
+    }
+}
+
 impl<I1, I2> Iterator for SortedIntersectingIter<I1, I2>
 where
     I1: Iterator,

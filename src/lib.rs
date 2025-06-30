@@ -1,5 +1,6 @@
 mod candidate_move;
 mod composed_criteria;
+mod composed_move_generator;
 mod criterion;
 mod r#move;
 mod move_generator;
