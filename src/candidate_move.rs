@@ -1,4 +1,4 @@
-use crate::{criterion::Criterion, r#move::Move, problem::Problem};
+use crate::r#move::Move;
 
 pub struct CandidateMove<M, V>
 where
@@ -12,10 +12,8 @@ impl<M, V> CandidateMove<M, V>
 where
     M: Move,
 {
-    pub fn compose<N>(self, other: CandidateMove<N, V>)
-    where
-        N: Move<On = M::On>,
-    {
+    pub fn compose(self, other: CandidateMove<M, V>) {
+        debug_assert_eq!(&self.r#move, &other.r#move);
         todo!()
     }
 }
