@@ -18,7 +18,7 @@ impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
 
     fn moves<'a>(
         &mut self,
-        solution: &SolutionOf<Self::X>,
+        solution: &'a SolutionOf<Self::X>,
         _: InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
         P::neighborhood(solution).map(|mv| {

@@ -29,7 +29,7 @@ where
 
     fn moves<'a>(
         &mut self,
-        solution: &SolutionOf<Self::X>,
+        solution: &'a SolutionOf<Self::X>,
         (input1, input2): InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
         let moves1 = self.0.moves(solution, input1);

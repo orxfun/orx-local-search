@@ -10,6 +10,7 @@ mod problem;
 mod sorted_intersecting_iterator;
 
 pub use candidate_move::CandidateMove;
+pub use criterion::{CandidateMoveOf, Criterion, InputOf, SolutionOf};
 pub use r#move::Move;
 pub use move_generator::MoveGenerator;
 pub use objective_value::ObjectiveValue;
