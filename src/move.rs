@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 
 pub trait Move: Ord + Eq + Debug {
-    type On;
+    type Solution;
 
-    fn apply(&self, object: Self::On) -> Self::On;
+    fn apply(&self, solution: Self::Solution) -> Self::Solution;
 }

@@ -18,9 +18,9 @@ impl InsertMove {
 }
 
 impl Move for InsertMove {
-    type On = Tour;
+    type Solution = Tour;
 
-    fn apply(&self, mut tour: Self::On) -> Self::On {
+    fn apply(&self, mut tour: Self::Solution) -> Self::Solution {
         match self.current_position.cmp(&self.target_position) {
             Ordering::Equal => {}
             Ordering::Less => {

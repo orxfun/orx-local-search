@@ -5,7 +5,7 @@ pub trait MoveGenerator {
 
     fn moves<'a>(
         &mut self,
-        object: &SolutionOf<Self::X>,
+        solution: &SolutionOf<Self::X>,
         input: InputOf<'a, Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>>;
 }
