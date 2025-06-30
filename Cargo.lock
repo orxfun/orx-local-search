@@ -3,5 +3,23 @@
 version = 4
 
 [[package]]
+name = "orx-iterable"
+version = "1.3.0"
+source = "sparse+https://artifactory.dhl.com/artifactory/api/cargo/cargo-remote/index/"
+checksum = "dfa2cb3f82a187c68835faac9cf03faaee70b93f4da3b85515ac1b4c6f8a432d"
+dependencies = [
+ "orx-self-or",
+]
+
+[[package]]
 name = "orx-local-search"
 version = "0.1.0"
+dependencies = [
+ "orx-iterable",
+]
+
+[[package]]
+name = "orx-self-or"
+version = "1.2.0"
+source = "sparse+https://artifactory.dhl.com/artifactory/api/cargo/cargo-remote/index/"
+checksum = "67a8e35dfe18921e475b9861266fd58a5ecfd681161f242d24a9e2d1e07fbc28"

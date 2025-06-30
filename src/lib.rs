@@ -7,3 +7,7 @@ mod move_generator;
 mod objective_value;
 mod problem;
 mod sorted_intersecting_iterator;
+
+pub use r#move::Move;
+pub use objective_value::ObjectiveValue;
+pub use problem::Problem;
