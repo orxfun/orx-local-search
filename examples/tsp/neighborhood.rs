@@ -1,20 +1,4 @@
-use orx_local_search::MoveGenerator;
-
 use crate::insert_move::InsertMove;
-
-pub struct Neighborhood;
-
-// impl MoveGenerator for Neighborhood {
-//     type X = ;
-
-//     fn moves<'a>(
-//         &mut self,
-//         solution: &SolutionOf<Self::X>,
-//         input: InputOf<'a, Self::X>,
-//     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
-//         todo!()
-//     }
-// }
 
 pub struct AllInsertMovesIter {
     n: usize,
