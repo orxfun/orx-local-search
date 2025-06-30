@@ -1,19 +1,29 @@
-use crate::r#move::Move;
+use crate::{
+    objective_value::ObjectiveValue,
+    problem::{MoveOf, ObjectiveUnitOf, Problem},
+};
 
-pub struct CandidateMove<M, V>
+pub struct CandidateMove<P>
 where
-    M: Move,
+    P: Problem,
 {
-    r#move: M,
-    value: V,
+    r#move: MoveOf<P>,
+    objective_value: ObjectiveUnitOf<P>,
 }
 
-impl<M, V> CandidateMove<M, V>
+impl<P> CandidateMove<P>
 where
-    M: Move,
+    P: Problem,
 {
-    pub fn compose(self, other: CandidateMove<M, V>) {
+    pub fn compose(self, other: CandidateMove<P>) -> Self {
         debug_assert_eq!(&self.r#move, &other.r#move);
-        todo!()
+        let objective_value = <P::ObjectiveValue as ObjectiveValue>::reduce(
+            self.objective_value,
+            other.objective_value,
+        );
+        Self {
+            r#move: self.r#move,
+            objective_value,
+        }
     }
 }

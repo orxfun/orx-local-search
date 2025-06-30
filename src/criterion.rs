@@ -8,10 +8,7 @@ pub trait Criterion {
     type MoveGenerator: MoveGenerator<X = Self>;
 }
 
-pub type CandidateMoveOf<X> = CandidateMove<
-    <<X as Criterion>::Problem as Problem>::Move,
-    <<X as Criterion>::Problem as Problem>::Value,
->;
+pub type CandidateMoveOf<X> = CandidateMove<<X as Criterion>::Problem>;
 
 pub type ObjectOf<X> = <<X as Criterion>::Problem as Problem>::Object;
 
