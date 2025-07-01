@@ -1,21 +1,33 @@
-use std::marker::PhantomData;
-
 use crate::{
     ObjectiveValue, Problem, SolutionOf,
     composed_move_generator::ComposedMoveGenerator,
     criterion::{Criterion, ObjectiveUnitOf},
 };
+use std::marker::PhantomData;
 
 pub struct ComposedCriteria<X1, X2>(PhantomData<(X1, X2)>)
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>;
 
+impl<X1, X2> Default for ComposedCriteria<X1, X2>
+where
+    X1: Criterion,
+    X2: Criterion<Problem = X1::Problem>,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl<X1, X2> ComposedCriteria<X1, X2>
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>,
 {
+    pub fn new() -> Self {
+        Self(PhantomData)
+    }
 }
 
 impl<X1, X2> Criterion for ComposedCriteria<X1, X2>
