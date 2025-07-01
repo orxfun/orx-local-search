@@ -48,48 +48,28 @@ impl TimeWindowInput {
     }
 
     pub fn tour_cost(&self, tour: &Tour) -> Option<u64> {
-        match tour.get(0) {
-            None => Some(0),
-            Some(mut prev_city) => {
-                let mut total_lateness = 0;
-                let mut arrival_time = self.start_time;
-
-                for city in tour.iter().copied() {
-                    let window = &self.windows[city];
-                    let travel_time = self.duration_matrix.get(prev_city, city);
-
-                    match window {
-                        None => {
-                            arrival_time += travel_time;
-                        }
-                        Some(w) => {
-                            arrival_time = max(arrival_time + travel_time, w.begin);
-                            let lateness = arrival_time.saturating_sub(w.end);
-                            if lateness > self.max_allowed_lateness {
-                                return None;
-                            }
-                            total_lateness += lateness;
-                        }
-                    }
-
-                    prev_city = city;
-                }
-
-                let lateness_penalty = self.penalty_per_late_minutes * total_lateness;
-                Some(lateness_penalty)
-            }
-        }
+        let first_city = tour.get(0);
+        self.tour_cost_for_cities_sequence(first_city, tour.iter().copied())
     }
 
     pub fn tour_cost_after_move(&self, tour: &Tour, mv: &InsertMove) -> Option<u64> {
-        let mut new_tour = TourAfterInsertIter::new(mv.clone(), tour).peekable();
-        match new_tour.peek().copied() {
+        let new_tour = TourAfterInsertIter::new(mv.clone(), tour);
+        let first_city = new_tour.peek();
+        self.tour_cost_for_cities_sequence(first_city, new_tour)
+    }
+
+    fn tour_cost_for_cities_sequence(
+        &self,
+        first_city: Option<usize>,
+        cities: impl Iterator<Item = usize>,
+    ) -> Option<u64> {
+        match first_city {
             None => Some(0),
             Some(mut prev_city) => {
                 let mut total_lateness = 0;
                 let mut arrival_time = self.start_time;
 
-                for city in new_tour {
+                for city in cities {
                     let window = &self.windows[city];
                     let travel_time = self.duration_matrix.get(prev_city, city);
 

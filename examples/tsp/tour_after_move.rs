@@ -14,6 +14,13 @@ impl<'a> TourAfterInsertIter<'a> {
             Ordering::Greater => Self::MoveToLeft(MoveToLeft { mv, tour, p: 0 }),
         }
     }
+
+    pub fn peek(&self) -> Option<usize> {
+        match self {
+            Self::MoveToRight(x) => x.peek(),
+            Self::MoveToLeft(x) => x.peek(),
+        }
+    }
 }
 
 impl Iterator for TourAfterInsertIter<'_> {
@@ -34,7 +41,7 @@ pub struct MoveToRight<'a> {
 }
 
 impl MoveToRight<'_> {
-    pub fn peek(&self) -> Option<usize> {
+    fn peek(&self) -> Option<usize> {
         let city = match self.p {
             p if (0..self.mv.current_position).contains(&p) => Some(self.tour[p]),
             p if (self.mv.current_position..self.mv.target_position).contains(&p) => {
@@ -64,7 +71,7 @@ pub struct MoveToLeft<'a> {
 }
 
 impl MoveToLeft<'_> {
-    pub fn peek(&self) -> Option<usize> {
+    fn peek(&self) -> Option<usize> {
         let city = match self.p {
             p if (0..self.mv.target_position).contains(&p) => Some(self.tour[p]),
             p if p == self.mv.target_position => Some(self.tour[self.mv.current_position]),
