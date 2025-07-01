@@ -8,7 +8,7 @@ use orx_iterable::Collection;
 use orx_local_search::CandidateMove;
 
 pub struct DurationMoves<'a> {
-    move_generator: &'a DurationMoveGenerator,
+    // move_generator: &'a DurationMoveGenerator,
     tour: &'a Tour,
     duration_matrix: &'a DurationMatrix,
     iter: AllInsertMovesIter,
@@ -16,13 +16,13 @@ pub struct DurationMoves<'a> {
 
 impl<'a> DurationMoves<'a> {
     pub fn new(
-        move_generator: &'a DurationMoveGenerator,
+        // move_generator: &'a DurationMoveGenerator,
         tour: &'a Tour,
         duration_matrix: &'a DurationMatrix,
     ) -> Self {
         let iter = AllInsertMovesIter::new(tour.iter().len());
         Self {
-            move_generator,
+            // move_generator,
             tour,
             duration_matrix,
             iter,

@@ -3,9 +3,9 @@ use crate::criterion::{CandidateMoveOf, Criterion, InputOf, SolutionOf};
 pub trait MoveGenerator {
     type X: Criterion;
 
-    fn moves(
+    fn moves<'a>(
         &mut self,
-        solution: &SolutionOf<Self::X>,
-        input: &InputOf<Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>>;
+        solution: &'a SolutionOf<Self::X>,
+        input: &'a InputOf<Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a;
 }

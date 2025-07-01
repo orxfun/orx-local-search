@@ -6,11 +6,11 @@ pub struct DurationMoveGenerator;
 impl MoveGenerator for DurationMoveGenerator {
     type X = Duration;
 
-    fn moves(
+    fn moves<'a>(
         &mut self,
-        tour: &SolutionOf<Self::X>,
-        duration_matrix: &InputOf<Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> {
-        DurationMoves::new(self, tour, duration_matrix)
+        tour: &'a SolutionOf<Self::X>,
+        duration_matrix: &'a InputOf<Self::X>,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a {
+        DurationMoves::new(tour, duration_matrix)
     }
 }
