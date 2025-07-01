@@ -3,7 +3,9 @@ use crate::{r#move::Move, objective_value::ObjectiveValue};
 pub trait Problem: 'static {
     type ObjectiveValue: ObjectiveValue;
 
-    type Move: Move;
+    type Solution;
+
+    type Move: Move<Solution = Self::Solution>;
 
     fn neighborhood<'a, 'b, 'c>(
         solution: &'b <Self::Move as Move>::Solution,
