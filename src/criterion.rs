@@ -1,9 +1,12 @@
 use crate::{ObjectiveValue, move_generator::MoveGenerator, problem::Problem};
+use orx_meta::queue::MetaQueue;
 
 pub trait Criterion {
     type Problem: Problem;
 
     type Input;
+
+    type InputQueue: MetaQueue;
 
     type MoveGenerator: MoveGenerator<Problem = Self::Problem, Input = Self::Input>;
 

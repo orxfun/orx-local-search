@@ -3,6 +3,7 @@ use crate::{
     problem::Tsp,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
+use orx_meta::queue::One;
 
 pub struct Capacity;
 
@@ -10,6 +11,8 @@ impl Criterion for Capacity {
     type Problem = Tsp;
 
     type Input = CapacityInput;
+
+    type InputQueue = One<Self::Input>;
 
     type MoveGenerator = CapacityMoveGenerator;
 

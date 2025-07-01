@@ -3,6 +3,7 @@ use crate::{
     composed_move_generator::ComposedMoveGenerator,
     criterion::{Criterion, ObjectiveUnitOf},
 };
+use orx_meta::queue::MetaQueue;
 use std::marker::PhantomData;
 
 pub struct ComposedCriteria<X1, X2>(PhantomData<(X1, X2)>)
@@ -38,6 +39,8 @@ where
     type Problem = X1::Problem;
 
     type Input = (X1::Input, X2::Input);
+
+    type InputQueue = <X1::InputQueue as MetaQueue>::Extend<X2::InputQueue>;
 
     type MoveGenerator = ComposedMoveGenerator<X1, X2>;
 
