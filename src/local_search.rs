@@ -1,6 +1,6 @@
 use crate::{
-    Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
-    criterion::CandidateMoveOf, criterion::ObjectiveUnitOf,
+    CandidateMoveOf, Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
+    criterion::ObjectiveUnitOf,
 };
 
 pub struct LocalSearch<X>
@@ -21,7 +21,7 @@ impl<X: Criterion> LocalSearch<X> {
         solution: &SolutionOf<X>,
         input: &InputOf<X>,
         mut best_value: ObjectiveUnitOf<X>,
-    ) -> Option<CandidateMoveOf<X>> {
+    ) -> Option<CandidateMoveOf<<X as Criterion>::Problem>> {
         let mut best_move = None;
         for candidate in self.move_generator.moves(solution, input) {
             if candidate.objective_value < best_value {

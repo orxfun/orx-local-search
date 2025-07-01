@@ -1,7 +1,5 @@
 use crate::{
-    composed_criteria::ComposedCriteria,
-    criterion::{CandidateMoveOf, Criterion, InputOf, SolutionOf},
-    move_generator::MoveGenerator,
+    criterion::Criterion, move_generator::MoveGenerator,
     sorted_intersecting_iterator::SortedIntersectingIter,
 };
 
