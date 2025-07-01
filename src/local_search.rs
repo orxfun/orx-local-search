@@ -32,9 +32,9 @@ impl<X: Criterion> LocalSearch<X> {
         best_move
     }
 
-    pub fn local_optimum(
+    pub fn optimize(
         &mut self,
-        initial_solution: &SolutionOf<X>,
+        initial_solution: SolutionOf<X>,
         input: &InputOf<X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X> {
@@ -51,18 +51,10 @@ impl<X: Criterion> LocalSearch<X> {
 
         match initial_value {
             None => LocalSearchResult::InfeasibleInitialSolution {
-                initial_solution: initial_solution.clone(),
+                initial_solution: initial_solution,
             },
             Some(mut best_value) => {
-                let mut solution = initial_solution.clone();
-                // {
-                //     // let solution = solution.clone();
-
-                //     let moves = self.move_generator.moves(&solution, input);
-
-                //     // let x = self.next_best_move(&solution, input, best_value);
-                //     // drop(x);
-                // }
+                let mut solution = initial_solution;
                 while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
                     if candidate.objective_value < best_value {
                         solution = candidate.r#move.apply(solution);
