@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests;
 
+mod composing_criteria;
 pub mod criteria;
 mod insert_move;
 mod neighborhood;
