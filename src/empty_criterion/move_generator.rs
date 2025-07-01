@@ -17,7 +17,7 @@ impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
     type X = EmptyCriterion<P>;
 
     fn moves<'a>(
-        &mut self,
+        &'a mut self,
         solution: &'a SolutionOf<Self::X>,
         _: &'a InputOf<Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a {

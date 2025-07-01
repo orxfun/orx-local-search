@@ -1,28 +1,20 @@
 use crate::{
-    criteria::duration::{input::DurationMatrix, move_generator::DurationMoveGenerator},
-    neighborhood::AllInsertMovesIter,
-    problem::Tsp,
+    criteria::duration::input::DurationMatrix, neighborhood::AllInsertMovesIter, problem::Tsp,
     tour::Tour,
 };
 use orx_iterable::Collection;
 use orx_local_search::CandidateMove;
 
 pub struct DurationMoves<'a> {
-    // move_generator: &'a DurationMoveGenerator,
     tour: &'a Tour,
     duration_matrix: &'a DurationMatrix,
     iter: AllInsertMovesIter,
 }
 
 impl<'a> DurationMoves<'a> {
-    pub fn new(
-        // move_generator: &'a DurationMoveGenerator,
-        tour: &'a Tour,
-        duration_matrix: &'a DurationMatrix,
-    ) -> Self {
+    pub fn new(tour: &'a Tour, duration_matrix: &'a DurationMatrix) -> Self {
         let iter = AllInsertMovesIter::new(tour.iter().len());
         Self {
-            // move_generator,
             tour,
             duration_matrix,
             iter,

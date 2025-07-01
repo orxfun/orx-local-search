@@ -7,7 +7,7 @@ impl MoveGenerator for DurationMoveGenerator {
     type X = Duration;
 
     fn moves<'a>(
-        &mut self,
+        &'a mut self,
         tour: &'a SolutionOf<Self::X>,
         duration_matrix: &'a InputOf<Self::X>,
     ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a {
