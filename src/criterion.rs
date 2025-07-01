@@ -7,7 +7,7 @@ pub trait Criterion {
 
     type Input;
 
-    type MoveGenerator: MoveGenerator<X = Self>;
+    type MoveGenerator: MoveGenerator<Problem = Self::Problem, Input = Self::Input>;
 
     fn move_generator() -> Self::MoveGenerator;
 

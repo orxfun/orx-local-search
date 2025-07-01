@@ -1,19 +1,21 @@
 use crate::{
-    criteria::capacity::{criterion::Capacity, iter::CapacityMoves},
+    criteria::capacity::{CapacityInput, iter::CapacityMoves},
     problem::Tsp,
 };
-use orx_local_search::{CandidateMoveOf, InputOf, MoveGenerator, SolutionOf};
+use orx_local_search::{CandidateMoveOf, MoveGenerator, Problem};
 
 pub struct CapacityMoveGenerator;
 
 impl MoveGenerator for CapacityMoveGenerator {
-    type X = Capacity;
+    type Problem = Tsp;
+
+    type Input = CapacityInput;
 
     fn moves<'a>(
         &'a mut self,
-        tour: &'a SolutionOf<Self::X>,
-        duration_matrix: &'a InputOf<Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Tsp>> + 'a {
-        CapacityMoves::new(tour, duration_matrix)
+        tour: &'a <Self::Problem as Problem>::Solution,
+        input: &'a Self::Input,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::Problem>> + 'a {
+        CapacityMoves::new(tour, input)
     }
 }

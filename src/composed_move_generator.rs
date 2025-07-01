@@ -25,13 +25,15 @@ where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>,
 {
-    type X = ComposedCriteria<X1, X2>;
+    type Problem = X1::Problem;
+
+    type Input = (X1::Input, X2::Input);
 
     fn moves<'a>(
         &'a mut self,
-        solution: &'a SolutionOf<Self::X>,
-        (input1, input2): &'a InputOf<Self::X>,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::X>> + 'a {
+        solution: &'a <Self::Problem as crate::Problem>::Solution,
+        (input1, input2): &'a Self::Input,
+    ) -> impl Iterator<Item = crate::CandidateMoveOf<Self::Problem>> + 'a {
         let moves1 = self.0.moves(solution, input1);
         let moves2 = self.1.moves(solution, input2);
         SortedIntersectingIter::new(moves1, moves2)
