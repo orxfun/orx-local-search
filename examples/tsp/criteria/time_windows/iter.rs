@@ -23,7 +23,6 @@ impl<'a> Iterator for TimeWindowMoves<'a> {
             match self.iter.next() {
                 None => return None,
                 Some(mv) => {
-                    // aaa
                     match self.input.tour_cost_after_move(self.tour, &mv) {
                         None => { /* infeasible move, continue to the next */ }
                         Some(cost) => return Some(CandidateMove::new(mv, cost)),
