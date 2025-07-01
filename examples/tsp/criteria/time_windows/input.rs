@@ -95,4 +95,14 @@ impl TimeWindowInput {
             }
         }
     }
+
+    pub fn example_input() -> Self {
+        let duration_matrix = DurationMatrix::example_input();
+        let windows = HashMap::<usize, TimeWindow>::from_iter([
+            (1, TimeWindow::new(540, 740)),
+            (3, TimeWindow::new(550, 850)),
+        ]);
+
+        Self::new(duration_matrix, 2, 120, 480, windows)
+    }
 }

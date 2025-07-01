@@ -14,6 +14,7 @@ mod sorted_intersecting_iterator;
 pub use candidate_move::CandidateMove;
 pub use composed_criteria::ComposedCriteria;
 pub use criterion::{Criterion, InputOf, ObjectiveUnitOf, SolutionOf};
+pub use local_search::LocalSearch;
 pub use r#move::Move;
 pub use move_generator::MoveGenerator;
 pub use objective_value::ObjectiveValue;

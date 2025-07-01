@@ -1,6 +1,5 @@
-use orx_iterable::Collection;
-
 use crate::{InsertMove, Tour, TourAfterInsertIter};
+use orx_iterable::Collection;
 
 pub struct CapacityInput {
     vehicle_capacity: u64,
@@ -37,5 +36,12 @@ impl CapacityInput {
             }
         }
         true
+    }
+
+    pub fn example_input() -> Self {
+        Self {
+            vehicle_capacity: 15,
+            city_capacity_delta: vec![7, 6, -6, 4, -8, -3],
+        }
     }
 }
