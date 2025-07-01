@@ -55,12 +55,11 @@ impl<X: Criterion> LocalSearch<X> {
             },
             Some(mut best_value) => {
                 let mut solution = initial_solution;
-                while let Some(candidate) = self.next_best_move(&solution, input, best_value) {
-                    if candidate.objective_value < best_value {
-                        solution = candidate.r#move.apply(solution);
-                        best_value = candidate.objective_value;
-                    }
+                while let Some(mv) = self.next_best_move(&solution, input, best_value) {
+                    solution = mv.r#move.apply(solution);
+                    best_value = mv.objective_value;
                 }
+
                 LocalSearchResult::LocalOptimum {
                     solution,
                     value: best_value,
