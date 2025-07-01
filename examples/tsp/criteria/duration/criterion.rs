@@ -9,7 +9,7 @@ pub struct Duration;
 impl Criterion for Duration {
     type Problem = Tsp;
 
-    type Input<'a> = &'a DurationMatrix;
+    type Input = DurationMatrix;
 
     type MoveGenerator = DurationMoveGenerator;
 
@@ -17,9 +17,9 @@ impl Criterion for Duration {
         DurationMoveGenerator
     }
 
-    fn evaluate<'a>(
-        tour: &'a SolutionOf<Self>,
-        duration_matrix: Self::Input<'a>,
+    fn evaluate(
+        tour: &SolutionOf<Self>,
+        duration_matrix: &Self::Input,
     ) -> Option<ObjectiveUnitOf<Self>> {
         Some(duration_matrix.tour_cost(tour))
     }

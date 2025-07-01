@@ -16,7 +16,7 @@ impl<P: Problem> Default for EmptyCriterion<P> {
 impl<P: Problem> Criterion for EmptyCriterion<P> {
     type Problem = P;
 
-    type Input<'a> = ();
+    type Input = ();
 
     type MoveGenerator = NeighborhoodGenerator<P>;
 
@@ -24,7 +24,7 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
         NeighborhoodGenerator::default()
     }
 
-    fn evaluate<'a>(_: &'a SolutionOf<Self>, _: Self::Input<'a>) -> Option<ObjectiveUnitOf<Self>> {
+    fn evaluate(_: &SolutionOf<Self>, _: &Self::Input) -> Option<ObjectiveUnitOf<Self>> {
         Some(<P::ObjectiveValue as ObjectiveValue>::identity())
     }
 }

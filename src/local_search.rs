@@ -16,10 +16,10 @@ impl<X: Criterion> LocalSearch<X> {
         Self { move_generator }
     }
 
-    fn next_best_move<'a, 'b, 'c>(
-        &'a mut self,
-        solution: &'b SolutionOf<X>,
-        input: InputOf<'c, X>,
+    fn next_best_move(
+        &mut self,
+        solution: &SolutionOf<X>,
+        input: &InputOf<X>,
         mut best_value: ObjectiveUnitOf<X>,
     ) -> Option<CandidateMoveOf<X>> {
         let mut best_move = None;
@@ -32,10 +32,10 @@ impl<X: Criterion> LocalSearch<X> {
         best_move
     }
 
-    pub fn local_optimum<'a, 'b, 'c>(
-        &'a mut self,
-        initial_solution: &'b SolutionOf<X>,
-        input: InputOf<'c, X>,
+    pub fn local_optimum(
+        &mut self,
+        initial_solution: &SolutionOf<X>,
+        input: &InputOf<X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X> {
         let initial_value = match initial_objective_value.is_some() {
