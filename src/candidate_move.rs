@@ -1,53 +1,49 @@
-use crate::{objective_value::ObjectiveValue, problem::Problem};
+use crate::{Move, objective_value::ObjectiveValue};
 use std::cmp::Ordering;
 
-pub struct CandidateMove<P>
+pub struct CandidateMove<M, O>
 where
-    P: Problem,
+    M: Move,
+    O: ObjectiveValue,
 {
-    pub r#move: P::Move,
-    pub objective_value: <P::ObjectiveValue as ObjectiveValue>::Unit,
+    pub r#move: M,
+    pub objective_value: O::Unit,
 }
 
-impl<P> CandidateMove<P>
+impl<M, O> CandidateMove<M, O>
 where
-    P: Problem,
+    M: Move,
+    O: ObjectiveValue,
 {
-    pub fn new(
-        r#move: P::Move,
-        objective_value: <P::ObjectiveValue as ObjectiveValue>::Unit,
-    ) -> Self {
+    pub fn new(r#move: M, objective_value: O::Unit) -> Self {
         Self {
             r#move,
             objective_value,
         }
     }
 
-    pub fn compose(self, other: CandidateMove<P>) -> Self {
+    pub fn compose(self, other: CandidateMove<M, O>) -> Self {
         debug_assert_eq!(&self.r#move, &other.r#move);
-        let objective_value = <P::ObjectiveValue as ObjectiveValue>::reduce(
-            self.objective_value,
-            other.objective_value,
-        );
+        let objective_value = O::reduce(self.objective_value, other.objective_value);
         Self::new(self.r#move, objective_value)
     }
 }
 
-impl<P: Problem> PartialEq for CandidateMove<P> {
+impl<M: Move, O: ObjectiveValue> PartialEq for CandidateMove<M, O> {
     fn eq(&self, other: &Self) -> bool {
         self.r#move == other.r#move
     }
 }
 
-impl<P: Problem> Eq for CandidateMove<P> {}
+impl<M: Move, O: ObjectiveValue> Eq for CandidateMove<M, O> {}
 
-impl<P: Problem> PartialOrd for CandidateMove<P> {
+impl<M: Move, O: ObjectiveValue> PartialOrd for CandidateMove<M, O> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.r#move.partial_cmp(&other.r#move)
     }
 }
 
-impl<P: Problem> Ord for CandidateMove<P> {
+impl<M: Move, O: ObjectiveValue> Ord for CandidateMove<M, O> {
     fn cmp(&self, other: &Self) -> Ordering {
         self.r#move.cmp(&other.r#move)
     }

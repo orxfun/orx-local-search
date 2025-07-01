@@ -1,4 +1,4 @@
-use crate::{r#move::Move, objective_value::ObjectiveValue};
+use crate::{CandidateMove, r#move::Move, objective_value::ObjectiveValue};
 
 pub trait Problem: 'static {
     type ObjectiveValue: ObjectiveValue;
@@ -11,3 +11,5 @@ pub trait Problem: 'static {
         solution: &'b <Self::Move as Move>::Solution,
     ) -> impl Iterator<Item = Self::Move> + 'a + 'b + 'c;
 }
+
+pub type CandidateMoveOf<P> = CandidateMove<<P as Problem>::Move, <P as Problem>::ObjectiveValue>;

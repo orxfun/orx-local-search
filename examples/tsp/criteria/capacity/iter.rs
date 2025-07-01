@@ -3,7 +3,7 @@ use crate::{
     tour::Tour,
 };
 use orx_iterable::Collection;
-use orx_local_search::CandidateMove;
+use orx_local_search::{CandidateMove, CandidateMoveOf};
 
 pub struct CapacityMoves<'a> {
     tour: &'a Tour,
@@ -19,7 +19,7 @@ impl<'a> CapacityMoves<'a> {
 }
 
 impl<'a> Iterator for CapacityMoves<'a> {
-    type Item = CandidateMove<Tsp>;
+    type Item = CandidateMoveOf<Tsp>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

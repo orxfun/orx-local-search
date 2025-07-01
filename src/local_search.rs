@@ -1,6 +1,6 @@
 use crate::{
-    CandidateMoveOf, Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
-    criterion::ObjectiveUnitOf,
+    Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
+    criterion::CandidateMoveOf, criterion::ObjectiveUnitOf,
 };
 
 pub struct LocalSearch<X>

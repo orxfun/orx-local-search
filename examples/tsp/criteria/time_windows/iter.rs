@@ -1,6 +1,6 @@
 use crate::{AllInsertMovesIter, Tour, criteria::time_windows::TimeWindowInput, problem::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::CandidateMove;
+use orx_local_search::{CandidateMove, CandidateMoveOf};
 
 pub struct TimeWindowMoves<'a> {
     tour: &'a Tour,
@@ -16,7 +16,7 @@ impl<'a> TimeWindowMoves<'a> {
 }
 
 impl<'a> Iterator for TimeWindowMoves<'a> {
-    type Item = CandidateMove<Tsp>;
+    type Item = CandidateMoveOf<Tsp>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

@@ -12,9 +12,9 @@ mod result;
 mod sorted_intersecting_iterator;
 
 pub use candidate_move::CandidateMove;
-pub use criterion::{CandidateMoveOf, Criterion, InputOf, ObjectiveUnitOf, SolutionOf};
+pub use criterion::{Criterion, InputOf, ObjectiveUnitOf, SolutionOf};
 pub use r#move::Move;
 pub use move_generator::MoveGenerator;
 pub use objective_value::ObjectiveValue;
-pub use problem::Problem;
+pub use problem::{CandidateMoveOf, Problem};
 pub use result::LocalSearchResult;
