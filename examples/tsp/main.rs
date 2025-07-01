@@ -16,4 +16,8 @@ pub use tour::Tour;
 pub use tour_after_move::TourAfterInsertIter;
 pub use tour_cost::TourCost;
 
-fn main() {}
+use crate::composing_criteria::explicit;
+
+fn main() {
+    explicit::run();
+}

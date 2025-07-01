@@ -11,6 +11,10 @@ impl Tour {
     pub fn get(&self, position: usize) -> Option<usize> {
         self.0.get(position).copied()
     }
+
+    pub fn example_solution() -> Self {
+        Self::new((0..6).collect())
+    }
 }
 
 impl IntoIterator for Tour {
