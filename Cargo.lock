@@ -16,7 +16,13 @@ name = "orx-local-search"
 version = "0.1.0"
 dependencies = [
  "orx-iterable",
+ "orx-meta",
 ]
+
+[[package]]
+name = "orx-meta"
+version = "1.0.0"
+source = "git+https://github.com/orxfun/orx-meta#7915570920e859e1bf8111c031234b3c2c9bc567"
 
 [[package]]
 name = "orx-self-or"

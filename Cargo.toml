@@ -5,6 +5,7 @@ edition = "2024"
 publish = ["artifactory"]
 
 [dependencies]
+orx-meta = { git = "https://github.com/orxfun/orx-meta" }
 
 
 [dev-dependencies]

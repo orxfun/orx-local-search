@@ -8,7 +8,10 @@ use crate::{
 };
 use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
 
-type TspCriteriaA = ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>;
+type TspCriteriaA = ComposedCriteria<
+    ComposedCriteria<ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>, Duration>,
+    Capacity,
+>;
 
 fn print(
     tour: &Tour,
@@ -29,13 +32,17 @@ fn print(
 }
 
 pub fn run() {
-    println!("\n\nRunning with explicit criteria for (Duration, Capacity, TimeWindows).");
+    println!(
+        "\n\nRunning with explicit criteria for (Duration, Capacity, TimeWindows, Duration, Capacity)."
+    );
 
     let initial_tour = Tour::example_solution();
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();
     let input_time_windows = TimeWindowInput::example_input();
+    let input_duration2 = DurationMatrix::example_input();
+    let input_capacity2 = CapacityInput::example_input();
 
     println!("\nInitial Solution");
     print(
@@ -45,14 +52,23 @@ pub fn run() {
         &input_time_windows,
     );
 
-    let input = ((input_duration, input_capacity), input_time_windows);
+    let input = (
+        (
+            ((input_duration, input_capacity), input_time_windows),
+            input_duration2,
+        ),
+        input_capacity2,
+    );
     let mut local_search = LocalSearch::<TspCriteriaA>::new();
     let (tour, _) = local_search
         .optimize(initial_tour, &input, None)
         .into_local_optimum()
         .unwrap();
 
-    let ((input_duration, input_capacity), input_time_windows) = input;
+    let (
+        (((input_duration, input_capacity), input_time_windows), _input_duration2),
+        _input_capacity2,
+    ) = input;
     println!("\nOptimized Solution");
     print(&tour, &input_duration, &input_capacity, &input_time_windows);
 }
