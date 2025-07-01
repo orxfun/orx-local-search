@@ -12,6 +12,10 @@ impl DurationMatrix {
         self.0[from_city][to_city]
     }
 
+    pub fn tour_len(&self) -> usize {
+        self.0.len()
+    }
+
     pub fn tour_cost(&self, tour: &Tour) -> u64 {
         let mut cost = 0;
         for p in 0..tour.iter().len().saturating_sub(1) {
@@ -22,9 +26,9 @@ impl DurationMatrix {
 
     pub fn tour_cost_after_move(&self, tour: &Tour, mv: &InsertMove) -> u64 {
         let mut cost = 0;
-        let mut iter = TourAfterInsertIter::new(mv.clone(), tour);
-        if let Some(mut a) = iter.next() {
-            for b in iter {
+        let mut new_tour = TourAfterInsertIter::new(mv.clone(), tour);
+        if let Some(mut a) = new_tour.next() {
+            for b in new_tour {
                 cost += self.get(a, b);
                 a = b;
             }

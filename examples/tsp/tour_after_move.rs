@@ -33,10 +33,8 @@ pub struct MoveToRight<'a> {
     p: usize,
 }
 
-impl Iterator for MoveToRight<'_> {
-    type Item = usize;
-
-    fn next(&mut self) -> Option<Self::Item> {
+impl MoveToRight<'_> {
+    pub fn peek(&self) -> Option<usize> {
         let city = match self.p {
             p if (0..self.mv.current_position).contains(&p) => Some(self.tour[p]),
             p if (self.mv.current_position..self.mv.target_position).contains(&p) => {
@@ -45,6 +43,15 @@ impl Iterator for MoveToRight<'_> {
             p if p == self.mv.target_position => Some(self.tour[self.mv.current_position]),
             p => self.tour.get(p),
         };
+        city
+    }
+}
+
+impl Iterator for MoveToRight<'_> {
+    type Item = usize;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let city = self.peek();
         self.p += 1;
         city
     }
@@ -56,10 +63,8 @@ pub struct MoveToLeft<'a> {
     p: usize,
 }
 
-impl Iterator for MoveToLeft<'_> {
-    type Item = usize;
-
-    fn next(&mut self) -> Option<Self::Item> {
+impl MoveToLeft<'_> {
+    pub fn peek(&self) -> Option<usize> {
         let city = match self.p {
             p if (0..self.mv.target_position).contains(&p) => Some(self.tour[p]),
             p if p == self.mv.target_position => Some(self.tour[self.mv.current_position]),
@@ -68,6 +73,15 @@ impl Iterator for MoveToLeft<'_> {
             }
             p => self.tour.get(p),
         };
+        city
+    }
+}
+
+impl Iterator for MoveToLeft<'_> {
+    type Item = usize;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let city = self.peek();
         self.p += 1;
         city
     }
