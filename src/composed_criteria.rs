@@ -38,7 +38,7 @@ where
 {
     type Problem = X1::Problem;
 
-    type Input = (X1::Input, X2::Input);
+    type Input<'i> = (X1::Input<'i>, X2::Input<'i>);
 
     type MoveGenerator<'i> = ComposedMoveGenerator<'i, X1, X2>;
 
@@ -56,7 +56,7 @@ where
     fn evaluate(
         self,
         solution: &SolutionOf<Self>,
-        (input1, input2): &Self::Input,
+        (input1, input2): &Self::Input<'_>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         self.0.evaluate(solution, input1).and_then(|value1| {
             self.1.evaluate(solution, input2).map(|value2| {

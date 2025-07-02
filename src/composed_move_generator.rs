@@ -30,7 +30,7 @@ where
 {
     type Problem = X1::Problem;
 
-    type Input = (X1::Input, X2::Input);
+    type Input = (X1::Input<'i>, X2::Input<'i>);
 
     fn moves<'a>(
         &'a mut self,
