@@ -4,9 +4,9 @@ use crate::{
     criterion::{Criterion, ObjectiveUnitOf},
 };
 use orx_meta::queue::MetaQueue;
-use std::marker::PhantomData;
 
-pub struct ComposedCriteria<X1, X2>(PhantomData<(X1, X2)>)
+#[derive(Clone, Copy)]
+pub struct ComposedCriteria<X1, X2>(X1, X2)
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>;
@@ -27,7 +27,7 @@ where
     X2: Criterion<Problem = X1::Problem>,
 {
     pub fn new() -> Self {
-        Self(PhantomData)
+        Self(Default::default(), Default::default())
     }
 }
 
@@ -40,20 +40,26 @@ where
 
     type Input = (X1::Input, X2::Input);
 
-    type InputQueue = <X1::InputQueue as MetaQueue>::Extend<X2::InputQueue>;
-
     type MoveGenerator = ComposedMoveGenerator<X1, X2>;
 
-    fn move_generator() -> Self::MoveGenerator {
-        ComposedMoveGenerator::new(X1::move_generator(), X2::move_generator())
+    type InputQueue = <X1::InputQueue as MetaQueue>::Extend<X2::InputQueue>;
+
+    type ComposeWith<X>
+        = ComposedCriteria<Self, X>
+    where
+        X: Criterion<Problem = Self::Problem>;
+
+    fn move_generator(self) -> Self::MoveGenerator {
+        ComposedMoveGenerator::new(X1::move_generator(self.0), X2::move_generator(self.1))
     }
 
     fn evaluate(
+        self,
         solution: &SolutionOf<Self>,
         (input1, input2): &Self::Input,
     ) -> Option<ObjectiveUnitOf<Self>> {
-        X1::evaluate(solution, input1).and_then(|value1| {
-            X2::evaluate(solution, input2).map(|value2| {
+        self.0.evaluate(solution, input1).and_then(|value1| {
+            self.1.evaluate(solution, input2).map(|value2| {
                 <<X1::Problem as Problem>::ObjectiveValue as ObjectiveValue>::reduce(value1, value2)
             })
         })

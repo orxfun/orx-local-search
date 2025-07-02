@@ -1,6 +1,6 @@
 use crate::{CandidateMove, r#move::Move, objective_value::ObjectiveValue};
 
-pub trait Problem: 'static {
+pub trait Problem: 'static + Default + Clone + Copy {
     type ObjectiveValue: ObjectiveValue;
 
     type Solution;

@@ -2,9 +2,10 @@ use crate::{
     criteria::duration::{input::DurationMatrix, move_generator::DurationMoveGenerator},
     problem::Tsp,
 };
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
+use orx_local_search::{ComposedCriteria, Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
 
+#[derive(Default, Clone, Copy)]
 pub struct Duration;
 
 impl Criterion for Duration {
@@ -12,15 +13,21 @@ impl Criterion for Duration {
 
     type Input = DurationMatrix;
 
-    type InputQueue = One<Self::Input>;
-
     type MoveGenerator = DurationMoveGenerator;
 
-    fn move_generator() -> Self::MoveGenerator {
+    type InputQueue = One<Self::Input>;
+
+    type ComposeWith<X>
+        = ComposedCriteria<Self, X>
+    where
+        X: Criterion<Problem = Self::Problem>;
+
+    fn move_generator(self) -> Self::MoveGenerator {
         DurationMoveGenerator
     }
 
     fn evaluate(
+        self,
         tour: &SolutionOf<Self>,
         duration_matrix: &Self::Input,
     ) -> Option<ObjectiveUnitOf<Self>> {

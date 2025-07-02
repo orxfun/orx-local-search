@@ -7,13 +7,16 @@ pub struct LocalSearch<X>
 where
     X: Criterion,
 {
+    criterion: X,
     move_generator: X::MoveGenerator,
 }
 
 impl<X: Criterion> LocalSearch<X> {
-    pub fn new() -> Self {
-        let move_generator = X::move_generator();
-        Self { move_generator }
+    pub fn new(criterion: X) -> Self {
+        Self {
+            criterion,
+            move_generator: criterion.move_generator(),
+        }
     }
 
     fn next_best_move(
@@ -42,11 +45,11 @@ impl<X: Criterion> LocalSearch<X> {
             true => {
                 debug_assert_eq!(
                     &initial_objective_value,
-                    &X::evaluate(&initial_solution, input)
+                    &self.criterion.evaluate(&initial_solution, input)
                 );
                 initial_objective_value
             }
-            false => X::evaluate(&initial_solution, input),
+            false => self.criterion.evaluate(&initial_solution, input),
         };
 
         match initial_value {

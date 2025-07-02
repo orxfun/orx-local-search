@@ -6,15 +6,16 @@ use crate::{
         time_windows::{TimeWindowInput, TimeWindows},
     },
 };
-use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
-
-type MyTsp = ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>;
+use orx_local_search::{Criterion, LocalSearch};
 
 fn print(
     tour: &Tour,
-    ((input_duration, input_capacity), input_time_windows): &(
-        (DurationMatrix, CapacityInput),
-        TimeWindowInput,
+    ((((input_duration, input_capacity), input_time_windows), _input_duration2), _input_capacity2): &(
+        (
+            ((DurationMatrix, CapacityInput), TimeWindowInput),
+            DurationMatrix,
+        ),
+        CapacityInput,
     ),
 ) {
     let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
@@ -30,18 +31,27 @@ fn print(
 }
 
 pub fn run() {
-    println!("\n\nRunning with explicit criteria for (Duration, Capacity, TimeWindows).");
+    println!(
+        "\n\nRunning with composed criteria for (Duration, Capacity, TimeWindows, Duration, Capacity)."
+    );
 
-    let my_tsp = MyTsp::new();
+    let my_tsp = Duration
+        .compose(Capacity)
+        .compose(TimeWindows)
+        .compose(Duration)
+        .compose(Capacity);
 
-    let input_duration = DurationMatrix::example_input();
-    let input_capacity = CapacityInput::example_input();
-    let input_time_windows = TimeWindowInput::example_input();
-    let input = ((input_duration, input_capacity), input_time_windows);
+    let input = my_tsp
+        .input_builder()
+        .add(DurationMatrix::example_input())
+        .add(CapacityInput::example_input())
+        .add(TimeWindowInput::example_input())
+        .add(DurationMatrix::example_input())
+        .add(CapacityInput::example_input())
+        .value();
 
     let initial_tour = Tour::example_solution();
 
-    println!("\nInitial Solution");
     print(&initial_tour, &input);
 
     let mut local_search = LocalSearch::new(my_tsp);
@@ -50,6 +60,5 @@ pub fn run() {
         .into_local_optimum()
         .unwrap();
 
-    println!("\nOptimized Solution");
     print(&tour, &input);
 }

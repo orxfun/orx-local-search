@@ -2,6 +2,7 @@ use crate::{Tour, insert_move::InsertMove, neighborhood::AllInsertMovesIter, tou
 use orx_iterable::Collection;
 use orx_local_search::{Move, Problem};
 
+#[derive(Default, Clone, Copy)]
 pub struct Tsp;
 
 impl Problem for Tsp {

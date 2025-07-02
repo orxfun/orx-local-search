@@ -2,9 +2,10 @@ use crate::{
     criteria::capacity::{input::CapacityInput, move_generator::CapacityMoveGenerator},
     problem::Tsp,
 };
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
+use orx_local_search::{ComposedCriteria, Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
 
+#[derive(Default, Clone, Copy)]
 pub struct Capacity;
 
 impl Criterion for Capacity {
@@ -12,15 +13,21 @@ impl Criterion for Capacity {
 
     type Input = CapacityInput;
 
-    type InputQueue = One<Self::Input>;
-
     type MoveGenerator = CapacityMoveGenerator;
 
-    fn move_generator() -> Self::MoveGenerator {
+    type InputQueue = One<Self::Input>;
+
+    type ComposeWith<X>
+        = ComposedCriteria<Self, X>
+    where
+        X: Criterion<Problem = Self::Problem>;
+
+    fn move_generator(self) -> Self::MoveGenerator {
         CapacityMoveGenerator
     }
 
     fn evaluate(
+        self,
         tour: &SolutionOf<Self>,
         capacity_input: &Self::Input,
     ) -> Option<ObjectiveUnitOf<Self>> {
