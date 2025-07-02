@@ -7,7 +7,7 @@ where
     O: ObjectiveValue,
 {
     OneIteratorConsumed,
-    BothYieldedSameValue(CandidateMove<M, O>),
+    BothYieldedSameValue { composed: CandidateMove<M, O> },
     FirstIteratorYieldedSmaller { next2: CandidateMove<M, O> },
     FirstIteratorYieldedGreater { next1: CandidateMove<M, O> },
 }
@@ -22,8 +22,8 @@ where
             (Some(value1), Some(value2)) => match value1.cmp(&value2) {
                 Ordering::Equal => {
                     let objective_value = O::reduce(value1.objective_value, value2.objective_value);
-                    let composed_next = CandidateMove::new(value1.r#move, objective_value);
-                    Self::BothYieldedSameValue(composed_next)
+                    let composed = CandidateMove::new(value1.r#move, objective_value);
+                    Self::BothYieldedSameValue { composed }
                 }
                 Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
                 Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },
@@ -37,8 +37,8 @@ where
             Some(value2) => match value1.cmp(&value2) {
                 Ordering::Equal => {
                     let objective_value = O::reduce(value1.objective_value, value2.objective_value);
-                    let composed_next = CandidateMove::new(value1.r#move, objective_value);
-                    Self::BothYieldedSameValue(composed_next)
+                    let composed = CandidateMove::new(value1.r#move, objective_value);
+                    Self::BothYieldedSameValue { composed }
                 }
                 Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
                 Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },
@@ -52,8 +52,8 @@ where
             Some(value1) => match value1.cmp(&value2) {
                 Ordering::Equal => {
                     let objective_value = O::reduce(value1.objective_value, value2.objective_value);
-                    let composed_next = CandidateMove::new(value1.r#move, objective_value);
-                    Self::BothYieldedSameValue(composed_next)
+                    let composed = CandidateMove::new(value1.r#move, objective_value);
+                    Self::BothYieldedSameValue { composed }
                 }
                 Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
                 Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },

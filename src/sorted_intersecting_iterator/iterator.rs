@@ -41,7 +41,7 @@ where
 
         loop {
             match result {
-                ComposedNext::BothYieldedSameValue(next) => return Some(next),
+                ComposedNext::BothYieldedSameValue { composed } => return Some(composed),
                 ComposedNext::FirstIteratorYieldedGreater { next1 } => {
                     result = ComposedNext::new_with_left(next1, self.iter2.next())
                 }
