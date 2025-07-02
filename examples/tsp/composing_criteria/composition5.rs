@@ -51,7 +51,7 @@ pub fn run() {
         .value();
 
     let initial_tour = Tour::example_solution();
-
+    println!("\nInitial Solution");
     print(&initial_tour, &input);
 
     let mut local_search = LocalSearch::new(my_tsp);
@@ -59,6 +59,6 @@ pub fn run() {
         .optimize(initial_tour, &input, None)
         .into_local_optimum()
         .unwrap();
-
+    println!("\nOptimized Solution");
     print(&tour, &input);
 }

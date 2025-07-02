@@ -1,6 +1,7 @@
 use orx_local_search::ObjectiveValue;
 
-pub struct TourCost(u64);
+#[derive(Default, Clone, Copy)]
+pub struct TourCost;
 
 impl ObjectiveValue for TourCost {
     type Unit = u64;
