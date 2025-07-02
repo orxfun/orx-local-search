@@ -3,15 +3,15 @@ use crate::{
     criterion::ObjectiveUnitOf,
 };
 
-pub struct LocalSearch<X>
+pub struct LocalSearch<'i, X>
 where
     X: Criterion,
 {
     criterion: X,
-    move_generator: X::MoveGenerator,
+    move_generator: X::MoveGenerator<'i>,
 }
 
-impl<X: Criterion> LocalSearch<X> {
+impl<'i, X: Criterion> LocalSearch<'i, X> {
     pub fn new(criterion: X) -> Self {
         Self {
             criterion,
@@ -22,7 +22,7 @@ impl<X: Criterion> LocalSearch<X> {
     fn next_best_move(
         &mut self,
         solution: &SolutionOf<X>,
-        input: &InputOf<X>,
+        input: &InputOf<'i, X>,
         mut best_value: ObjectiveUnitOf<X>,
     ) -> Option<CandidateMoveOf<<X as Criterion>::Problem>> {
         let mut best_move = None;
@@ -38,7 +38,7 @@ impl<X: Criterion> LocalSearch<X> {
     pub fn optimize(
         &mut self,
         initial_solution: SolutionOf<X>,
-        input: &InputOf<X>,
+        input: &InputOf<'i, X>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X> {
         let initial_value = match initial_objective_value.is_some() {
