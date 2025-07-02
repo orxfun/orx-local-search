@@ -1,0 +1,12 @@
+[package]
+name = "orx-local-search"
+version = "0.1.0"
+edition = "2024"
+publish = ["artifactory"]
+
+[dependencies]
+orx-meta = { git = "https://github.com/orxfun/orx-meta" }
+
+
+[dev-dependencies]
+orx-iterable = { version = "1.3.0", registry = "artifactory" }
