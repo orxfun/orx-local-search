@@ -40,7 +40,7 @@ where
 
     type Input = (X1::Input, X2::Input);
 
-    type MoveGenerator = ComposedMoveGenerator<X1, X2>;
+    type MoveGenerator<'i> = ComposedMoveGenerator<'i, X1, X2>;
 
     type InputQueue = <X1::InputQueue as MetaQueue>::Extend<X2::InputQueue>;
 
@@ -49,7 +49,7 @@ where
     where
         X: Criterion<Problem = Self::Problem>;
 
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         ComposedMoveGenerator::new(X1::move_generator(self.0), X2::move_generator(self.1))
     }
 

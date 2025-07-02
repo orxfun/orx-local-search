@@ -20,7 +20,7 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
 
     type Input = ();
 
-    type MoveGenerator = NeighborhoodGenerator<P>;
+    type MoveGenerator<'i> = NeighborhoodGenerator<P>;
 
     type InputQueue = Empty;
 
@@ -29,7 +29,7 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
     where
         X: Criterion<Problem = Self::Problem>;
 
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         NeighborhoodGenerator::default()
     }
 

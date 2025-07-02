@@ -9,7 +9,7 @@ impl<P: Problem> Default for NeighborhoodGenerator<P> {
     }
 }
 
-impl<P: Problem> MoveGenerator for NeighborhoodGenerator<P> {
+impl<P: Problem> MoveGenerator<'_> for NeighborhoodGenerator<P> {
     type Problem = P;
 
     type Input = ();

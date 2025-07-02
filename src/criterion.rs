@@ -6,7 +6,7 @@ pub trait Criterion: Default + Clone + Copy {
 
     type Input;
 
-    type MoveGenerator: MoveGenerator<Problem = Self::Problem, Input = Self::Input>;
+    type MoveGenerator<'i>: MoveGenerator<'i, Problem = Self::Problem, Input = Self::Input>;
 
     type InputQueue: MetaQueue;
 
@@ -18,7 +18,7 @@ pub trait Criterion: Default + Clone + Copy {
         Self::default()
     }
 
-    fn move_generator(self) -> Self::MoveGenerator;
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i>;
 
     fn evaluate(
         self,
