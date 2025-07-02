@@ -44,11 +44,6 @@ where
 
     type InputQueue<'i> = <X1::InputQueue<'i> as MetaQueue>::Extend<X2::InputQueue<'i>>;
 
-    type ComposeWith<X>
-        = ComposedCriteria<Self, X>
-    where
-        X: Criterion<Problem = Self::Problem>;
-
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         ComposedMoveGenerator::new(X1::move_generator(self.0), X2::move_generator(self.1))
     }

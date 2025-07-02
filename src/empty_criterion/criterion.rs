@@ -24,11 +24,6 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
 
     type InputQueue<'i> = Empty;
 
-    type ComposeWith<X>
-        = X
-    where
-        X: Criterion<Problem = Self::Problem>;
-
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         NeighborhoodGenerator::default()
     }

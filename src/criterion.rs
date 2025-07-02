@@ -10,10 +10,6 @@ pub trait Criterion: Default + Clone + Copy {
 
     type InputQueue<'i>: MetaQueue;
 
-    type ComposeWith<X>: Criterion
-    where
-        X: Criterion<Problem = Self::Problem>;
-
     fn new() -> Self {
         Self::default()
     }
