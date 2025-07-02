@@ -11,25 +11,25 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input = TimeWindowInput;
+    type Input<'i> = TimeWindowInput;
 
-    type MoveGenerator = TimeWindowMoveGenerator;
+    type MoveGenerator<'i> = TimeWindowMoveGenerator;
 
-    type InputQueue = One<Self::Input>;
+    type InputQueue<'i> = One<Self::Input<'i>>;
 
     type ComposeWith<X>
         = ComposedCriteria<Self, X>
     where
         X: Criterion<Problem = Self::Problem>;
 
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         TimeWindowMoveGenerator
     }
 
     fn evaluate(
         self,
         tour: &SolutionOf<Self>,
-        input: &Self::Input,
+        input: &Self::Input<'_>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         input.tour_cost(tour)
     }

@@ -8,7 +8,7 @@ pub trait Criterion: Default + Clone + Copy {
 
     type MoveGenerator<'i>: MoveGenerator<'i, Problem = Self::Problem, Input = Self::Input<'i>>;
 
-    type InputQueue: MetaQueue;
+    type InputQueue<'i>: MetaQueue;
 
     type ComposeWith<X>: Criterion
     where
@@ -33,7 +33,7 @@ pub trait Criterion: Default + Clone + Copy {
         Default::default()
     }
 
-    fn input_builder(self) -> TupleQueue<Self::InputQueue> {
+    fn input_builder<'i>(self) -> TupleQueue<Self::InputQueue<'i>> {
         Default::default()
     }
 }

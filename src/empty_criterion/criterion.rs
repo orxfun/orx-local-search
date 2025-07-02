@@ -22,7 +22,7 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
 
     type MoveGenerator<'i> = NeighborhoodGenerator<P>;
 
-    type InputQueue = Empty;
+    type InputQueue<'i> = Empty;
 
     type ComposeWith<X>
         = X

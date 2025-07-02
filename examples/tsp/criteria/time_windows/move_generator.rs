@@ -6,7 +6,7 @@ use orx_local_search::{CandidateMoveOf, MoveGenerator, Problem};
 
 pub struct TimeWindowMoveGenerator;
 
-impl MoveGenerator for TimeWindowMoveGenerator {
+impl<'i> MoveGenerator<'i> for TimeWindowMoveGenerator {
     type Problem = Tsp;
 
     type Input = TimeWindowInput;

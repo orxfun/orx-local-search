@@ -11,25 +11,25 @@ pub struct Duration;
 impl Criterion for Duration {
     type Problem = Tsp;
 
-    type Input = DurationMatrix;
+    type Input<'i> = DurationMatrix;
 
-    type MoveGenerator = DurationMoveGenerator;
+    type MoveGenerator<'i> = DurationMoveGenerator;
 
-    type InputQueue = One<Self::Input>;
+    type InputQueue<'i> = One<Self::Input<'i>>;
 
     type ComposeWith<X>
         = ComposedCriteria<Self, X>
     where
         X: Criterion<Problem = Self::Problem>;
 
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         DurationMoveGenerator
     }
 
     fn evaluate(
         self,
         tour: &SolutionOf<Self>,
-        duration_matrix: &Self::Input,
+        duration_matrix: &Self::Input<'_>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         Some(duration_matrix.tour_cost(tour))
     }
