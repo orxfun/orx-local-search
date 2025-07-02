@@ -11,7 +11,7 @@ pub struct Duration;
 impl Criterion for Duration {
     type Problem = Tsp;
 
-    type Input<'i> = DurationMatrix;
+    type Input<'i> = &'i DurationMatrix;
 
     type MoveGenerator<'i> = DurationMoveGenerator;
 

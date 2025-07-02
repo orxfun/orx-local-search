@@ -17,10 +17,10 @@ fn print(
     tour: &Tour,
     ((((input_duration, input_capacity), input_time_windows), _input_duration2), _input_capacity2): &(
         (
-            ((DurationMatrix, CapacityInput), TimeWindowInput),
-            DurationMatrix,
+            ((&DurationMatrix,& CapacityInput), &TimeWindowInput),
+          &DurationMatrix,
         ),
-        CapacityInput,
+        &CapacityInput,
     ),
 ) {
     let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
@@ -44,15 +44,15 @@ pub fn run() {
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();
-    let input_time_windows = TimeWindowInput::example_input();
+    let input_time_windows = TimeWindowInput::example_input(&input_duration);
     let input_duration2 = DurationMatrix::example_input();
     let input_capacity2 = CapacityInput::example_input();
     let input = (
         (
-            ((input_duration, input_capacity), input_time_windows),
-            input_duration2,
+            ((&input_duration, &input_capacity), &input_time_windows),
+            &input_duration2,
         ),
-        input_capacity2,
+        &input_capacity2,
     );
 
     let initial_tour = Tour::example_solution();

@@ -9,7 +9,7 @@ pub struct TimeWindowMoveGenerator;
 impl<'i> MoveGenerator<'i> for TimeWindowMoveGenerator {
     type Problem = Tsp;
 
-    type Input = TimeWindowInput;
+    type Input = &'i TimeWindowInput<'i>;
 
     fn moves<'a>(
         &'a mut self,

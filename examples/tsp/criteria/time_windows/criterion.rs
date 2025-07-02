@@ -11,7 +11,7 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input<'i> = TimeWindowInput;
+    type Input<'i> = &'i TimeWindowInput<'i>;
 
     type MoveGenerator<'i> = TimeWindowMoveGenerator;
 

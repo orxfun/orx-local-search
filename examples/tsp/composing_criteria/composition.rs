@@ -11,8 +11,8 @@ use orx_local_search::{Criterion, LocalSearch};
 fn print(
     tour: &Tour,
     ((input_duration, input_capacity), input_time_windows): &(
-        (DurationMatrix, CapacityInput),
-        TimeWindowInput,
+        (&DurationMatrix, &CapacityInput),
+        &TimeWindowInput,
     ),
 ) {
     let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
@@ -32,11 +32,15 @@ pub fn run() {
 
     let my_tsp = Duration.compose(Capacity).compose(TimeWindows);
 
+    let input_duration = DurationMatrix::example_input();
+    let input_capacity = CapacityInput::example_input();
+    let input_time_windows = TimeWindowInput::example_input(&input_duration);
+
     let input = my_tsp
         .input_builder()
-        .add(DurationMatrix::example_input())
-        .add(CapacityInput::example_input())
-        .add(TimeWindowInput::example_input())
+        .add(&input_duration)
+        .add(&input_capacity)
+        .add(&input_time_windows)
         .value();
 
     let initial_tour = Tour::example_solution();

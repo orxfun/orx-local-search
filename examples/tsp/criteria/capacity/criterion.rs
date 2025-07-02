@@ -11,7 +11,7 @@ pub struct Capacity;
 impl Criterion for Capacity {
     type Problem = Tsp;
 
-    type Input<'i> = CapacityInput;
+    type Input<'i> = &'i CapacityInput;
 
     type MoveGenerator<'i> = CapacityMoveGenerator;
 

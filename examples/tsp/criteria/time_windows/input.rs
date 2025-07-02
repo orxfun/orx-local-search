@@ -16,17 +16,17 @@ impl TimeWindow {
     }
 }
 
-pub struct TimeWindowInput {
-    duration_matrix: DurationMatrix,
+pub struct TimeWindowInput<'i> {
+    duration_matrix: &'i DurationMatrix,
     penalty_per_late_minutes: u64,
     max_allowed_lateness: u64,
     windows: Vec<Option<TimeWindow>>,
     start_time: u64,
 }
 
-impl TimeWindowInput {
+impl<'i> TimeWindowInput<'i> {
     pub fn new(
-        duration_matrix: DurationMatrix,
+        duration_matrix: &'i DurationMatrix,
         penalty_per_late_minutes: u64,
         max_allowed_lateness: u64,
         start_time: u64,
@@ -96,8 +96,7 @@ impl TimeWindowInput {
         }
     }
 
-    pub fn example_input() -> Self {
-        let duration_matrix = DurationMatrix::example_input();
+    pub fn example_input(duration_matrix: &'i DurationMatrix) -> Self {
         let windows = HashMap::<usize, TimeWindow>::from_iter([
             (1, TimeWindow::new(400, 500)),
             (3, TimeWindow::new(550, 850)),

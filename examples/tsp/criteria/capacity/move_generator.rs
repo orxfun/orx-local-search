@@ -9,7 +9,7 @@ pub struct CapacityMoveGenerator;
 impl<'i> MoveGenerator<'i> for CapacityMoveGenerator {
     type Problem = Tsp;
 
-    type Input = CapacityInput;
+    type Input = &'i CapacityInput;
 
     fn moves<'a>(
         &'a mut self,

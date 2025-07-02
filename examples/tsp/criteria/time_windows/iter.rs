@@ -4,7 +4,7 @@ use orx_local_search::{CandidateMove, CandidateMoveOf};
 
 pub struct TimeWindowMoves<'a> {
     tour: &'a Tour,
-    input: &'a TimeWindowInput,
+    input: &'a TimeWindowInput<'a>,
     iter: AllInsertMovesIter,
 }
 
