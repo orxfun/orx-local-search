@@ -41,15 +41,12 @@ where
 
         loop {
             match result {
-                ComposedNext::BothYieldedSameValue(next) => {
-                    // abc
-                    return next;
-                }
+                ComposedNext::BothYieldedSameValue(next) => return Some(next),
                 ComposedNext::FirstIteratorYieldedGreater { next1 } => {
-                    result = ComposedNext::new(next1, self.iter2.next())
+                    result = ComposedNext::new_with_left(next1, self.iter2.next())
                 }
                 ComposedNext::FirstIteratorYieldedSmaller { next2 } => {
-                    result = ComposedNext::new(self.iter1.next(), next2)
+                    result = ComposedNext::new_with_right(self.iter1.next(), next2)
                 }
                 ComposedNext::OneIteratorConsumed => return None,
             }

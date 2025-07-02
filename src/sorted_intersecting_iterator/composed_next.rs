@@ -7,9 +7,9 @@ where
     O: ObjectiveValue,
 {
     OneIteratorConsumed,
-    BothYieldedSameValue(Option<CandidateMove<M, O>>),
-    FirstIteratorYieldedSmaller { next2: Option<CandidateMove<M, O>> },
-    FirstIteratorYieldedGreater { next1: Option<CandidateMove<M, O>> },
+    BothYieldedSameValue(CandidateMove<M, O>),
+    FirstIteratorYieldedSmaller { next2: CandidateMove<M, O> },
+    FirstIteratorYieldedGreater { next1: CandidateMove<M, O> },
 }
 
 impl<M, O> ComposedNext<M, O>
@@ -23,14 +23,40 @@ where
                 Ordering::Equal => {
                     let objective_value = O::reduce(value1.objective_value, value2.objective_value);
                     let composed_next = CandidateMove::new(value1.r#move, objective_value);
-                    Self::BothYieldedSameValue(Some(composed_next))
+                    Self::BothYieldedSameValue(composed_next)
                 }
-                Ordering::Greater => Self::FirstIteratorYieldedGreater {
-                    next1: Some(value1),
-                },
-                Ordering::Less => Self::FirstIteratorYieldedSmaller {
-                    next2: Some(value2),
-                },
+                Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
+                Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },
+            },
+            _ => Self::OneIteratorConsumed,
+        }
+    }
+
+    pub fn new_with_left(value1: CandidateMove<M, O>, next2: Option<CandidateMove<M, O>>) -> Self {
+        match next2 {
+            Some(value2) => match value1.cmp(&value2) {
+                Ordering::Equal => {
+                    let objective_value = O::reduce(value1.objective_value, value2.objective_value);
+                    let composed_next = CandidateMove::new(value1.r#move, objective_value);
+                    Self::BothYieldedSameValue(composed_next)
+                }
+                Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
+                Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },
+            },
+            _ => Self::OneIteratorConsumed,
+        }
+    }
+
+    pub fn new_with_right(next1: Option<CandidateMove<M, O>>, value2: CandidateMove<M, O>) -> Self {
+        match next1 {
+            Some(value1) => match value1.cmp(&value2) {
+                Ordering::Equal => {
+                    let objective_value = O::reduce(value1.objective_value, value2.objective_value);
+                    let composed_next = CandidateMove::new(value1.r#move, objective_value);
+                    Self::BothYieldedSameValue(composed_next)
+                }
+                Ordering::Greater => Self::FirstIteratorYieldedGreater { next1: value1 },
+                Ordering::Less => Self::FirstIteratorYieldedSmaller { next2: value2 },
             },
             _ => Self::OneIteratorConsumed,
         }
