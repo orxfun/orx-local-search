@@ -38,25 +38,20 @@ where
 {
     type Problem = X1::Problem;
 
-    type Input = (X1::Input, X2::Input);
+    type Input<'i> = (X1::Input<'i>, X2::Input<'i>);
 
-    type MoveGenerator = ComposedMoveGenerator<X1, X2>;
+    type MoveGenerator<'i> = ComposedMoveGenerator<'i, X1, X2>;
 
-    type InputQueue = <X1::InputQueue as MetaQueue>::Extend<X2::InputQueue>;
+    type InputQueue<'i> = <X1::InputQueue<'i> as MetaQueue>::Extend<X2::InputQueue<'i>>;
 
-    type ComposeWith<X>
-        = ComposedCriteria<Self, X>
-    where
-        X: Criterion<Problem = Self::Problem>;
-
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         ComposedMoveGenerator::new(X1::move_generator(self.0), X2::move_generator(self.1))
     }
 
     fn evaluate(
         self,
         solution: &SolutionOf<Self>,
-        (input1, input2): &Self::Input,
+        (input1, input2): &Self::Input<'_>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         self.0.evaluate(solution, input1).and_then(|value1| {
             self.1.evaluate(solution, input2).map(|value2| {

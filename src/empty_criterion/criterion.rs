@@ -18,22 +18,17 @@ impl<P: Problem> Default for EmptyCriterion<P> {
 impl<P: Problem> Criterion for EmptyCriterion<P> {
     type Problem = P;
 
-    type Input = ();
+    type Input<'i> = ();
 
-    type MoveGenerator = NeighborhoodGenerator<P>;
+    type MoveGenerator<'i> = NeighborhoodGenerator<P>;
 
-    type InputQueue = Empty;
+    type InputQueue<'i> = Empty;
 
-    type ComposeWith<X>
-        = X
-    where
-        X: Criterion<Problem = Self::Problem>;
-
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         NeighborhoodGenerator::default()
     }
 
-    fn evaluate(self, _: &SolutionOf<Self>, _: &Self::Input) -> Option<ObjectiveUnitOf<Self>> {
+    fn evaluate(self, _: &SolutionOf<Self>, _: &Self::Input<'_>) -> Option<ObjectiveUnitOf<Self>> {
         Some(<P::ObjectiveValue as ObjectiveValue>::identity())
     }
 }

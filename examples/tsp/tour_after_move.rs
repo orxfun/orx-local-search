@@ -9,7 +9,6 @@ pub enum TourAfterInsertIter<'a> {
 impl<'a> TourAfterInsertIter<'a> {
     pub fn new(mv: InsertMove, tour: &'a Tour) -> Self {
         match mv.current_position.cmp(&mv.target_position) {
-            // Ordering::Equal => panic!("invalid move"),
             Ordering::Equal | Ordering::Less => Self::MoveToRight(MoveToRight { mv, tour, p: 0 }),
             Ordering::Greater => Self::MoveToLeft(MoveToLeft { mv, tour, p: 0 }),
         }

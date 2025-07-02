@@ -1,6 +1,6 @@
 use crate::{CandidateMoveOf, Problem};
 
-pub trait MoveGenerator {
+pub trait MoveGenerator<'i> {
     type Problem: Problem;
 
     type Input;

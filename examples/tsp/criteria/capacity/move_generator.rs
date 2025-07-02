@@ -6,10 +6,10 @@ use orx_local_search::{CandidateMoveOf, MoveGenerator, Problem};
 
 pub struct CapacityMoveGenerator;
 
-impl MoveGenerator for CapacityMoveGenerator {
+impl<'i> MoveGenerator<'i> for CapacityMoveGenerator {
     type Problem = Tsp;
 
-    type Input = CapacityInput;
+    type Input = &'i CapacityInput;
 
     fn moves<'a>(
         &'a mut self,

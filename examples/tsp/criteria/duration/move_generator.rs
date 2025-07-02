@@ -6,10 +6,10 @@ use orx_local_search::{CandidateMoveOf, MoveGenerator, Problem};
 
 pub struct DurationMoveGenerator;
 
-impl MoveGenerator for DurationMoveGenerator {
+impl<'i> MoveGenerator<'i> for DurationMoveGenerator {
     type Problem = Tsp;
 
-    type Input = DurationMatrix;
+    type Input = &'i DurationMatrix;
 
     fn moves<'a>(
         &'a mut self,

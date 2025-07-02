@@ -2,7 +2,7 @@ use crate::{
     criteria::time_windows::{TimeWindowInput, move_generator::TimeWindowMoveGenerator},
     problem::Tsp,
 };
-use orx_local_search::{ComposedCriteria, Criterion, ObjectiveUnitOf, SolutionOf};
+use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
 
 #[derive(Default, Clone, Copy)]
@@ -11,25 +11,20 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input = TimeWindowInput;
+    type Input<'i> = &'i TimeWindowInput<'i>;
 
-    type MoveGenerator = TimeWindowMoveGenerator;
+    type MoveGenerator<'i> = TimeWindowMoveGenerator;
 
-    type InputQueue = One<Self::Input>;
+    type InputQueue<'i> = One<Self::Input<'i>>;
 
-    type ComposeWith<X>
-        = ComposedCriteria<Self, X>
-    where
-        X: Criterion<Problem = Self::Problem>;
-
-    fn move_generator(self) -> Self::MoveGenerator {
+    fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         TimeWindowMoveGenerator
     }
 
     fn evaluate(
         self,
         tour: &SolutionOf<Self>,
-        input: &Self::Input,
+        input: &Self::Input<'_>,
     ) -> Option<ObjectiveUnitOf<Self>> {
         input.tour_cost(tour)
     }

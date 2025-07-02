@@ -5,29 +5,32 @@ use crate::{
     sorted_intersecting_iterator::SortedIntersectingIter,
 };
 
-pub struct ComposedMoveGenerator<X1, X2>(X1::MoveGenerator, X2::MoveGenerator)
+pub struct ComposedMoveGenerator<'i, X1, X2>(X1::MoveGenerator<'i>, X2::MoveGenerator<'i>)
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>;
 
-impl<X1, X2> ComposedMoveGenerator<X1, X2>
+impl<'i, X1, X2> ComposedMoveGenerator<'i, X1, X2>
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>,
 {
-    pub fn new(move_generator1: X1::MoveGenerator, move_generator2: X2::MoveGenerator) -> Self {
+    pub fn new(
+        move_generator1: X1::MoveGenerator<'i>,
+        move_generator2: X2::MoveGenerator<'i>,
+    ) -> Self {
         Self(move_generator1, move_generator2)
     }
 }
 
-impl<X1, X2> MoveGenerator for ComposedMoveGenerator<X1, X2>
+impl<'i, X1, X2> MoveGenerator<'i> for ComposedMoveGenerator<'i, X1, X2>
 where
     X1: Criterion,
     X2: Criterion<Problem = X1::Problem>,
 {
     type Problem = X1::Problem;
 
-    type Input = (X1::Input, X2::Input);
+    type Input = (X1::Input<'i>, X2::Input<'i>);
 
     fn moves<'a>(
         &'a mut self,
