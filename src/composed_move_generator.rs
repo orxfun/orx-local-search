@@ -1,5 +1,7 @@
 use crate::{
-    criterion::Criterion, move_generator::MoveGenerator,
+    criterion::Criterion,
+    move_generator::MoveGenerator,
+    problem::{CandidateMoveOf, Problem},
     sorted_intersecting_iterator::SortedIntersectingIter,
 };
 
@@ -29,9 +31,9 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        solution: &'a <Self::Problem as crate::Problem>::Solution,
+        solution: &'a <Self::Problem as Problem>::Solution,
         (input1, input2): &'a Self::Input,
-    ) -> impl Iterator<Item = crate::CandidateMoveOf<Self::Problem>> + 'a {
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::Problem>> + 'a {
         let moves1 = self.0.moves(solution, input1);
         let moves2 = self.1.moves(solution, input2);
         SortedIntersectingIter::new(moves1, moves2)
