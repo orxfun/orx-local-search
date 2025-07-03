@@ -1,31 +1,35 @@
 use crate::{
-    CandidateMoveOf, Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
-    criterion::ObjectiveUnitOf,
+    CandidateMoveOf, Criterion, CriterionWithNeighborhood, InputOf, LocalSearchResult, Move,
+    MoveGenerator, SolutionOf, criterion::ObjectiveUnitOf,
 };
 use orx_self_or::SoR;
 
 pub struct LocalSearch<'i, X>
 where
-    X: Criterion,
+    X: CriterionWithNeighborhood,
 {
-    criterion: X,
+    criterion: X::Criterion,
     move_generator: X::MoveGenerator<'i>,
 }
 
-impl<'i, X: Criterion> LocalSearch<'i, X> {
-    pub fn new(criterion: X) -> Self {
+impl<'i, X> LocalSearch<'i, X>
+where
+    X: CriterionWithNeighborhood,
+{
+    pub fn new(criterion_with_neighborhood: X) -> Self {
+        let criterion = X::Criterion::default();
         Self {
             criterion,
-            move_generator: criterion.move_generator(),
+            move_generator: criterion_with_neighborhood.move_generator(),
         }
     }
 
     fn next_best_move(
         &mut self,
-        solution: &SolutionOf<X>,
+        solution: &SolutionOf<X::Criterion>,
         input: &InputOf<'i, X>,
-        mut best_value: ObjectiveUnitOf<X>,
-    ) -> Option<CandidateMoveOf<<X as Criterion>::Neighborhood>> {
+        mut best_value: ObjectiveUnitOf<X::Criterion>,
+    ) -> Option<CandidateMoveOf<X::Neighborhood>> {
         let mut best_move = None;
         for candidate in self.move_generator.moves(solution, input) {
             if candidate.objective_value < best_value {
@@ -38,10 +42,10 @@ impl<'i, X: Criterion> LocalSearch<'i, X> {
 
     pub fn optimize(
         &mut self,
-        initial_solution: SolutionOf<X>,
+        initial_solution: SolutionOf<X::Criterion>,
         input: impl SoR<InputOf<'i, X>>,
-        initial_objective_value: Option<ObjectiveUnitOf<X>>,
-    ) -> LocalSearchResult<X> {
+        initial_objective_value: Option<ObjectiveUnitOf<X::Criterion>>,
+    ) -> LocalSearchResult<X::Criterion> {
         let input = input.get_ref();
 
         let initial_value = match initial_objective_value.is_some() {
