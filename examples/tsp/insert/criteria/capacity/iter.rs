@@ -2,7 +2,6 @@ use crate::{
     Tour,
     insert::{
         AllInsertMovesIter, criteria::capacity::CapacityInput, neighborhood::InsertNeighborhood,
-        problem::Tsp,
     },
 };
 use orx_iterable::Collection;

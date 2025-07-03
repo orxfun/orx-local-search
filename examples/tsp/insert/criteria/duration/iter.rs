@@ -1,7 +1,6 @@
 use crate::{
     insert::{
         AllInsertMovesIter, criteria::duration::DurationMatrix, neighborhood::InsertNeighborhood,
-        problem::Tsp,
     },
     tour::Tour,
 };
