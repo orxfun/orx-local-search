@@ -1,17 +1,18 @@
 use crate::{
-    Neighborhood, criterion::Criterion, move_generator::MoveGenerator, problem::Problem,
+    InputOf, Neighborhood, criterion_with_neighborhood::CriterionWithNeighborhood,
+    move_generator::MoveGenerator, problem::Problem,
     sorted_intersecting_iterator::SortedIntersectingIter,
 };
 
 pub struct ComposedMoveGenerator<'i, X1, X2>(X1::MoveGenerator<'i>, X2::MoveGenerator<'i>)
 where
-    X1: Criterion,
-    X2: Criterion<Neighborhood = X1::Neighborhood>;
+    X1: CriterionWithNeighborhood,
+    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>;
 
 impl<'i, X1, X2> ComposedMoveGenerator<'i, X1, X2>
 where
-    X1: Criterion,
-    X2: Criterion<Neighborhood = X1::Neighborhood>,
+    X1: CriterionWithNeighborhood,
+    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
 {
     pub fn new(
         move_generator1: X1::MoveGenerator<'i>,
@@ -23,12 +24,12 @@ where
 
 impl<'i, X1, X2> MoveGenerator<'i> for ComposedMoveGenerator<'i, X1, X2>
 where
-    X1: Criterion,
-    X2: Criterion<Neighborhood = X1::Neighborhood>,
+    X1: CriterionWithNeighborhood,
+    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
 {
     type Neighborhood = X1::Neighborhood;
 
-    type Input = (X1::Input<'i>, X2::Input<'i>);
+    type Input = (InputOf<'i, X1>, InputOf<'i, X2>);
 
     fn moves<'a>(
         &'a mut self,

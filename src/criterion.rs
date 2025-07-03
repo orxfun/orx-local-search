@@ -1,4 +1,4 @@
-use crate::{ObjectiveValue, problem::Problem};
+use crate::{ComposedCriteria, ObjectiveValue, problem::Problem};
 use orx_meta::queue::{MetaQueue, TupleQueue};
 
 pub trait Criterion: Default + Clone + Copy {
@@ -21,11 +21,16 @@ pub trait Criterion: Default + Clone + Copy {
     fn input_builder<'i>(self) -> TupleQueue<Self::InputQueue<'i>> {
         Default::default()
     }
+
+    fn compose<X>(self, _with: X) -> ComposedCriteria<Self, X>
+    where
+        X: Criterion<Problem = Self::Problem>,
+    {
+        Default::default()
+    }
 }
 
 pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
-
-pub type InputOf<'i, X> = <X as Criterion>::Input<'i>;
 
 pub type ObjectiveUnitOf<X> =
     <<<X as Criterion>::Problem as Problem>::ObjectiveValue as ObjectiveValue>::Unit;
