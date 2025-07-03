@@ -1,6 +1,6 @@
-use crate::insert::{
-    criteria::time_windows::{TimeWindowInput, iter::TimeWindowMoves},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::TimeWindowInput,
+    insert::{criteria::time_windows::iter::TimeWindowMoves, neighborhood::InsertNeighborhood},
 };
 use orx_local_search::{CandidateMoveOf, MoveGenerator, Neighborhood, Problem};
 

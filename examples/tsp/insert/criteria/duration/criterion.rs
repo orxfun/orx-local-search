@@ -1,31 +1,22 @@
-use crate::insert::{
-    criteria::duration::{DurationMatrix, move_generator::DurationMoveGenerator},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::Duration,
+    insert::{
+        criteria::duration::move_generator::DurationMoveGenerator, neighborhood::InsertNeighborhood,
+    },
 };
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
-use orx_meta::queue::One;
+use orx_local_search::CriterionWithNeighborhood;
 
 #[derive(Default, Clone, Copy)]
-pub struct Duration;
+pub struct DurationInsert;
 
-impl Criterion for Duration {
+impl CriterionWithNeighborhood for DurationInsert {
+    type Criterion = Duration;
+
     type Neighborhood = InsertNeighborhood;
-
-    type Input<'i> = &'i DurationMatrix;
 
     type MoveGenerator<'i> = DurationMoveGenerator;
 
-    type InputQueue<'i> = One<Self::Input<'i>>;
-
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         DurationMoveGenerator
-    }
-
-    fn evaluate(
-        self,
-        tour: &SolutionOf<Self>,
-        duration_matrix: &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
-        Some(duration_matrix.tour_cost(tour))
     }
 }

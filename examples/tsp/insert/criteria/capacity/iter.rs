@@ -20,11 +20,11 @@ impl<'a> CapacityMoves<'a> {
         Self { tour, input, iter }
     }
 
-    fn is_tour_feasible_after_move(input: &CapacityInput, tour: &Tour, mv: &InsertMove) -> bool {
-        let feasible_range = 0..input.vehicle_capacity as i64;
+    fn is_tour_feasible_after_move(&self, mv: &InsertMove) -> bool {
+        let feasible_range = 0..self.input.vehicle_capacity as i64;
         let mut current_capacity = 0i64;
-        for city in TourAfterInsertIter::new(mv.clone(), tour) {
-            current_capacity += input.city_capacity_delta[city];
+        for city in TourAfterInsertIter::new(mv.clone(), self.tour) {
+            current_capacity += self.input.city_capacity_delta[city];
             if !feasible_range.contains(&current_capacity) {
                 return false;
             }
@@ -40,7 +40,7 @@ impl<'a> Iterator for CapacityMoves<'a> {
         loop {
             match self.iter.next() {
                 None => return None,
-                Some(mv) if Self::is_tour_feasible_after_move(self.input, self.tour, &mv) => {
+                Some(mv) if self.is_tour_feasible_after_move(&mv) => {
                     return Some(CandidateMove::new(mv, 0));
                 }
                 _ => { /* infeasible move, continue to the next */ }

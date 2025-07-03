@@ -1,31 +1,23 @@
-use crate::insert::{
-    criteria::time_windows::{TimeWindowInput, move_generator::TimeWindowMoveGenerator},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::TimeWindows,
+    insert::{
+        criteria::time_windows::move_generator::TimeWindowMoveGenerator,
+        neighborhood::InsertNeighborhood,
+    },
 };
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
-use orx_meta::queue::One;
+use orx_local_search::CriterionWithNeighborhood;
 
 #[derive(Default, Clone, Copy)]
-pub struct TimeWindows;
+pub struct TimeWindowsInsert;
 
-impl Criterion for TimeWindows {
+impl CriterionWithNeighborhood for TimeWindowsInsert {
+    type Criterion = TimeWindows;
+
     type Neighborhood = InsertNeighborhood;
-
-    type Input<'i> = &'i TimeWindowInput<'i>;
 
     type MoveGenerator<'i> = TimeWindowMoveGenerator;
 
-    type InputQueue<'i> = One<Self::Input<'i>>;
-
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         TimeWindowMoveGenerator
-    }
-
-    fn evaluate(
-        self,
-        tour: &SolutionOf<Self>,
-        input: &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
-        input.tour_cost(tour)
     }
 }

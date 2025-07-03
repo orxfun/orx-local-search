@@ -74,7 +74,7 @@ impl<'i> TimeWindowInput<'i> {
         self.tour_cost_for_cities_sequence(first_city, tour.iter().copied())
     }
 
-    fn tour_cost_for_cities_sequence(
+    pub fn tour_cost_for_cities_sequence(
         &self,
         first_city: Option<usize>,
         cities: impl Iterator<Item = usize>,
