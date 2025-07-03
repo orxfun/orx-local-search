@@ -1,5 +1,9 @@
-use crate::{InsertMove, Tour, TourAfterInsertIter};
 use orx_iterable::Collection;
+
+use crate::{
+    Tour,
+    insert::{InsertMove, TourAfterInsertIter},
+};
 
 pub struct CapacityInput {
     vehicle_capacity: u64,

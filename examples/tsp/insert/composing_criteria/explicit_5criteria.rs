@@ -1,19 +1,22 @@
-use crate::{
-    Tour,
-    criteria::{
-        capacity::{Capacity, CapacityInput},
-        duration::{Duration, DurationMatrix},
-        time_windows::{TimeWindowInput, TimeWindows},
-    },
+use super::super::criteria::{
+    capacity::{Capacity, CapacityInput},
+    duration::{Duration, DurationMatrix},
+    time_windows::{TimeWindowInput, TimeWindows},
 };
-use orx_local_search::{Criterion, LocalSearch};
+use crate::Tour;
+use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
+
+type MyTsp = ComposedCriteria<
+    ComposedCriteria<ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>, Duration>,
+    Capacity,
+>;
 
 fn print(
     tour: &Tour,
     ((((input_duration, input_capacity), input_time_windows), _input_duration2), _input_capacity2): &(
         (
-            ((&DurationMatrix, &CapacityInput), &TimeWindowInput),
-            &DurationMatrix,
+            ((&DurationMatrix,& CapacityInput), &TimeWindowInput),
+          &DurationMatrix,
         ),
         &CapacityInput,
     ),
@@ -32,31 +35,26 @@ fn print(
 
 pub fn run() {
     println!(
-        "\n\nRunning with composed criteria for (Duration, Capacity, TimeWindows, Duration, Capacity)."
+        "\n\nRunning with explicit criteria for (Duration, Capacity, TimeWindows, Duration, Capacity)."
     );
 
-    let my_tsp = Duration
-        .compose(Capacity)
-        .compose(TimeWindows)
-        .compose(Duration)
-        .compose(Capacity);
+    let my_tsp = MyTsp::new();
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();
     let input_time_windows = TimeWindowInput::example_input(&input_duration);
     let input_duration2 = DurationMatrix::example_input();
     let input_capacity2 = CapacityInput::example_input();
-
-    let input = my_tsp
-        .input_builder()
-        .add(&input_duration)
-        .add(&input_capacity)
-        .add(&input_time_windows)
-        .add(&input_duration2)
-        .add(&input_capacity2)
-        .value();
+    let input = (
+        (
+            ((&input_duration, &input_capacity), &input_time_windows),
+            &input_duration2,
+        ),
+        &input_capacity2,
+    );
 
     let initial_tour = Tour::example_solution();
+
     println!("\nInitial Solution");
     print(&initial_tour, &input);
 
@@ -65,6 +63,7 @@ pub fn run() {
         .optimize(initial_tour, &input, None)
         .into_local_optimum()
         .unwrap();
+
     println!("\nOptimized Solution");
     print(&tour, &input);
 }

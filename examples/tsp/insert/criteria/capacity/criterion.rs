@@ -1,5 +1,5 @@
-use crate::{
-    criteria::capacity::{input::CapacityInput, move_generator::CapacityMoveGenerator},
+use crate::insert::{
+    criteria::capacity::{CapacityInput, move_generator::CapacityMoveGenerator},
     problem::Tsp,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};

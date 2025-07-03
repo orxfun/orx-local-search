@@ -1,4 +1,5 @@
-use crate::{insert_move::InsertMove, tour::Tour};
+use super::insert_move::InsertMove;
+use crate::Tour;
 use std::cmp::Ordering;
 
 pub enum TourAfterInsertIter<'a> {

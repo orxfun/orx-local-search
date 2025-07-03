@@ -1,4 +1,4 @@
-use crate::{
+use crate::insert::{
     criteria::time_windows::{TimeWindowInput, move_generator::TimeWindowMoveGenerator},
     problem::Tsp,
 };

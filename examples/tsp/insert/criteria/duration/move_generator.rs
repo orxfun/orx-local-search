@@ -1,4 +1,4 @@
-use crate::{
+use crate::insert::{
     criteria::duration::{DurationMatrix, iter::DurationMoves},
     problem::Tsp,
 };

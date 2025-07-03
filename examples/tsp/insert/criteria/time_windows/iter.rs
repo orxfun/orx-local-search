@@ -1,4 +1,7 @@
-use crate::{AllInsertMovesIter, Tour, criteria::time_windows::TimeWindowInput, problem::Tsp};
+use crate::{
+    Tour,
+    insert::{AllInsertMovesIter, criteria::time_windows::TimeWindowInput, problem::Tsp},
+};
 use orx_iterable::Collection;
 use orx_local_search::{CandidateMove, CandidateMoveOf};
 

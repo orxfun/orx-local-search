@@ -1,5 +1,5 @@
-use crate::{
-    criteria::duration::{input::DurationMatrix, move_generator::DurationMoveGenerator},
+use crate::insert::{
+    criteria::duration::{DurationMatrix, move_generator::DurationMoveGenerator},
     problem::Tsp,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};

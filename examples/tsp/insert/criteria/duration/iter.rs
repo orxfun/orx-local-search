@@ -1,5 +1,5 @@
 use crate::{
-    criteria::duration::input::DurationMatrix, neighborhood::AllInsertMovesIter, problem::Tsp,
+    insert::{AllInsertMovesIter, criteria::duration::DurationMatrix, problem::Tsp},
     tour::Tour,
 };
 use orx_iterable::Collection;
