@@ -7,9 +7,7 @@ pub trait Problem: 'static + Default + Clone + Copy {
 
     type Move: Move<Solution = Self::Solution>;
 
-    fn neighborhood<'a, 'b, 'c>(
-        solution: &'b <Self::Move as Move>::Solution,
-    ) -> impl Iterator<Item = Self::Move> + 'a + 'b + 'c;
+    fn neighborhood(solution: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move>;
 }
 
 pub type CandidateMoveOf<P> = CandidateMove<<P as Problem>::Move, <P as Problem>::ObjectiveValue>;

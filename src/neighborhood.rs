@@ -5,7 +5,5 @@ pub trait Neighborhood: 'static + Default + Clone + Copy {
 
     type Move: Move<Solution = <Self::Problem as Problem>::Solution>;
 
-    fn neighborhood<'a, 'b, 'c>(
-        solution: &'b <Self::Move as Move>::Solution,
-    ) -> impl Iterator<Item = Self::Move> + 'a + 'b + 'c;
+    fn neighborhood(solution: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move>;
 }

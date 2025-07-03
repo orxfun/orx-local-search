@@ -13,9 +13,7 @@ impl Problem for Tsp {
 
     type Move = InsertMove;
 
-    fn neighborhood<'a, 'b, 'c>(
-        tour: &'b <Self::Move as Move>::Solution,
-    ) -> impl Iterator<Item = Self::Move> + 'a + 'b + 'c {
+    fn neighborhood(tour: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move> {
         AllInsertMovesIter::new(tour.iter().len())
     }
 }
