@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use orx_self_or::SoR;
 
 use crate::{
