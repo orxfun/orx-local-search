@@ -1,5 +1,5 @@
 use super::InsertMove;
-use crate::insert::problem::Tsp;
+use crate::tsp::Tsp;
 use orx_iterable::Collection;
 use orx_local_search::{Move, Neighborhood};
 

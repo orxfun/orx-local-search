@@ -1,7 +1,6 @@
 use crate::insert::{
     criteria::time_windows::{TimeWindowInput, move_generator::TimeWindowMoveGenerator},
     neighborhood::InsertNeighborhood,
-    problem::Tsp,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;

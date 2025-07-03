@@ -2,7 +2,6 @@ mod composing_criteria;
 mod criteria;
 mod insert_move;
 mod neighborhood;
-mod problem;
 mod tour_after_move;
 
 pub use insert_move::InsertMove;
