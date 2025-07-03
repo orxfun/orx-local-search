@@ -1,4 +1,4 @@
-use crate::{Problem, r#move::Move};
+use crate::{CandidateMove, Problem, r#move::Move};
 
 pub trait Neighborhood: 'static + Default + Clone + Copy {
     type Problem: Problem;
@@ -7,3 +7,8 @@ pub trait Neighborhood: 'static + Default + Clone + Copy {
 
     fn neighborhood(solution: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move>;
 }
+
+pub type CandidateMoveOf<N> = CandidateMove<
+    <N as Neighborhood>::Move,
+    <<N as Neighborhood>::Problem as Problem>::ObjectiveValue,
+>;

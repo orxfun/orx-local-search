@@ -1,9 +1,8 @@
-use orx_self_or::SoR;
-
 use crate::{
     CandidateMoveOf, Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
     criterion::ObjectiveUnitOf,
 };
+use orx_self_or::SoR;
 
 pub struct LocalSearch<'i, X>
 where
@@ -26,7 +25,7 @@ impl<'i, X: Criterion> LocalSearch<'i, X> {
         solution: &SolutionOf<X>,
         input: &InputOf<'i, X>,
         mut best_value: ObjectiveUnitOf<X>,
-    ) -> Option<CandidateMoveOf<<X as Criterion>::Problem>> {
+    ) -> Option<CandidateMoveOf<<X as Criterion>::Neighborhood>> {
         let mut best_move = None;
         for candidate in self.move_generator.moves(solution, input) {
             if candidate.objective_value < best_value {

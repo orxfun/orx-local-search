@@ -1,5 +1,8 @@
 use crate::{
-    insert::{AllInsertMovesIter, criteria::duration::DurationMatrix, problem::Tsp},
+    insert::{
+        AllInsertMovesIter, criteria::duration::DurationMatrix, neighborhood::InsertNeighborhood,
+        problem::Tsp,
+    },
     tour::Tour,
 };
 use orx_iterable::Collection;
@@ -23,7 +26,7 @@ impl<'a> DurationMoves<'a> {
 }
 
 impl<'a> Iterator for DurationMoves<'a> {
-    type Item = CandidateMoveOf<Tsp>;
+    type Item = CandidateMoveOf<InsertNeighborhood>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.iter.next().map(|mv| {

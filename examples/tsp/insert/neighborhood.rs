@@ -1,4 +1,20 @@
 use super::InsertMove;
+use crate::insert::problem::Tsp;
+use orx_iterable::Collection;
+use orx_local_search::{Move, Neighborhood};
+
+#[derive(Default, Clone, Copy)]
+pub struct InsertNeighborhood;
+
+impl Neighborhood for InsertNeighborhood {
+    type Problem = Tsp;
+
+    type Move = InsertMove;
+
+    fn neighborhood(tour: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move> {
+        AllInsertMovesIter::new(tour.iter().len())
+    }
+}
 
 pub struct AllInsertMovesIter {
     n: usize,
