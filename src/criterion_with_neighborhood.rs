@@ -1,9 +1,9 @@
 use crate::{Criterion, Neighborhood, move_generator::MoveGenerator};
 
-pub trait CriterionWithNeighborhood {
+pub trait CriterionWithNeighborhood: Default + Clone + Copy {
     type Criterion: Criterion;
 
-    type Neighborhood: Neighborhood;
+    type Neighborhood: Neighborhood<Problem = <Self::Criterion as Criterion>::Problem>;
 
     type MoveGenerator<'i>: MoveGenerator<
             'i,

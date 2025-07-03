@@ -1,5 +1,6 @@
 mod candidate_move;
 mod composed_criteria;
+mod composed_criteria_with_neighborhood;
 mod composed_move_generator;
 mod criterion;
 mod criterion_with_neighborhood;
