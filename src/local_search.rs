@@ -1,3 +1,7 @@
+use std::ops::Deref;
+
+use orx_self_or::SoR;
+
 use crate::{
     CandidateMoveOf, Criterion, InputOf, LocalSearchResult, Move, MoveGenerator, SolutionOf,
     criterion::ObjectiveUnitOf,
@@ -38,9 +42,11 @@ impl<'i, X: Criterion> LocalSearch<'i, X> {
     pub fn optimize(
         &mut self,
         initial_solution: SolutionOf<X>,
-        input: &InputOf<'i, X>,
+        input: impl SoR<InputOf<'i, X>>,
         initial_objective_value: Option<ObjectiveUnitOf<X>>,
     ) -> LocalSearchResult<X> {
+        let input = input.get_ref();
+
         let initial_value = match initial_objective_value.is_some() {
             true => {
                 debug_assert_eq!(
