@@ -1,5 +1,5 @@
 use super::super::criteria::{
-    capacity::{Capacity, CapacityInput},
+    capacity::{CapacityInsert, CapacityInput},
     duration::{Duration, DurationMatrix},
     time_windows::{TimeWindowInput, TimeWindows},
 };
@@ -17,7 +17,7 @@ fn print(
     ),
 ) {
     let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
-    let cost_capacity = Capacity.evaluate(&tour, &input_capacity).unwrap();
+    let cost_capacity = CapacityInsert.evaluate(&tour, &input_capacity).unwrap();
     let cost_time_windows = TimeWindows.evaluate(&tour, &input_time_windows).unwrap();
     let cost = cost_duration + cost_capacity + cost_time_windows;
 
@@ -34,10 +34,10 @@ pub fn run() {
     );
 
     let my_tsp = Duration
-        .compose(Capacity)
+        .compose(CapacityInsert)
         .compose(TimeWindows)
         .compose(Duration)
-        .compose(Capacity);
+        .compose(CapacityInsert);
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();

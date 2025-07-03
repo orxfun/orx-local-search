@@ -26,8 +26,8 @@ impl Criterion for Capacity {
 }
 
 pub struct CapacityInput {
-    vehicle_capacity: u64,
-    city_capacity_delta: Vec<i64>,
+    pub vehicle_capacity: u64,
+    pub city_capacity_delta: Vec<i64>,
 }
 
 impl CapacityInput {

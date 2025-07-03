@@ -1,34 +1,22 @@
-use crate::insert::{
-    criteria::capacity::{CapacityInput, move_generator::CapacityMoveGenerator},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::Capacity,
+    insert::{
+        criteria::capacity::move_generator::CapacityMoveGenerator, neighborhood::InsertNeighborhood,
+    },
 };
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
-use orx_meta::queue::One;
+use orx_local_search::CriterionWithNeighborhood;
 
 #[derive(Default, Clone, Copy)]
-pub struct Capacity;
+pub struct CapacityInsert;
 
-impl Criterion for Capacity {
+impl CriterionWithNeighborhood for CapacityInsert {
+    type Criterion = Capacity;
+
     type Neighborhood = InsertNeighborhood;
-
-    type Input<'i> = &'i CapacityInput;
 
     type MoveGenerator<'i> = CapacityMoveGenerator;
 
-    type InputQueue<'i> = One<Self::Input<'i>>;
-
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i> {
         CapacityMoveGenerator
-    }
-
-    fn evaluate(
-        self,
-        tour: &SolutionOf<Self>,
-        capacity_input: &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
-        match capacity_input.is_tour_feasible(tour) {
-            true => Some(0),
-            false => None,
-        }
     }
 }

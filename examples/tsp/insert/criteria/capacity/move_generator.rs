@@ -1,6 +1,6 @@
-use crate::insert::{
-    criteria::capacity::{CapacityInput, iter::CapacityMoves},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::CapacityInput,
+    insert::{criteria::capacity::iter::CapacityMoves, neighborhood::InsertNeighborhood},
 };
 use orx_local_search::{CandidateMoveOf, MoveGenerator, Neighborhood, Problem};
 

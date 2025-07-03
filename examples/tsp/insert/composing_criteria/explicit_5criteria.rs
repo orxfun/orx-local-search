@@ -1,5 +1,5 @@
 use super::super::criteria::{
-    capacity::{Capacity, CapacityInput},
+    capacity::{CapacityInput, CapacityInsert},
     duration::{Duration, DurationMatrix},
     time_windows::{TimeWindowInput, TimeWindows},
 };
@@ -7,8 +7,11 @@ use crate::Tour;
 use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
 
 type MyTsp = ComposedCriteria<
-    ComposedCriteria<ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>, Duration>,
-    Capacity,
+    ComposedCriteria<
+        ComposedCriteria<ComposedCriteria<Duration, CapacityInsert>, TimeWindows>,
+        Duration,
+    >,
+    CapacityInsert,
 >;
 
 fn print(
@@ -22,7 +25,7 @@ fn print(
     ),
 ) {
     let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
-    let cost_capacity = Capacity.evaluate(&tour, &input_capacity).unwrap();
+    let cost_capacity = CapacityInsert.evaluate(&tour, &input_capacity).unwrap();
     let cost_time_windows = TimeWindows.evaluate(&tour, &input_time_windows).unwrap();
     let cost = cost_duration + cost_capacity + cost_time_windows;
 
