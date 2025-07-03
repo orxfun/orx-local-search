@@ -1,4 +1,5 @@
 mod criterion;
+mod criterion_with_neighborhood;
 mod input;
 mod iter;
 mod move_generator;
