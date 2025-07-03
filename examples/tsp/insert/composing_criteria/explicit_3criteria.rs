@@ -1,12 +1,13 @@
 use super::super::criteria::{
-    capacity::{CapacityInput, CapacityInsert},
-    duration::{DurationInsert, DurationMatrix},
-    time_windows::{TimeWindowInput, TimeWindowsInsert},
+    capacity::CapacityInsert, duration::DurationInsert, time_windows::TimeWindowsInsert,
 };
-use crate::Tour;
-use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
+use crate::{
+    Tour,
+    criteria::{Capacity, CapacityInput, Duration, DurationMatrix, TimeWindowInput, TimeWindows},
+};
+use orx_local_search::{ComposedCriteria, CriterionWithNeighborhood};
 
-type MyTsp = ComposedCriteria<ComposedCriteria<DurationInsert, CapacityInsert>, TimeWindowsInsert>;
+type MyTsp = ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>;
 
 fn print(
     tour: &Tour,
@@ -17,7 +18,9 @@ fn print(
 ) {
     let cost_duration = DurationInsert.evaluate(&tour, &input_duration).unwrap();
     let cost_capacity = CapacityInsert.evaluate(&tour, &input_capacity).unwrap();
-    let cost_time_windows = TimeWindowsInsert.evaluate(&tour, &input_time_windows).unwrap();
+    let cost_time_windows = TimeWindowsInsert
+        .evaluate(&tour, &input_time_windows)
+        .unwrap();
     let cost = cost_duration + cost_capacity + cost_time_windows;
 
     println!("tour: {:?}", &tour);
@@ -42,12 +45,12 @@ pub fn run() {
     println!("\nInitial Solution");
     print(&initial_tour, &input);
 
-    let mut local_search = LocalSearch::new(my_tsp);
-    let (tour, _) = local_search
-        .optimize(initial_tour, &input, None)
-        .into_local_optimum()
-        .unwrap();
+    //     let mut local_search = LocalSearch::new(my_tsp);
+    //     let (tour, _) = local_search
+    //         .optimize(initial_tour, &input, None)
+    //         .into_local_optimum()
+    //         .unwrap();
 
-    println!("\nOptimized Solution");
-    print(&tour, &input);
+    //     println!("\nOptimized Solution");
+    //     print(&tour, &input);
 }
