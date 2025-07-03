@@ -1,6 +1,6 @@
 use crate::insert::{
     criteria::duration::{DurationMatrix, move_generator::DurationMoveGenerator},
-    problem::Tsp,
+    neighborhood::InsertNeighborhood,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
@@ -9,7 +9,7 @@ use orx_meta::queue::One;
 pub struct Duration;
 
 impl Criterion for Duration {
-    type Problem = Tsp;
+    type Neighborhood = InsertNeighborhood;
 
     type Input<'i> = &'i DurationMatrix;
 

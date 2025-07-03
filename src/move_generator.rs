@@ -1,13 +1,13 @@
-use crate::{CandidateMoveOf, Problem};
+use crate::{CandidateMoveOf, Neighborhood, Problem};
 
 pub trait MoveGenerator<'i> {
-    type Problem: Problem;
+    type Neighborhood: Neighborhood;
 
     type Input;
 
     fn moves<'a>(
         &'a mut self,
-        solution: &'a <Self::Problem as Problem>::Solution,
+        solution: &'a <<Self::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         input: &'a Self::Input,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::Problem>> + 'a;
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::Neighborhood>> + 'a;
 }

@@ -1,6 +1,6 @@
 use crate::insert::{
     criteria::capacity::{CapacityInput, move_generator::CapacityMoveGenerator},
-    problem::Tsp,
+    neighborhood::InsertNeighborhood,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
@@ -9,7 +9,7 @@ use orx_meta::queue::One;
 pub struct Capacity;
 
 impl Criterion for Capacity {
-    type Problem = Tsp;
+    type Neighborhood = InsertNeighborhood;
 
     type Input<'i> = &'i CapacityInput;
 

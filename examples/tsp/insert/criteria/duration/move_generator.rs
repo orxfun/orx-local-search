@@ -1,21 +1,21 @@
 use crate::insert::{
     criteria::duration::{DurationMatrix, iter::DurationMoves},
-    problem::Tsp,
+    neighborhood::InsertNeighborhood,
 };
-use orx_local_search::{CandidateMoveOf, MoveGenerator, Problem};
+use orx_local_search::{CandidateMoveOf, MoveGenerator, Neighborhood, Problem};
 
 pub struct DurationMoveGenerator;
 
 impl<'i> MoveGenerator<'i> for DurationMoveGenerator {
-    type Problem = Tsp;
+    type Neighborhood = InsertNeighborhood;
 
     type Input = &'i DurationMatrix;
 
     fn moves<'a>(
         &'a mut self,
-        tour: &'a <Self::Problem as Problem>::Solution,
-        duration_matrix: &'a Self::Input,
-    ) -> impl Iterator<Item = CandidateMoveOf<Self::Problem>> + 'a {
-        DurationMoves::new(tour, duration_matrix)
+        tour: &'a <<Self::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+        input: &'a Self::Input,
+    ) -> impl Iterator<Item = CandidateMoveOf<Self::Neighborhood>> + 'a {
+        DurationMoves::new(tour, input)
     }
 }

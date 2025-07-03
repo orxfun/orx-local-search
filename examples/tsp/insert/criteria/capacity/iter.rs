@@ -1,6 +1,8 @@
 use crate::{
     Tour,
-    insert::{AllInsertMovesIter, criteria::capacity::CapacityInput, problem::Tsp},
+    insert::{
+        AllInsertMovesIter, criteria::capacity::CapacityInput, neighborhood::InsertNeighborhood,
+    },
 };
 use orx_iterable::Collection;
 use orx_local_search::{CandidateMove, CandidateMoveOf};
@@ -19,7 +21,7 @@ impl<'a> CapacityMoves<'a> {
 }
 
 impl<'a> Iterator for CapacityMoves<'a> {
-    type Item = CandidateMoveOf<Tsp>;
+    type Item = CandidateMoveOf<InsertNeighborhood>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

@@ -1,12 +1,14 @@
-use crate::{ComposedCriteria, ObjectiveValue, move_generator::MoveGenerator, problem::Problem};
+use crate::{
+    ComposedCriteria, Neighborhood, ObjectiveValue, move_generator::MoveGenerator, problem::Problem,
+};
 use orx_meta::queue::{MetaQueue, TupleQueue};
 
 pub trait Criterion: Default + Clone + Copy {
-    type Problem: Problem;
+    type Neighborhood: Neighborhood;
 
     type Input<'i>;
 
-    type MoveGenerator<'i>: MoveGenerator<'i, Problem = Self::Problem, Input = Self::Input<'i>>;
+    type MoveGenerator<'i>: MoveGenerator<'i, Neighborhood = Self::Neighborhood, Input = Self::Input<'i>>;
 
     type InputQueue<'i>: MetaQueue;
 
@@ -24,7 +26,7 @@ pub trait Criterion: Default + Clone + Copy {
 
     fn compose<X>(self, _with: X) -> ComposedCriteria<Self, X>
     where
-        X: Criterion<Problem = Self::Problem>,
+        X: Criterion<Neighborhood = Self::Neighborhood>,
     {
         Default::default()
     }
@@ -34,9 +36,10 @@ pub trait Criterion: Default + Clone + Copy {
     }
 }
 
-pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
+pub type SolutionOf<X> =
+    <<<X as Criterion>::Neighborhood as Neighborhood>::Problem as Problem>::Solution;
 
 pub type InputOf<'i, X> = <X as Criterion>::Input<'i>;
 
 pub type ObjectiveUnitOf<X> =
-    <<<X as Criterion>::Problem as Problem>::ObjectiveValue as ObjectiveValue>::Unit;
+    <<<<X as Criterion>::Neighborhood as Neighborhood>::Problem as Problem>::ObjectiveValue as ObjectiveValue>::Unit;

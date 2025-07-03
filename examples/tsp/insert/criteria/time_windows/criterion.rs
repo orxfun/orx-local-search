@@ -1,6 +1,6 @@
 use crate::insert::{
     criteria::time_windows::{TimeWindowInput, move_generator::TimeWindowMoveGenerator},
-    problem::Tsp,
+    neighborhood::InsertNeighborhood,
 };
 use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
 use orx_meta::queue::One;
@@ -9,7 +9,7 @@ use orx_meta::queue::One;
 pub struct TimeWindows;
 
 impl Criterion for TimeWindows {
-    type Problem = Tsp;
+    type Neighborhood = InsertNeighborhood;
 
     type Input<'i> = &'i TimeWindowInput<'i>;
 

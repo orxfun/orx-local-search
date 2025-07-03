@@ -1,6 +1,9 @@
 use crate::{
     Tour,
-    insert::{AllInsertMovesIter, criteria::time_windows::TimeWindowInput, problem::Tsp},
+    insert::{
+        AllInsertMovesIter, criteria::time_windows::TimeWindowInput,
+        neighborhood::InsertNeighborhood,
+    },
 };
 use orx_iterable::Collection;
 use orx_local_search::{CandidateMove, CandidateMoveOf};
@@ -19,7 +22,7 @@ impl<'a> TimeWindowMoves<'a> {
 }
 
 impl<'a> Iterator for TimeWindowMoves<'a> {
-    type Item = CandidateMoveOf<Tsp>;
+    type Item = CandidateMoveOf<InsertNeighborhood>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {
