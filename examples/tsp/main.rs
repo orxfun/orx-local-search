@@ -16,11 +16,12 @@ pub use tour::Tour;
 pub use tour_after_move::TourAfterInsertIter;
 pub use tour_cost::TourCost;
 
-use crate::composing_criteria::{composition, composition5, explicit, explicit5};
+use crate::composing_criteria::{composition3, composition5, explicit1, explicit3, explicit5};
 
 fn main() {
-    explicit::run();
+    explicit1::run();
+    explicit3::run();
     explicit5::run();
-    composition::run();
+    composition3::run();
     composition5::run();
 }
