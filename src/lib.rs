@@ -16,6 +16,8 @@ pub use criterion::{Criterion, InputOf, ObjectiveUnitOf, SolutionOf};
 pub use local_search::LocalSearch;
 pub use r#move::Move;
 pub use move_generator::MoveGenerator;
+mod neighborhood;
+pub use neighborhood::Neighborhood;
 pub use objective_value::ObjectiveValue;
 pub use problem::{CandidateMoveOf, Problem};
 pub use result::LocalSearchResult;
