@@ -1,10 +1,11 @@
 use super::super::criteria::{
-    capacity::{CapacityInput, CapacityInsert},
-    duration::{DurationInsert, DurationMatrix},
-    time_windows::{TimeWindowInput, TimeWindowsInsert},
+    capacity::CapacityInsert, duration::DurationInsert, time_windows::TimeWindowsInsert,
 };
-use crate::Tour;
-use orx_local_search::{Criterion, LocalSearch};
+use crate::{
+    Tour,
+    criteria::{CapacityInput, DurationMatrix, TimeWindowInput},
+};
+use orx_local_search::{Criterion, CriterionWithNeighborhood, LocalSearch};
 
 fn print(
     tour: &Tour,

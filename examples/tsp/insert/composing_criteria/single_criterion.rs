@@ -1,8 +1,5 @@
-use crate::{
-    Tour,
-    insert::criteria::duration::{DurationInsert, DurationMatrix},
-};
-use orx_local_search::{Criterion, LocalSearch};
+use crate::{Tour, criteria::DurationMatrix, insert::criteria::duration::DurationInsert};
+use orx_local_search::{CriterionWithNeighborhood, LocalSearch};
 
 fn print(tour: &Tour, input_duration: &DurationMatrix) {
     let cost_duration = DurationInsert.evaluate(&tour, &input_duration).unwrap();
@@ -14,7 +11,7 @@ fn print(tour: &Tour, input_duration: &DurationMatrix) {
 pub fn run() {
     println!("\n\nRunning with single explicit criterion for (Duration).");
 
-    let my_tsp = DurationInsert::new();
+    let my_tsp = DurationInsert;
 
     let input_duration = DurationMatrix::example_input();
 

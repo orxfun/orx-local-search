@@ -1,5 +1,4 @@
-use crate::{Criterion, Neighborhood, move_generator::MoveGenerator};
-
+use crate::{Criterion, Neighborhood, ObjectiveUnitOf, SolutionOf, move_generator::MoveGenerator};
 pub trait CriterionWithNeighborhood: Default + Clone + Copy {
     type Criterion: Criterion;
 
@@ -12,6 +11,16 @@ pub trait CriterionWithNeighborhood: Default + Clone + Copy {
         >;
 
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i>;
+
+    // provided from criterion
+
+    fn evaluate(
+        self,
+        solution: &SolutionOf<Self::Criterion>,
+        input: &InputOf<'_, Self>,
+    ) -> Option<ObjectiveUnitOf<Self::Criterion>> {
+        Self::Criterion::default().evaluate(solution, input)
+    }
 }
 
 pub type InputOf<'i, X> = <<X as CriterionWithNeighborhood>::Criterion as Criterion>::Input<'i>;
