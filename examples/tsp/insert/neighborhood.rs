@@ -1,4 +1,4 @@
-use crate::insert_move::InsertMove;
+use super::InsertMove;
 
 pub struct AllInsertMovesIter {
     n: usize,

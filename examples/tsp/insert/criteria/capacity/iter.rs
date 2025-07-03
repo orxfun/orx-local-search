@@ -1,6 +1,6 @@
 use crate::{
-    criteria::capacity::input::CapacityInput, neighborhood::AllInsertMovesIter, problem::Tsp,
-    tour::Tour,
+    Tour,
+    insert::{AllInsertMovesIter, criteria::capacity::CapacityInput, problem::Tsp},
 };
 use orx_iterable::Collection;
 use orx_local_search::{CandidateMove, CandidateMoveOf};

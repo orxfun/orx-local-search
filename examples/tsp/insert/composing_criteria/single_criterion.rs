@@ -1,6 +1,6 @@
 use crate::{
     Tour,
-    criteria::duration::{Duration, DurationMatrix},
+    insert::criteria::duration::{Duration, DurationMatrix},
 };
 use orx_local_search::{Criterion, LocalSearch};
 

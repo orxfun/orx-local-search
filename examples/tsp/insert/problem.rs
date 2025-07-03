@@ -1,4 +1,5 @@
-use crate::{Tour, insert_move::InsertMove, neighborhood::AllInsertMovesIter, tour_cost::TourCost};
+use super::{AllInsertMovesIter, InsertMove};
+use crate::{Tour, tour_cost::TourCost};
 use orx_iterable::Collection;
 use orx_local_search::{Move, Problem};
 

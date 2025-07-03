@@ -1,4 +1,7 @@
-use crate::{insert_move::InsertMove, tour::Tour, tour_after_move::TourAfterInsertIter};
+use crate::{
+    Tour,
+    insert::{InsertMove, TourAfterInsertIter},
+};
 use orx_iterable::Collection;
 
 pub struct DurationMatrix(Vec<Vec<u64>>);

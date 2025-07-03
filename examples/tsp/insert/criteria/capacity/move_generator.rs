@@ -1,4 +1,4 @@
-use crate::{
+use crate::insert::{
     criteria::capacity::{CapacityInput, iter::CapacityMoves},
     problem::Tsp,
 };

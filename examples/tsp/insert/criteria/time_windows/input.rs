@@ -1,5 +1,6 @@
-use crate::TourAfterInsertIter;
-use crate::{InsertMove, Tour, criteria::duration::DurationMatrix};
+use crate::Tour;
+use crate::insert::criteria::duration::DurationMatrix;
+use crate::insert::{InsertMove, TourAfterInsertIter};
 use orx_iterable::Collection;
 use std::cmp::max;
 use std::collections::HashMap;
