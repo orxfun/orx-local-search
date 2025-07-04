@@ -1,7 +1,7 @@
 use super::super::criteria::{
-    capacity::{Capacity, CapacityInput},
-    duration::{Duration, DurationMatrix},
-    time_windows::{TimeWindowInput, TimeWindows},
+    capacity::{CapacityInsert, CapacityInput},
+    duration::{DurationInsert, DurationMatrix},
+    time_windows::{TimeWindowInput, TimeWindowsInsert},
 };
 use crate::Tour;
 use orx_local_search::{Criterion, LocalSearch};
@@ -16,9 +16,9 @@ fn print(
         &CapacityInput,
     ),
 ) {
-    let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
-    let cost_capacity = Capacity.evaluate(&tour, &input_capacity).unwrap();
-    let cost_time_windows = TimeWindows.evaluate(&tour, &input_time_windows).unwrap();
+    let cost_duration = DurationInsert.evaluate(&tour, &input_duration).unwrap();
+    let cost_capacity = CapacityInsert.evaluate(&tour, &input_capacity).unwrap();
+    let cost_time_windows = TimeWindowsInsert.evaluate(&tour, &input_time_windows).unwrap();
     let cost = cost_duration + cost_capacity + cost_time_windows;
 
     println!("tour: {:?}", &tour);
@@ -33,11 +33,11 @@ pub fn run() {
         "\n\nRunning with composed criteria for (Duration, Capacity, TimeWindows, Duration, Capacity)."
     );
 
-    let my_tsp = Duration
-        .compose(Capacity)
-        .compose(TimeWindows)
-        .compose(Duration)
-        .compose(Capacity);
+    let my_tsp = DurationInsert
+        .compose(CapacityInsert)
+        .compose(TimeWindowsInsert)
+        .compose(DurationInsert)
+        .compose(CapacityInsert);
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();

@@ -1,12 +1,19 @@
 use super::super::criteria::{
-    capacity::{Capacity, CapacityInput},
-    duration::{Duration, DurationMatrix},
-    time_windows::{TimeWindowInput, TimeWindows},
+    capacity::CapacityInsert, duration::DurationInsert, time_windows::TimeWindowsInsert,
 };
-use crate::Tour;
-use orx_local_search::{ComposedCriteria, Criterion, LocalSearch};
+use crate::{
+    Tour,
+    criteria::{Capacity, CapacityInput, Duration, DurationMatrix, TimeWindowInput, TimeWindows},
+};
+use orx_local_search::{
+    ComposedCriteria, ComposedCriteriaWithNeighborhood, CriterionWithNeighborhood, LocalSearch,
+};
 
-type MyTsp = ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>;
+type MyCriteria = ComposedCriteria<ComposedCriteria<Duration, Capacity>, TimeWindows>;
+type MyCriteriaWithNeighborhood = ComposedCriteriaWithNeighborhood<
+    ComposedCriteriaWithNeighborhood<DurationInsert, CapacityInsert>,
+    TimeWindowsInsert,
+>;
 
 fn print(
     tour: &Tour,
@@ -15,9 +22,11 @@ fn print(
         &TimeWindowInput,
     ),
 ) {
-    let cost_duration = Duration.evaluate(&tour, &input_duration).unwrap();
-    let cost_capacity = Capacity.evaluate(&tour, &input_capacity).unwrap();
-    let cost_time_windows = TimeWindows.evaluate(&tour, &input_time_windows).unwrap();
+    let cost_duration = DurationInsert.evaluate(&tour, &input_duration).unwrap();
+    let cost_capacity = CapacityInsert.evaluate(&tour, &input_capacity).unwrap();
+    let cost_time_windows = TimeWindowsInsert
+        .evaluate(&tour, &input_time_windows)
+        .unwrap();
     let cost = cost_duration + cost_capacity + cost_time_windows;
 
     println!("tour: {:?}", &tour);
@@ -30,7 +39,8 @@ fn print(
 pub fn run() {
     println!("\n\nRunning with explicit criteria for (Duration, Capacity, TimeWindows).");
 
-    let my_tsp = MyTsp::new();
+    let criteria = MyCriteria::new();
+    let with_neighborhood = MyCriteriaWithNeighborhood::new();
 
     let input_duration = DurationMatrix::example_input();
     let input_capacity = CapacityInput::example_input();
@@ -42,7 +52,7 @@ pub fn run() {
     println!("\nInitial Solution");
     print(&initial_tour, &input);
 
-    let mut local_search = LocalSearch::new(my_tsp);
+    let mut local_search = LocalSearch::new(criteria).with_neighborhood(with_neighborhood);
     let (tour, _) = local_search
         .optimize(initial_tour, &input, None)
         .into_local_optimum()

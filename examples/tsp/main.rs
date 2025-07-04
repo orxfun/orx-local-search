@@ -1,6 +1,7 @@
 #[cfg(test)]
 mod tests;
 
+mod criteria;
 mod insert;
 mod tour;
 mod tour_cost;

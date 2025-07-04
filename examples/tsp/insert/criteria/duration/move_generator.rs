@@ -1,6 +1,6 @@
-use crate::insert::{
-    criteria::duration::{DurationMatrix, iter::DurationMoves},
-    neighborhood::InsertNeighborhood,
+use crate::{
+    criteria::DurationMatrix,
+    insert::{criteria::duration::iter::DurationMoves, neighborhood::InsertNeighborhood},
 };
 use orx_local_search::{CandidateMoveOf, MoveGenerator, Neighborhood, Problem};
 

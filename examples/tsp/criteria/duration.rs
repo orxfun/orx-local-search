@@ -1,8 +1,26 @@
-use crate::{
-    Tour,
-    insert::{InsertMove, TourAfterInsertIter},
-};
+use crate::{Tour, tsp::Tsp};
 use orx_iterable::Collection;
+use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
+use orx_meta::queue::One;
+
+#[derive(Default, Clone, Copy)]
+pub struct Duration;
+
+impl Criterion for Duration {
+    type Problem = Tsp;
+
+    type Input<'i> = &'i DurationMatrix;
+
+    type InputQueue<'i> = One<Self::Input<'i>>;
+
+    fn evaluate(
+        self,
+        tour: &SolutionOf<Self>,
+        duration_matrix: &Self::Input<'_>,
+    ) -> Option<ObjectiveUnitOf<Self>> {
+        Some(duration_matrix.tour_cost(tour))
+    }
+}
 
 pub struct DurationMatrix(Vec<Vec<u64>>);
 
@@ -23,18 +41,6 @@ impl DurationMatrix {
         let mut cost = 0;
         for p in 0..tour.iter().len().saturating_sub(1) {
             cost += self.get(tour[p], tour[p + 1]);
-        }
-        cost
-    }
-
-    pub fn tour_cost_after_move(&self, tour: &Tour, mv: &InsertMove) -> u64 {
-        let mut cost = 0;
-        let mut new_tour = TourAfterInsertIter::new(mv.clone(), tour);
-        if let Some(mut a) = new_tour.next() {
-            for b in new_tour {
-                cost += self.get(a, b);
-                a = b;
-            }
         }
         cost
     }
