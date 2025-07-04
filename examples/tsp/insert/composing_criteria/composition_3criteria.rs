@@ -3,7 +3,7 @@ use super::super::criteria::{
 };
 use crate::{
     Tour,
-    criteria::{CapacityInput, DurationMatrix, TimeWindowInput},
+    criteria::{Capacity, CapacityInput, Duration, DurationMatrix, TimeWindowInput, TimeWindows},
 };
 use orx_local_search::{Criterion, CriterionWithNeighborhood, LocalSearch};
 
@@ -31,7 +31,8 @@ fn print(
 pub fn run() {
     println!("\n\nRunning with composed criteria for (Duration, Capacity, TimeWindows).");
 
-    let my_tsp = DurationInsert
+    let criteria = Duration.compose(Capacity).compose(TimeWindows);
+    let with_neighborhood = DurationInsert
         .compose(CapacityInsert)
         .compose(TimeWindowsInsert);
 
@@ -39,7 +40,7 @@ pub fn run() {
     let input_capacity = CapacityInput::example_input();
     let input_time_windows = TimeWindowInput::example_input(&input_duration);
 
-    let input = my_tsp
+    let input = criteria
         .input_builder()
         .add(&input_duration)
         .add(&input_capacity)
@@ -50,7 +51,7 @@ pub fn run() {
     println!("\nInitial Solution");
     print(&initial_tour, &input);
 
-    let mut local_search = LocalSearch::new(my_tsp);
+    let mut local_search = LocalSearch::new(criteria).with_neighborhood(with_neighborhood);
     let (tour, _) = local_search
         .optimize(initial_tour, &input, None)
         .into_local_optimum()

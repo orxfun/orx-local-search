@@ -1,4 +1,7 @@
-use crate::{Criterion, Neighborhood, ObjectiveUnitOf, SolutionOf, move_generator::MoveGenerator};
+use crate::{
+    ComposedCriteriaWithNeighborhood, Criterion, Neighborhood, ObjectiveUnitOf, SolutionOf,
+    move_generator::MoveGenerator,
+};
 pub trait CriterionWithNeighborhood: Default + Clone + Copy {
     type Criterion: Criterion;
 
@@ -12,7 +15,15 @@ pub trait CriterionWithNeighborhood: Default + Clone + Copy {
 
     fn move_generator<'i>(self) -> Self::MoveGenerator<'i>;
 
-    // provided from criterion
+    // provided
+
+    fn compose<X>(self, _with: X) -> ComposedCriteriaWithNeighborhood<Self, X>
+    where
+        X: CriterionWithNeighborhood<Neighborhood = Self::Neighborhood>,
+        X::Criterion: Criterion<Problem = <Self::Criterion as Criterion>::Problem>,
+    {
+        Default::default()
+    }
 
     fn evaluate(
         self,

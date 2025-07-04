@@ -1,5 +1,5 @@
 use crate::{Tour, criteria::DurationMatrix, insert::criteria::duration::DurationInsert};
-use orx_local_search::{CriterionWithNeighborhood, LocalSearch};
+use orx_local_search::{CriterionWithNeighborhood, LocalSearchOnNeighborhood};
 
 fn print(tour: &Tour, input_duration: &DurationMatrix) {
     let cost_duration = DurationInsert.evaluate(&tour, &input_duration).unwrap();
@@ -20,7 +20,7 @@ pub fn run() {
     println!("\nInitial Solution");
     print(&initial_tour, &input_duration);
 
-    let mut local_search = LocalSearch::new(my_tsp);
+    let mut local_search = LocalSearchOnNeighborhood::new(my_tsp);
     let (tour, _) = local_search
         .optimize(initial_tour, &input_duration, None)
         .into_local_optimum()
