@@ -14,5 +14,6 @@
 
 mod criterion;
 mod r#move;
+mod neighborhood;
 mod obj;
 mod problem;
