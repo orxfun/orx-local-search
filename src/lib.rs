@@ -13,8 +13,9 @@
 #![cfg_attr(not(test), no_std)]
 
 mod cand_move;
-mod criterion;
-mod criterion_on_neighborhood;
+mod crit;
+mod crit_on;
+mod local_search_on;
 mod r#move;
 mod move_generator;
 mod neighborhood;
