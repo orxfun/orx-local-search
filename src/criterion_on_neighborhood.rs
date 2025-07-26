@@ -1,9 +1,14 @@
-use crate::{criterion::Criterion, move_generator::MoveGenerator, neighborhood::Neighborhood};
+use crate::{
+    criterion::Criterion, move_generator::MoveGenerator, neighborhood::Neighborhood,
+    problem::Problem,
+};
 
 pub trait CriterionOnNeighborhood: Default + Clone + Copy {
-    type Criterion: Criterion;
+    type Problem: Problem;
 
-    type Neighborhood: Neighborhood;
+    type Criterion: Criterion<Problem = Self::Problem>;
 
-    type MoveGenerator<'i>: MoveGenerator;
+    type Neighborhood: Neighborhood<Problem = Self::Problem>;
+
+    type MoveGenerator<'i>: MoveGenerator<Problem = Self::Problem>;
 }

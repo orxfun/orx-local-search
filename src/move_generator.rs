@@ -1,7 +1,6 @@
 use crate::{
-    cand_move::CandidateMove, criterion::Criterion,
-    criterion_on_neighborhood::CriterionOnNeighborhood, r#move::Move, neighborhood::Neighborhood,
-    obj::Objective, problem::Problem,
+    cand_move::CandidateMove, criterion::Criterion, r#move::Move, neighborhood::Neighborhood,
+    problem::Problem,
 };
 
 pub trait MoveGenerator {
