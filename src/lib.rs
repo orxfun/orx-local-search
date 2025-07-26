@@ -14,6 +14,7 @@
 
 mod cand_move;
 mod criterion;
+mod criterion_on_neighborhood;
 mod r#move;
 mod move_generator;
 mod neighborhood;

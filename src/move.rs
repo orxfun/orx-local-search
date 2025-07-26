@@ -1,7 +1,11 @@
+use crate::problem::Problem;
 use core::fmt::Debug;
 
 pub trait Move: Ord + Eq + Debug {
-    type Solution;
+    type Problem: Problem;
 
-    fn apply(&self, solution: Self::Solution) -> Self::Solution;
+    fn apply(
+        &self,
+        solution: <Self::Problem as Problem>::Solution,
+    ) -> <Self::Problem as Problem>::Solution;
 }
