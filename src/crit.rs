@@ -1,4 +1,7 @@
-use crate::problem::Problem;
+use crate::{obj::Objective, problem::Problem};
+
+type Soln<P> = <P as Problem>::Solution;
+type ObjUnit<P> = <<P as Problem>::Objective as Objective>::Unit;
 
 pub trait Criterion: Default + Clone + Copy {
     type Problem: Problem;
@@ -8,6 +11,6 @@ pub trait Criterion: Default + Clone + Copy {
     fn evaluate(
         self,
         input: &Self::Input,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> <Self::Problem as Problem>::Objective;
+        solution: &Soln<Self::Problem>,
+    ) -> ObjUnit<Self::Problem>;
 }

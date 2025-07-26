@@ -56,4 +56,40 @@ where
         }
         best_move
     }
+
+    pub fn optimize(
+        &mut self,
+        initial_solution: Soln<'i, X>,
+        input: &Input<'i, X>,
+        initial_objective_value: Option<ObjUnit<'i, X>>,
+    ) {
+        let initial_value = match initial_objective_value.is_some() {
+            true => {
+                debug_assert_eq!(
+                    &initial_objective_value,
+                    &self.criterion.evaluate(input, &initial_solution)
+                );
+                initial_objective_value
+            }
+            false => self.criterion.evaluate(input, &initial_solution),
+        };
+
+        // match initial_value {
+        //     None => LocalSearchResult::InfeasibleInitialSolution {
+        //         initial_solution: initial_solution,
+        //     },
+        //     Some(mut best_value) => {
+        //         let mut solution = initial_solution;
+        //         while let Some(mv) = self.next_best_move(&solution, input, best_value) {
+        //             solution = mv.r#move.apply(solution);
+        //             best_value = mv.objective_value;
+        //         }
+
+        //         LocalSearchResult::LocalOptimum {
+        //             solution,
+        //             value: best_value,
+        //         }
+        //     }
+        // }
+    }
 }
