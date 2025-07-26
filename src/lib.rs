@@ -12,8 +12,10 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod cand_move;
 mod criterion;
 mod r#move;
+mod move_generator;
 mod neighborhood;
 mod obj;
 mod problem;

@@ -1,11 +1,7 @@
-use crate::{r#move::Move, problem::Problem};
+use crate::r#move::Move;
 
 pub trait Neighborhood: 'static + Default + Clone + Copy {
-    type Problem: Problem;
+    type Move: Move;
 
-    type Move: Move<Problem = Self::Problem>;
-
-    fn neighborhood(
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = Self::Move>;
+    fn neighborhood(solution: &<Self::Move as Move>::Solution) -> impl Iterator<Item = Self::Move>;
 }
