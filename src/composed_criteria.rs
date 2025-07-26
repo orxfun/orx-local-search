@@ -1,8 +1,10 @@
+use std::marker::PhantomData;
+
 use crate::{
     ObjectiveValue, Problem, SolutionOf,
     criterion::{Criterion, ObjectiveUnitOf},
 };
-use orx_meta::queue::MetaQueue;
+use orx_meta::{composition::Composition, queue::MetaQueue};
 
 #[derive(Clone, Copy)]
 pub struct ComposedCriteria<X1, X2>(X1, X2)
@@ -55,3 +57,25 @@ where
         })
     }
 }
+
+struct CriteriaComposition;
+
+impl Composition for CriteriaComposition {
+    type Empty = ();
+
+    type One<X> = X;
+
+    type Multi<X, Y> = ComposedCriteria<X, Y>;
+}
+
+// impl<L, R> Composition for CriteriaComposition<L, R>
+// where
+//     L: Criterion,
+//     R: Criterion<Problem = L::Problem>,
+// {
+//     type Left = L;
+
+//     type Right = R;
+
+//     type Composed = ComposedCriteria<L, R>;
+// }
