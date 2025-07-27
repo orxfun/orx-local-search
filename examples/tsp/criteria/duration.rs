@@ -1,24 +1,20 @@
-use crate::{tour::Tour, tour_cost::TourCost, tsp::Tsp};
+use crate::{tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, Objective};
+use orx_local_search::{Criterion, Problem};
 
 #[derive(Default, Clone, Copy)]
 pub struct Duration;
 
 impl Criterion for Duration {
-    type Input = DurationMatrix;
-
-    type Solution = Tour;
-
-    type Objective = TourCost;
-
     type Problem = Tsp;
+
+    type Input<'i> = DurationMatrix;
 
     fn evaluate(
         self,
-        input: &Self::Input,
-        tour: &Self::Solution,
-    ) -> Option<<Self::Objective as Objective>::Unit> {
+        input: &Self::Input<'_>,
+        tour: &<Self::Problem as Problem>::Solution,
+    ) -> Option<<Self::Problem as Problem>::ObjectiveUnit> {
         Some(input.tour_cost(tour))
     }
 }
