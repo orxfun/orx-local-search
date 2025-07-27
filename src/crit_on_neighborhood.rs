@@ -1,6 +1,5 @@
 use crate::{
-    ComposedCriteriaOnNeighborhood, Criterion, Neighborhood, Problem, SolutionOf,
-    move_generator::MoveGenerator,
+    ComposedCriteriaOnNeighborhood, Criterion, Neighborhood, move_generator::MoveGenerator,
 };
 pub trait CriterionOnNeighborhood: Default + Clone + Copy {
     type Criterion: Criterion;
@@ -23,14 +22,6 @@ pub trait CriterionOnNeighborhood: Default + Clone + Copy {
         X::Criterion: Criterion<Problem = <Self::Criterion as Criterion>::Problem>,
     {
         Default::default()
-    }
-
-    fn evaluate(
-        self,
-        solution: &SolutionOf<Self::Criterion>,
-        input: &InputOf<'_, Self>,
-    ) -> Option<<<Self::Criterion as Criterion>::Problem as Problem>::ObjectiveUnit> {
-        Self::Criterion::default().evaluate(solution, input)
     }
 }
 
