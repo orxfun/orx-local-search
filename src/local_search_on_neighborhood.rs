@@ -1,6 +1,6 @@
 use crate::{
-    CandidateMoveOf, Criterion, CriterionOnNeighborhood, InputOf, Move, MoveGenerator, Solution,
-    SolutionOf, crit::ObjectiveUnitOf,
+    CandidateMoveOf, Criterion, CriterionOnNeighborhood, InputOf, Move, MoveGenerator, Problem,
+    Solution, SolutionOf,
 };
 use orx_self_or::SoR;
 
@@ -28,7 +28,7 @@ where
         &mut self,
         solution: &SolutionOf<X::Criterion>,
         input: &InputOf<'i, X>,
-        mut best_value: ObjectiveUnitOf<X::Criterion>,
+        mut best_value: <<X::Criterion as Criterion>::Problem as Problem>::ObjectiveUnit,
     ) -> Option<CandidateMoveOf<X::Neighborhood>> {
         let mut best_move = None;
         for candidate in self.move_generator.moves(solution, input) {
@@ -44,7 +44,9 @@ where
         &mut self,
         initial_solution: SolutionOf<X::Criterion>,
         input: impl SoR<InputOf<'i, X>>,
-        initial_objective_value: Option<ObjectiveUnitOf<X::Criterion>>,
+        initial_objective_value: Option<
+            <<X::Criterion as Criterion>::Problem as Problem>::ObjectiveUnit,
+        >,
     ) -> Solution<<X::Criterion as Criterion>::Problem> {
         let input = input.get_ref();
 

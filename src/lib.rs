@@ -15,7 +15,7 @@ mod sorted_intersecting_iterator;
 
 pub use candidate_move::CandidateMove;
 pub use composed_crit::ComposedCriteria;
-pub use crit::{Criterion, ObjectiveUnitOf, SolutionOf};
+pub use crit::{Criterion, SolutionOf};
 pub use crit_on_neighborhood::{CriterionOnNeighborhood, InputOf};
 pub use local_search_on_neighborhood::LocalSearchOnNeighborhood;
 pub use r#move::Move;

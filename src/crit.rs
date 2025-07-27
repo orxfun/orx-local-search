@@ -1,4 +1,4 @@
-use crate::{ComposedCriteria, Objective, problem::Problem};
+use crate::{ComposedCriteria, problem::Problem};
 
 pub trait Criterion: Default + Clone + Copy {
     type Problem: Problem;
@@ -15,7 +15,7 @@ pub trait Criterion: Default + Clone + Copy {
         self,
         solution: &SolutionOf<Self>,
         input: &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>>;
+    ) -> Option<<Self::Problem as Problem>::ObjectiveUnit>;
 
     // fn input_builder<'i>(self) -> TupleQueue<Self::InputQueue<'i>> {
     //     Default::default()
@@ -30,6 +30,3 @@ pub trait Criterion: Default + Clone + Copy {
 }
 
 pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
-
-pub type ObjectiveUnitOf<X> =
-    <<<X as Criterion>::Problem as Problem>::Objective as Objective>::Unit;

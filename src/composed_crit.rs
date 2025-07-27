@@ -1,7 +1,4 @@
-use crate::{
-    Objective, Problem, SolutionOf,
-    crit::{Criterion, ObjectiveUnitOf},
-};
+use crate::{Objective, Problem, SolutionOf, crit::Criterion};
 
 #[derive(Clone, Copy)]
 pub struct ComposedCriteria<X1, X2>(X1, X2)
@@ -44,7 +41,7 @@ where
         self,
         solution: &SolutionOf<Self>,
         (input1, input2): &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
+    ) -> Option<<Self::Problem as Problem>::ObjectiveUnit> {
         self.0.evaluate(solution, input1).and_then(|value1| {
             self.1.evaluate(solution, input2).map(|value2| {
                 <<Self::Problem as Problem>::Objective as Objective>::reduce(value1, value2)
