@@ -15,6 +15,24 @@ pub enum Solution<P: Problem> {
 }
 
 impl<P: Problem> Solution<P> {
+    pub fn is_feasible(&self) -> bool {
+        match self {
+            Self::InfeasibleSolution {
+                initial_solution: _,
+            } => false,
+            _ => true,
+        }
+    }
+
+    pub fn is_infeasible(&self) -> bool {
+        match self {
+            Self::InfeasibleSolution {
+                initial_solution: _,
+            } => true,
+            _ => false,
+        }
+    }
+
     pub fn is_local_optimum(&self) -> bool {
         matches!(
             self,
