@@ -2,7 +2,7 @@
 mod tests;
 
 mod criteria;
-// mod insert;
+mod insert_neighborhood;
 mod tour;
 mod tour_cost;
 mod tsp;
