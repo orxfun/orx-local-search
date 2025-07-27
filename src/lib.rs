@@ -12,6 +12,7 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod crit;
 mod eval_move;
 mod r#move;
 mod move_gen;
