@@ -3,7 +3,7 @@ use crate::{
     r#move::Move, move_gen::MoveGenerator, problem::Problem, solution::Solution,
 };
 
-pub struct LocalSearchOnNeighborhood<'i, X>
+pub struct LocalSearch<'i, X>
 where
     X: CriterionOnNeighborhood,
 {
@@ -11,7 +11,7 @@ where
     move_generator: X::MoveGenerator<'i>,
 }
 
-impl<'i, X> Default for LocalSearchOnNeighborhood<'i, X>
+impl<'i, X> Default for LocalSearch<'i, X>
 where
     X: CriterionOnNeighborhood,
 {
@@ -23,7 +23,7 @@ where
     }
 }
 
-impl<'i, X> LocalSearchOnNeighborhood<'i, X>
+impl<'i, X> LocalSearch<'i, X>
 where
     X: CriterionOnNeighborhood,
 {

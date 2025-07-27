@@ -15,7 +15,7 @@
 mod crit;
 mod crit_on_neighborhood;
 mod eval_move;
-mod ls_on_neighborhood;
+mod ls;
 mod r#move;
 mod move_gen;
 mod neighborhood;
