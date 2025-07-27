@@ -1,6 +1,6 @@
 use crate::{
     crit::Criterion, crit_on_neighborhood::CriterionOnNeighborhood, eval_move::EvalMove,
-    move_gen::MoveGenerator, problem::Problem,
+    r#move::Move, move_gen::MoveGenerator, problem::Problem, solution::Solution,
 };
 
 pub struct LocalSearchOnNeighborhood<'i, X>
@@ -34,9 +34,9 @@ where
     fn optimize(
         &mut self,
         input: &<X::Criterion as Criterion>::Input<'i>,
-        solution: <X::Problem as Problem>::Solution,
+        mut solution: <X::Problem as Problem>::Solution,
         value: Option<<X::Problem as Problem>::ObjectiveUnit>,
-    ) {
+    ) -> Solution<X::Problem> {
         let value = match value.is_some() {
             true => {
                 debug_assert_eq!(&value, &self.criterion.evaluate(input, &solution));
@@ -44,6 +44,18 @@ where
             }
             false => self.criterion.evaluate(input, &solution),
         };
+
+        match value {
+            None => Solution::InfeasibleSolution { solution },
+            Some(mut value) => {
+                while let Some(eval_move) = self.next_best_move(input, &solution, value) {
+                    solution = eval_move.mv.apply(solution);
+                    value = eval_move.value;
+                }
+
+                Solution::LocalOptimum { solution, value }
+            }
+        }
     }
 }
 
