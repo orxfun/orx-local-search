@@ -26,6 +26,7 @@ mod symbolic;
 
 pub use crit::Criterion;
 pub use crit_on_neighborhood::CriterionOnNeighborhood;
+pub use eval_move::EvalMove;
 pub use r#move::Move;
 pub use move_gen::MoveGenerator;
 pub use neighborhood::Neighborhood;
