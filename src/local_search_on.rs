@@ -1,6 +1,7 @@
 use crate::{
-    cand_move::CandidateMove, crit::Criterion, crit_on::CriterionOnNeighborhood,
+    cand_move::CandidateMove, crit::Criterion, crit_on::CriterionOnNeighborhood, r#move::Move,
     move_generator::MoveGenerator, neighborhood::Neighborhood, obj::Objective, problem::Problem,
+    solution::Solution,
 };
 
 type MoveGen<'i, X> = <X as CriterionOnNeighborhood>::MoveGenerator<'i>;
@@ -59,34 +60,32 @@ where
 
     pub fn optimize(
         &mut self,
-        initial_solution: Soln<'i, X>,
         input: &Input<'i, X>,
+        solution: Soln<'i, X>,
         initial_objective_value: Option<ObjUnit<'i, X>>,
-    ) {
-        let initial_value = match initial_objective_value {
-            Some(x) => {
-                debug_assert_eq!(&x, &self.criterion.evaluate(input, &initial_solution));
-                x
+    ) -> Solution<Prob<'i, X>> {
+        let initial_value = match initial_objective_value.is_some() {
+            true => {
+                debug_assert_eq!(
+                    &initial_objective_value,
+                    &self.criterion.evaluate(input, &solution)
+                );
+                initial_objective_value
             }
-            None => self.criterion.evaluate(input, &initial_solution),
+            false => self.criterion.evaluate(input, &solution),
         };
 
-        // match initial_value {
-        //     None => LocalSearchResult::InfeasibleInitialSolution {
-        //         initial_solution: initial_solution,
-        //     },
-        //     Some(mut best_value) => {
-        //         let mut solution = initial_solution;
-        //         while let Some(mv) = self.next_best_move(&solution, input, best_value) {
-        //             solution = mv.r#move.apply(solution);
-        //             best_value = mv.objective_value;
-        //         }
+        match initial_value {
+            None => Solution::Infeasible { solution },
+            Some(mut value) => {
+                let mut solution = solution;
+                while let Some(cand_move) = self.next_best_move(input, &solution, value) {
+                    solution = cand_move.r#move.apply(solution);
+                    value = cand_move.objective_value;
+                }
 
-        //         LocalSearchResult::LocalOptimum {
-        //             solution,
-        //             value: best_value,
-        //         }
-        //     }
-        // }
+                Solution::LocalOptimum { solution, value }
+            }
+        }
     }
 }

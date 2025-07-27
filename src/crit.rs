@@ -12,5 +12,5 @@ pub trait Criterion: Default + Clone + Copy {
         self,
         input: &Self::Input,
         solution: &Soln<Self::Problem>,
-    ) -> ObjUnit<Self::Problem>;
+    ) -> Option<ObjUnit<Self::Problem>>;
 }
