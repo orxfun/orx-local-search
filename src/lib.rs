@@ -15,9 +15,11 @@
 mod crit;
 mod crit_on_neighborhood;
 mod eval_move;
+mod ls_on_neighborhood;
 mod r#move;
 mod move_gen;
 mod neighborhood;
 mod objective;
 mod problem;
+mod solution;
 mod symbolic;

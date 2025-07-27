@@ -1,8 +1,8 @@
 use crate::{neighborhood::Neighborhood, objective::Objective, problem::Problem};
 
 pub struct EvalMove<N: Neighborhood> {
-    mv: N::Move,
-    value: <N::Problem as Problem>::ObjectiveUnit,
+    pub(crate) mv: N::Move,
+    pub(crate) value: <N::Problem as Problem>::ObjectiveUnit,
 }
 
 impl<N: Neighborhood> EvalMove<N> {
