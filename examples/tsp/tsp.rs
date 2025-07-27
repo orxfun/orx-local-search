@@ -5,6 +5,8 @@ use orx_local_search::Problem;
 pub struct Tsp;
 
 impl Problem for Tsp {
+    type ObjectiveUnit = u64;
+
     type Objective = TourCost;
 
     type Solution = Tour;
