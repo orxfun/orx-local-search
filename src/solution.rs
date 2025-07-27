@@ -3,11 +3,11 @@ use crate::{Objective, Problem};
 pub enum Solution<P: Problem> {
     LocalOptimum {
         solution: P::Solution,
-        value: <P::ObjectiveValue as Objective>::Unit,
+        value: <P::Objective as Objective>::Unit,
     },
     FeasibleSolution {
         solution: P::Solution,
-        value: <P::ObjectiveValue as Objective>::Unit,
+        value: <P::Objective as Objective>::Unit,
     },
     InfeasibleSolution {
         initial_solution: P::Solution,
@@ -45,7 +45,7 @@ impl<P: Problem> Solution<P> {
 
     pub fn into_local_optimum(
         self,
-    ) -> Option<(P::Solution, <P::ObjectiveValue as Objective>::Unit)> {
+    ) -> Option<(P::Solution, <P::Objective as Objective>::Unit)> {
         match self {
             Self::LocalOptimum { solution, value } => Some((solution, value)),
             _ => None,

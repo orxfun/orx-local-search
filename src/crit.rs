@@ -32,4 +32,4 @@ pub trait Criterion: Default + Clone + Copy {
 pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
 
 pub type ObjectiveUnitOf<X> =
-    <<<X as Criterion>::Problem as Problem>::ObjectiveValue as Objective>::Unit;
+    <<<X as Criterion>::Problem as Problem>::Objective as Objective>::Unit;
