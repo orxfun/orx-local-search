@@ -19,9 +19,9 @@ impl<'i> MoveGenerator<'i> for CapacityMoveGenerator {
 
     fn moves<'a>(
         &'a mut self,
-        tour: &'a <Self::Problem as Problem>::Solution,
         input: &'a Self::Input,
+        tour: &'a <Self::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a {
-        CapacityMoves::new(tour, input)
+        CapacityMoves::new(input, tour)
     }
 }

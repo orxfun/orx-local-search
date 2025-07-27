@@ -11,13 +11,13 @@ use orx_iterable::Collection;
 use orx_local_search::EvalMove;
 
 pub struct CapacityMoves<'a> {
-    tour: &'a Tour,
     input: &'a CapacityInput,
+    tour: &'a Tour,
     iter: AllInsertMovesIter,
 }
 
 impl<'a> CapacityMoves<'a> {
-    pub fn new(tour: &'a Tour, input: &'a CapacityInput) -> Self {
+    pub fn new(input: &'a CapacityInput, tour: &'a Tour) -> Self {
         let iter = AllInsertMovesIter::new(tour.iter().len());
         Self { tour, input, iter }
     }

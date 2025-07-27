@@ -38,7 +38,7 @@ where
         mut value: <X::Problem as Problem>::ObjectiveUnit,
     ) -> Option<EvalMove<X::Neighborhood>> {
         let mut best_move = None;
-        for candidate in self.move_generator.moves(solution, input) {
+        for candidate in self.move_generator.moves(input, solution) {
             if candidate.value < value {
                 value = candidate.value;
                 best_move = Some(candidate);

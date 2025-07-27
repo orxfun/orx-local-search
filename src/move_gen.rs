@@ -9,7 +9,7 @@ pub trait MoveGenerator<'i>: Default {
 
     fn moves<'a>(
         &'a mut self,
-        solution: &'a <Self::Problem as Problem>::Solution,
         input: &'a Self::Input,
+        solution: &'a <Self::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a;
 }
