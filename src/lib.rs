@@ -13,6 +13,7 @@
 #![cfg_attr(not(test), no_std)]
 
 mod crit;
+mod crit_on_neighborhood;
 mod eval_move;
 mod r#move;
 mod move_gen;
