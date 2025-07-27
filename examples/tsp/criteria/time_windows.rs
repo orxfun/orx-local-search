@@ -10,7 +10,7 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input<'i> = TimeWindowInput<'i>;
+    type Input<'i> = TimeWindowsInput<'i>;
 
     fn evaluate(
         self,
@@ -33,7 +33,7 @@ impl TimeWindow {
     }
 }
 
-pub struct TimeWindowInput<'i> {
+pub struct TimeWindowsInput<'i> {
     duration_matrix: &'i DurationMatrix,
     penalty_per_late_minutes: u64,
     max_allowed_lateness: u64,
@@ -41,7 +41,7 @@ pub struct TimeWindowInput<'i> {
     start_time: u64,
 }
 
-impl<'i> TimeWindowInput<'i> {
+impl<'i> TimeWindowsInput<'i> {
     pub fn new(
         duration_matrix: &'i DurationMatrix,
         penalty_per_late_minutes: u64,
