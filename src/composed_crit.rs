@@ -1,6 +1,6 @@
 use crate::{
     ObjectiveValue, Problem, SolutionOf,
-    criterion::{Criterion, ObjectiveUnitOf},
+    crit::{Criterion, ObjectiveUnitOf},
 };
 
 #[derive(Clone, Copy)]

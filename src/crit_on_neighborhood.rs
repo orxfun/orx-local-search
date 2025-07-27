@@ -1,8 +1,8 @@
 use crate::{
-    ComposedCriteriaWithNeighborhood, Criterion, Neighborhood, ObjectiveUnitOf, SolutionOf,
+    ComposedCriteriaOnNeighborhood, Criterion, Neighborhood, ObjectiveUnitOf, SolutionOf,
     move_generator::MoveGenerator,
 };
-pub trait CriterionWithNeighborhood: Default + Clone + Copy {
+pub trait CriterionOnNeighborhood: Default + Clone + Copy {
     type Criterion: Criterion;
 
     type Neighborhood: Neighborhood<Problem = <Self::Criterion as Criterion>::Problem>;
@@ -17,9 +17,9 @@ pub trait CriterionWithNeighborhood: Default + Clone + Copy {
 
     // provided
 
-    fn compose<X>(self, _with: X) -> ComposedCriteriaWithNeighborhood<Self, X>
+    fn compose<X>(self, _with: X) -> ComposedCriteriaOnNeighborhood<Self, X>
     where
-        X: CriterionWithNeighborhood<Neighborhood = Self::Neighborhood>,
+        X: CriterionOnNeighborhood<Neighborhood = Self::Neighborhood>,
         X::Criterion: Criterion<Problem = <Self::Criterion as Criterion>::Problem>,
     {
         Default::default()
@@ -34,4 +34,4 @@ pub trait CriterionWithNeighborhood: Default + Clone + Copy {
     }
 }
 
-pub type InputOf<'i, X> = <<X as CriterionWithNeighborhood>::Criterion as Criterion>::Input<'i>;
+pub type InputOf<'i, X> = <<X as CriterionOnNeighborhood>::Criterion as Criterion>::Input<'i>;

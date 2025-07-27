@@ -1,4 +1,4 @@
-use crate::{Criterion, CriterionWithNeighborhood, LocalSearchOnNeighborhood, Neighborhood};
+use crate::{Criterion, CriterionOnNeighborhood, LocalSearchOnNeighborhood, Neighborhood};
 
 pub struct LocalSearch<X>
 where
@@ -20,7 +20,7 @@ where
         criterion_with_neighborhood: N,
     ) -> LocalSearchOnNeighborhood<'i, N>
     where
-        N: CriterionWithNeighborhood<Criterion = X>,
+        N: CriterionOnNeighborhood<Criterion = X>,
     {
         LocalSearchOnNeighborhood::new(criterion_with_neighborhood)
     }

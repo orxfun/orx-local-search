@@ -1,19 +1,19 @@
 use crate::{
-    ComposedCriteria, CriterionWithNeighborhood, composed_move_generator::ComposedMoveGenerator,
-    criterion::Criterion,
+    ComposedCriteria, CriterionOnNeighborhood, composed_move_generator::ComposedMoveGenerator,
+    crit::Criterion,
 };
 
 #[derive(Clone, Copy)]
-pub struct ComposedCriteriaWithNeighborhood<X1, X2>(X1, X2)
+pub struct ComposedCriteriaOnNeighborhood<X1, X2>(X1, X2)
 where
-    X1: CriterionWithNeighborhood,
-    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
+    X1: CriterionOnNeighborhood,
+    X2: CriterionOnNeighborhood<Neighborhood = X1::Neighborhood>,
     X2::Criterion: Criterion<Problem = <X1::Criterion as Criterion>::Problem>;
 
-impl<X1, X2> Default for ComposedCriteriaWithNeighborhood<X1, X2>
+impl<X1, X2> Default for ComposedCriteriaOnNeighborhood<X1, X2>
 where
-    X1: CriterionWithNeighborhood,
-    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
+    X1: CriterionOnNeighborhood,
+    X2: CriterionOnNeighborhood<Neighborhood = X1::Neighborhood>,
     X2::Criterion: Criterion<Problem = <X1::Criterion as Criterion>::Problem>,
 {
     fn default() -> Self {
@@ -21,10 +21,10 @@ where
     }
 }
 
-impl<X1, X2> ComposedCriteriaWithNeighborhood<X1, X2>
+impl<X1, X2> ComposedCriteriaOnNeighborhood<X1, X2>
 where
-    X1: CriterionWithNeighborhood,
-    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
+    X1: CriterionOnNeighborhood,
+    X2: CriterionOnNeighborhood<Neighborhood = X1::Neighborhood>,
     X2::Criterion: Criterion<Problem = <X1::Criterion as Criterion>::Problem>,
 {
     pub fn new() -> Self {
@@ -32,10 +32,10 @@ where
     }
 }
 
-impl<X1, X2> CriterionWithNeighborhood for ComposedCriteriaWithNeighborhood<X1, X2>
+impl<X1, X2> CriterionOnNeighborhood for ComposedCriteriaOnNeighborhood<X1, X2>
 where
-    X1: CriterionWithNeighborhood,
-    X2: CriterionWithNeighborhood<Neighborhood = X1::Neighborhood>,
+    X1: CriterionOnNeighborhood,
+    X2: CriterionOnNeighborhood<Neighborhood = X1::Neighborhood>,
     X2::Criterion: Criterion<Problem = <X1::Criterion as Criterion>::Problem>,
 {
     type Criterion = ComposedCriteria<X1::Criterion, X2::Criterion>;

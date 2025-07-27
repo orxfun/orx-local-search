@@ -1,12 +1,12 @@
 use crate::{
-    CandidateMoveOf, Criterion, CriterionWithNeighborhood, InputOf, Move, MoveGenerator, Solution,
-    SolutionOf, criterion::ObjectiveUnitOf,
+    CandidateMoveOf, Criterion, CriterionOnNeighborhood, InputOf, Move, MoveGenerator, Solution,
+    SolutionOf, crit::ObjectiveUnitOf,
 };
 use orx_self_or::SoR;
 
 pub struct LocalSearchOnNeighborhood<'i, X>
 where
-    X: CriterionWithNeighborhood,
+    X: CriterionOnNeighborhood,
 {
     criterion: X::Criterion,
     move_generator: X::MoveGenerator<'i>,
@@ -14,7 +14,7 @@ where
 
 impl<'i, X> LocalSearchOnNeighborhood<'i, X>
 where
-    X: CriterionWithNeighborhood,
+    X: CriterionOnNeighborhood,
 {
     pub fn new(criterion_with_neighborhood: X) -> Self {
         let criterion = X::Criterion::default();
