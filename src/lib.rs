@@ -23,5 +23,6 @@ mod obj;
 mod problem;
 mod solution;
 
+pub use crit::Criterion;
 pub use obj::Objective;
 pub use problem::Problem;
