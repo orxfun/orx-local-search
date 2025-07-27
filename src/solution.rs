@@ -43,9 +43,7 @@ impl<P: Problem> Solution<P> {
         )
     }
 
-    pub fn into_local_optimum(
-        self,
-    ) -> Option<(P::Solution, <P::Objective as Objective>::Unit)> {
+    pub fn into_local_optimum(self) -> Option<(P::Solution, <P::Objective as Objective>::Unit)> {
         match self {
             Self::LocalOptimum { solution, value } => Some((solution, value)),
             _ => None,
