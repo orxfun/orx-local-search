@@ -13,6 +13,7 @@
 #![cfg_attr(not(test), no_std)]
 
 mod r#move;
+mod neighborhood;
 mod objective;
 mod problem;
 mod symbolic;
