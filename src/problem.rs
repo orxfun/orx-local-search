@@ -1,7 +1,7 @@
-use crate::obj::Objective;
+use crate::objective_value::ObjectiveValue;
 
 pub trait Problem: 'static + Default + Clone + Copy {
-    type Objective: Objective;
+    type ObjectiveValue: ObjectiveValue;
 
     type Solution;
 }

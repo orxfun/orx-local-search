@@ -1,0 +1,56 @@
+use crate::{
+    ObjectiveValue, Problem, SolutionOf,
+    criterion::{Criterion, ObjectiveUnitOf},
+};
+
+#[derive(Clone, Copy)]
+pub struct ComposedCriteria<X1, X2>(X1, X2)
+where
+    X1: Criterion,
+    X2: Criterion<Problem = X1::Problem>;
+
+impl<X1, X2> Default for ComposedCriteria<X1, X2>
+where
+    X1: Criterion,
+    X2: Criterion<Problem = X1::Problem>,
+{
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl<X1, X2> ComposedCriteria<X1, X2>
+where
+    X1: Criterion,
+    X2: Criterion<Problem = X1::Problem>,
+{
+    pub fn new() -> Self {
+        Self(Default::default(), Default::default())
+    }
+}
+
+impl<X1, X2> Criterion for ComposedCriteria<X1, X2>
+where
+    X1: Criterion,
+    X2: Criterion<Problem = X1::Problem>,
+{
+    type Problem = X1::Problem;
+
+    type Input<'i> = (X1::Input<'i>, X2::Input<'i>);
+
+    // type InputQueue<'i> = <X1::InputQueue<'i> as MetaQueue>::Extend<X2::InputQueue<'i>>;
+
+    fn evaluate(
+        self,
+        solution: &SolutionOf<Self>,
+        (input1, input2): &Self::Input<'_>,
+    ) -> Option<ObjectiveUnitOf<Self>> {
+        self.0.evaluate(solution, input1).and_then(|value1| {
+            self.1.evaluate(solution, input2).map(|value2| {
+                <<Self::Problem as Problem>::ObjectiveValue as ObjectiveValue>::reduce(
+                    value1, value2,
+                )
+            })
+        })
+    }
+}
