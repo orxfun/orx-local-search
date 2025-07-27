@@ -11,3 +11,7 @@
     clippy::todo
 )]
 #![cfg_attr(not(test), no_std)]
+
+mod objective;
+mod problem;
+mod symbolic;
