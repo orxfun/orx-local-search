@@ -1,5 +1,5 @@
 use crate::{
-    ObjectiveValue, Problem, SolutionOf,
+    Objective, Problem, SolutionOf,
     crit::{Criterion, ObjectiveUnitOf},
 };
 
@@ -47,9 +47,7 @@ where
     ) -> Option<ObjectiveUnitOf<Self>> {
         self.0.evaluate(solution, input1).and_then(|value1| {
             self.1.evaluate(solution, input2).map(|value2| {
-                <<Self::Problem as Problem>::ObjectiveValue as ObjectiveValue>::reduce(
-                    value1, value2,
-                )
+                <<Self::Problem as Problem>::ObjectiveValue as Objective>::reduce(value1, value2)
             })
         })
     }

@@ -1,10 +1,10 @@
-use crate::{Move, objective_value::ObjectiveValue};
+use crate::{Move, objective::Objective};
 use std::cmp::Ordering;
 
 pub struct CandidateMove<M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
 {
     pub r#move: M,
     pub objective_value: O::Unit,
@@ -13,7 +13,7 @@ where
 impl<M, O> CandidateMove<M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
 {
     pub fn new(r#move: M, objective_value: O::Unit) -> Self {
         Self {
@@ -29,21 +29,21 @@ where
     }
 }
 
-impl<M: Move, O: ObjectiveValue> PartialEq for CandidateMove<M, O> {
+impl<M: Move, O: Objective> PartialEq for CandidateMove<M, O> {
     fn eq(&self, other: &Self) -> bool {
         self.r#move == other.r#move
     }
 }
 
-impl<M: Move, O: ObjectiveValue> Eq for CandidateMove<M, O> {}
+impl<M: Move, O: Objective> Eq for CandidateMove<M, O> {}
 
-impl<M: Move, O: ObjectiveValue> PartialOrd for CandidateMove<M, O> {
+impl<M: Move, O: Objective> PartialOrd for CandidateMove<M, O> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.r#move.partial_cmp(&other.r#move)
     }
 }
 
-impl<M: Move, O: ObjectiveValue> Ord for CandidateMove<M, O> {
+impl<M: Move, O: Objective> Ord for CandidateMove<M, O> {
     fn cmp(&self, other: &Self) -> Ordering {
         self.r#move.cmp(&other.r#move)
     }

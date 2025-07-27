@@ -1,11 +1,11 @@
 use crate::{
-    CandidateMove, Move, ObjectiveValue, sorted_intersecting_iterator::composed_next::ComposedNext,
+    CandidateMove, Move, Objective, sorted_intersecting_iterator::composed_next::ComposedNext,
 };
 
 pub struct SortedIntersectingIter<I1, I2, M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
     I1: Iterator<Item = CandidateMove<M, O>>,
     I2: Iterator<Item = CandidateMove<M, O>>,
 {
@@ -16,7 +16,7 @@ where
 impl<I1, I2, M, O> SortedIntersectingIter<I1, I2, M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
     I1: Iterator<Item = CandidateMove<M, O>>,
     I2: Iterator<Item = CandidateMove<M, O>>,
 {
@@ -28,7 +28,7 @@ where
 impl<I1, I2, M, O> Iterator for SortedIntersectingIter<I1, I2, M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
     I1: Iterator<Item = CandidateMove<M, O>>,
     I2: Iterator<Item = CandidateMove<M, O>>,
 {

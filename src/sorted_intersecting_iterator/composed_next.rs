@@ -1,10 +1,10 @@
-use crate::{CandidateMove, Move, ObjectiveValue};
+use crate::{CandidateMove, Move, Objective};
 use std::cmp::Ordering;
 
 pub enum ComposedNext<M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
 {
     OneIteratorConsumed,
     BothYieldedSameValue { composed: CandidateMove<M, O> },
@@ -15,7 +15,7 @@ where
 impl<M, O> ComposedNext<M, O>
 where
     M: Move,
-    O: ObjectiveValue,
+    O: Objective,
 {
     pub fn new(next1: Option<CandidateMove<M, O>>, next2: Option<CandidateMove<M, O>>) -> Self {
         match (next1, next2) {

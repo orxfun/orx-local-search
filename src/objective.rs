@@ -1,6 +1,6 @@
-use std::fmt::Debug;
+use core::fmt::Debug;
 
-pub trait ObjectiveValue: Default + Clone + Copy {
+pub trait Objective: Default + Clone + Copy {
     type Unit: Debug + PartialEq + Eq + PartialOrd + Clone + Copy;
 
     fn identity() -> Self::Unit;

@@ -1,4 +1,4 @@
-use crate::{ComposedCriteria, ObjectiveValue, problem::Problem};
+use crate::{ComposedCriteria, Objective, problem::Problem};
 
 pub trait Criterion: Default + Clone + Copy {
     type Problem: Problem;
@@ -32,4 +32,4 @@ pub trait Criterion: Default + Clone + Copy {
 pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
 
 pub type ObjectiveUnitOf<X> =
-    <<<X as Criterion>::Problem as Problem>::ObjectiveValue as ObjectiveValue>::Unit;
+    <<<X as Criterion>::Problem as Problem>::ObjectiveValue as Objective>::Unit;
