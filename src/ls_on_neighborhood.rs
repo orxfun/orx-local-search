@@ -11,10 +11,26 @@ where
     move_generator: X::MoveGenerator<'i>,
 }
 
+impl<'i, X> Default for LocalSearchOnNeighborhood<'i, X>
+where
+    X: CriterionOnNeighborhood,
+{
+    fn default() -> Self {
+        Self {
+            criterion: Default::default(),
+            move_generator: Default::default(),
+        }
+    }
+}
+
 impl<'i, X> LocalSearchOnNeighborhood<'i, X>
 where
     X: CriterionOnNeighborhood,
 {
+    pub fn new() -> Self {
+        Default::default()
+    }
+
     fn next_best_move(
         &mut self,
         input: &<X::Criterion as Criterion>::Input<'i>,
@@ -31,7 +47,7 @@ where
         best_move
     }
 
-    fn optimize(
+    pub fn optimize(
         &mut self,
         input: &<X::Criterion as Criterion>::Input<'i>,
         mut solution: <X::Problem as Problem>::Solution,
@@ -58,6 +74,3 @@ where
         }
     }
 }
-
-// pub type InputOf<'i, X> = <<X as CriterionOnNeighborhood>::Criterion as Criterion>::Input<'i>;
-// pub type SolutionOf<X> = <<X as Criterion>::Problem as Problem>::Solution;
