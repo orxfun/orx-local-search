@@ -63,15 +63,12 @@ where
         input: &Input<'i, X>,
         initial_objective_value: Option<ObjUnit<'i, X>>,
     ) {
-        let initial_value = match initial_objective_value.is_some() {
-            true => {
-                debug_assert_eq!(
-                    &initial_objective_value,
-                    &self.criterion.evaluate(input, &initial_solution)
-                );
-                initial_objective_value
+        let initial_value = match initial_objective_value {
+            Some(x) => {
+                debug_assert_eq!(&x, &self.criterion.evaluate(input, &initial_solution));
+                x
             }
-            false => self.criterion.evaluate(input, &initial_solution),
+            None => self.criterion.evaluate(input, &initial_solution),
         };
 
         // match initial_value {

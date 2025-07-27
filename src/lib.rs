@@ -21,3 +21,4 @@ mod move_generator;
 mod neighborhood;
 mod obj;
 mod problem;
+mod solution;
