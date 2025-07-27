@@ -22,3 +22,6 @@ mod neighborhood;
 mod obj;
 mod problem;
 mod solution;
+
+pub use obj::Objective;
+pub use problem::Problem;
