@@ -1,6 +1,7 @@
 use crate::{criteria::duration::DurationMatrix, tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
 use orx_local_search::{Criterion, Problem};
+use orx_meta::queue::{NonEmptyQueue, Single};
 use std::cmp::max;
 use std::collections::HashMap;
 
@@ -10,13 +11,14 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input<'i> = TimeWindowsInput<'i>;
+    type Input<'i> = Single<&'i TimeWindowsInput<'i>>;
 
     fn evaluate(
         self,
-        input: &Self::Input<'_>,
+        input: Self::Input<'_>,
         tour: &<Self::Problem as Problem>::Solution,
     ) -> Option<<Self::Problem as Problem>::ObjectiveUnit> {
+        let input = *input.front();
         input.tour_cost(tour)
     }
 }

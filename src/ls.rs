@@ -33,7 +33,7 @@ where
 
     fn next_best_move(
         &mut self,
-        input: &<X::Criterion as Criterion>::Input<'i>,
+        input: <X::Criterion as Criterion>::Input<'i>,
         solution: &<X::Problem as Problem>::Solution,
         mut value: <X::Problem as Problem>::ObjectiveUnit,
     ) -> Option<EvalMove<X::Neighborhood>> {
@@ -49,7 +49,7 @@ where
 
     pub fn optimize(
         &mut self,
-        input: &<X::Criterion as Criterion>::Input<'i>,
+        input: <X::Criterion as Criterion>::Input<'i>,
         mut solution: <X::Problem as Problem>::Solution,
         value: Option<<X::Problem as Problem>::ObjectiveUnit>,
     ) -> Solution<X::Problem> {

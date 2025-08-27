@@ -6,6 +6,7 @@ use crate::{
     tsp::Tsp,
 };
 use orx_local_search::{EvalMove, MoveGenerator, Problem};
+use orx_meta::queue::{NonEmptyQueue, Single};
 
 #[derive(Default)]
 pub struct CapacityMoveGenerator;
@@ -15,13 +16,16 @@ impl<'i> MoveGenerator<'i> for CapacityMoveGenerator {
 
     type Neighborhood = InsertNeighborhood;
 
-    type Input = CapacityInput;
+    type Input = Single<&'i CapacityInput>;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'a Self::Input,
+        input: Self::Input,
         tour: &'a <Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a {
-        CapacityMoves::new(input, tour)
+    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+    where
+        'i: 'a,
+    {
+        CapacityMoves::new(input.front(), tour)
     }
 }

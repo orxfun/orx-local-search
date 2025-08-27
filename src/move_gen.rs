@@ -5,11 +5,13 @@ pub trait MoveGenerator<'i>: Default {
 
     type Neighborhood: Neighborhood<Problem = Self::Problem>;
 
-    type Input;
+    type Input: Copy;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'a Self::Input,
+        input: Self::Input,
         solution: &'a <Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a;
+    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+    where
+        'i: 'a;
 }

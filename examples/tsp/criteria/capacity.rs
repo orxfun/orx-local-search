@@ -1,6 +1,7 @@
 use crate::{tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
 use orx_local_search::{Criterion, Problem};
+use orx_meta::queue::{NonEmptyQueue, Single};
 
 #[derive(Default, Clone, Copy)]
 pub struct Capacity;
@@ -8,13 +9,14 @@ pub struct Capacity;
 impl Criterion for Capacity {
     type Problem = Tsp;
 
-    type Input<'i> = CapacityInput;
+    type Input<'i> = Single<&'i CapacityInput>;
 
     fn evaluate(
         self,
-        input: &Self::Input<'_>,
+        input: Self::Input<'_>,
         tour: &<Self::Problem as Problem>::Solution,
     ) -> Option<<Self::Problem as Problem>::ObjectiveUnit> {
+        let input = *input.front();
         match input.is_tour_feasible(tour) {
             true => Some(0),
             false => None,
