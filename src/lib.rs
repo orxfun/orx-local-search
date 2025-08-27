@@ -14,6 +14,7 @@
 
 mod crit;
 mod crit_on_neighborhood;
+mod crit_pair;
 mod eval_move;
 mod ls;
 mod r#move;

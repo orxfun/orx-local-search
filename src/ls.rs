@@ -53,7 +53,7 @@ where
         mut solution: <X::Problem as Problem>::Solution,
         value: Option<<X::Problem as Problem>::ObjectiveUnit>,
     ) -> Solution<X::Problem> {
-        let value = match value.is_some() {
+        let initial_value = match value.is_some() {
             true => {
                 debug_assert_eq!(&value, &self.criterion.evaluate(input, &solution));
                 value
@@ -61,7 +61,7 @@ where
             false => self.criterion.evaluate(input, &solution),
         };
 
-        match value {
+        match initial_value {
             None => Solution::InfeasibleSolution { solution },
             Some(mut value) => {
                 while let Some(eval_move) = self.next_best_move(input, &solution, value) {

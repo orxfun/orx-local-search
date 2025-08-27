@@ -15,7 +15,7 @@ impl Criterion for Duration {
         input: &Self::Input<'_>,
         tour: &<Self::Problem as Problem>::Solution,
     ) -> Option<<Self::Problem as Problem>::ObjectiveUnit> {
-        Some(input.tour_cost(tour))
+        Some(input.tour_duration(tour))
     }
 }
 
@@ -34,10 +34,12 @@ impl DurationMatrix {
         self.0.len()
     }
 
-    pub fn tour_cost(&self, tour: &Tour) -> u64 {
+    pub fn tour_duration(&self, tour: &Tour) -> u64 {
         let mut cost = 0;
-        for p in 0..tour.iter().len().saturating_sub(1) {
-            cost += self.get(tour[p], tour[p + 1]);
+        let a = tour.iter().copied();
+        let b = tour.iter().copied().skip(1);
+        for (a, b) in a.zip(b) {
+            cost += self.get(a, b);
         }
         cost
     }

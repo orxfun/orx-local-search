@@ -4,8 +4,8 @@ use std::ops::{Index, IndexMut};
 pub struct Tour(Vec<usize>);
 
 impl Tour {
-    pub fn new(sequence: Vec<usize>) -> Self {
-        Self(sequence)
+    pub fn in_standard_order(num_cities: usize) -> Self {
+        Self((0..num_cities).collect())
     }
 
     pub fn get(&self, position: usize) -> Option<usize> {
@@ -13,7 +13,7 @@ impl Tour {
     }
 
     pub fn example_solution() -> Self {
-        Self::new((0..6).collect())
+        Self::in_standard_order(6)
     }
 }
 
