@@ -15,10 +15,12 @@
 mod crit;
 mod crit_on_neighborhood;
 mod crit_pair;
+mod crit_pair_on_neighborhood;
 mod eval_move;
 mod ls;
 mod r#move;
 mod move_gen;
+mod move_gen_pair;
 mod neighborhood;
 mod objective;
 mod problem;
