@@ -25,6 +25,7 @@ mod neighborhood;
 mod objective;
 mod problem;
 mod solution;
+mod sorted_intersecting_iter;
 mod symbolic;
 
 pub use crit::Criterion;
