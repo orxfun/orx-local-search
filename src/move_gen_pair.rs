@@ -1,5 +1,8 @@
-use crate::{Criterion, CriterionOnNeighborhood, move_gen::MoveGenerator};
-use orx_meta::queue::Pair;
+use crate::{
+    Criterion, CriterionOnNeighborhood, move_gen::MoveGenerator,
+    sorted_intersecting_iter::SortedIntersectingIter,
+};
+use orx_meta::queue::{NonEmptyQueue, Pair};
 
 pub struct ComposedMoveGenerator<'i, X1, X2>(X1::MoveGenerator<'i>, X2::MoveGenerator<'i>)
 where
@@ -38,8 +41,10 @@ where
     where
         'i: 'a,
     {
-        todo!();
-        core::iter::empty()
+        let (input1, input2) = input.pop_front();
+        let moves1 = self.0.moves(input1, solution);
+        let moves2 = self.1.moves(input2, solution);
+        SortedIntersectingIter::new(moves1, moves2)
     }
 }
 
