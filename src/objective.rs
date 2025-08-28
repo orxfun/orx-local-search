@@ -5,5 +5,5 @@ pub trait Objective: Symbolic {
 
     fn identity() -> Self::Unit;
 
-    fn reduce(a: Self::Unit, b: Self::Unit) -> Self::Unit;
+    fn compose(a: Self::Unit, b: Self::Unit) -> Self::Unit;
 }

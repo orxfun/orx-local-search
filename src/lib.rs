@@ -12,6 +12,7 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod eval_move;
 mod ls;
 mod neighborhood;
 mod objective;
