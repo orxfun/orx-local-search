@@ -13,6 +13,7 @@
 #![cfg_attr(not(test), no_std)]
 
 mod crit;
+mod crit_empty;
 mod crit_on_neighborhood;
 mod crit_pair;
 mod crit_pair_on_neighborhood;
