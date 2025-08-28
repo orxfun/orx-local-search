@@ -120,3 +120,13 @@ where
         }
     }
 }
+
+#[test]
+fn abc() {
+    use orx_meta::queue::*;
+
+    let a = EmptyQueue.push_back(1);
+    let b = EmptyQueue.push_back(2);
+
+    let c = a.push_back(b);
+}

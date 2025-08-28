@@ -1,6 +1,6 @@
 use crate::{criterion::Criterion, eval_soln::EvalSoln, objective::Objective, problem::Problem};
 use core::marker::PhantomData;
-use orx_meta::queue::{NonEmptyQueue, Pair, Queue};
+use orx_meta::queue::{NonEmptyQueue, Pair};
 
 #[derive(Default, Clone, Copy)]
 pub struct ComposedCriteria<X1, X2>(PhantomData<(X1, X2)>)
@@ -33,14 +33,4 @@ where
             _ => EvalSoln::Infeasible,
         }
     }
-}
-
-#[test]
-fn abc() {
-    use orx_meta::queue::*;
-
-    let a = EmptyQueue.push_back(1);
-    let b = EmptyQueue.push_back(2);
-
-    let c = a.push_back(b);
 }
