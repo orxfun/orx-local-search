@@ -14,6 +14,7 @@
 
 mod eval_move;
 mod ls;
+mod move_gen;
 mod neighborhood;
 mod objective;
 mod problem;
