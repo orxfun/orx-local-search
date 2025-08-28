@@ -11,9 +11,9 @@ use orx_local_search::{Criterion, EvalMove, MoveGenerator, Problem};
 use orx_meta::queue::NonEmptyQueue;
 
 #[derive(Default)]
-pub struct DurationMoveGenerator;
+pub struct InsertMovesForDuration;
 
-impl<'i> MoveGenerator<'i> for DurationMoveGenerator {
+impl<'i> MoveGenerator<'i> for InsertMovesForDuration {
     type Neighborhood = InsertNeighborhood;
 
     type X = Duration;
@@ -26,8 +26,11 @@ impl<'i> MoveGenerator<'i> for DurationMoveGenerator {
     where
         'i: 'a,
     {
-        let duration_matrix = input.front();
-        DurationMoves::new(tour, duration_matrix)
+        DurationMoves {
+            iter: AllInsertMovesIter::new(tour.iter().len()),
+            duration_matrix: input.front(),
+            tour,
+        }
     }
 }
 
@@ -35,22 +38,17 @@ impl<'i> MoveGenerator<'i> for DurationMoveGenerator {
 
 pub struct DurationMoves<'a> {
     tour: &'a Tour,
-    input: &'a DurationMatrix,
+    duration_matrix: &'a DurationMatrix,
     iter: AllInsertMovesIter,
 }
 
 impl<'a> DurationMoves<'a> {
-    pub fn new(tour: &'a Tour, input: &'a DurationMatrix) -> Self {
-        let iter = AllInsertMovesIter::new(tour.iter().len());
-        Self { tour, input, iter }
-    }
-
     fn tour_cost_after_move(&self, mv: &InsertMove) -> u64 {
         let mut cost = 0;
         let mut new_tour = TourAfterInsertIter::new(mv.clone(), self.tour);
         if let Some(mut a) = new_tour.next() {
             for b in new_tour {
-                cost += self.input.get(a, b);
+                cost += self.duration_matrix.get(a, b);
                 a = b;
             }
         }
