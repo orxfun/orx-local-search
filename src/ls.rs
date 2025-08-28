@@ -5,20 +5,14 @@ use crate::{
     neighborhood::Neighborhood,
 };
 use core::marker::PhantomData;
+use orx_meta::queue::EmptyQueue;
 
-pub struct LocalSearch<'i, N, M>(PhantomData<&'i (N, M)>)
-where
-    N: Neighborhood,
-    M: MoveGenerator<'i, Neighborhood = N>;
-
-impl<'i, N, M> Default for LocalSearch<'i, N, M>
+pub struct LocalSearch<'i, N, M>
 where
     N: Neighborhood,
     M: MoveGenerator<'i, Neighborhood = N>,
 {
-    fn default() -> Self {
-        Self(PhantomData)
-    }
+    input: <M::X as Criterion>::Input<'i>,
 }
 
 impl<'i, N> LocalSearch<'i, N, EmptyMoveGenerator<'i, N>>
@@ -26,6 +20,16 @@ where
     N: Neighborhood,
 {
     pub fn new() -> Self {
-        Self(PhantomData)
+        Self { input: EmptyQueue }
+    }
+}
+
+impl<'i, N, M> LocalSearch<'i, N, M>
+where
+    N: Neighborhood,
+    M: MoveGenerator<'i, Neighborhood = N>,
+{
+    fn with<Q>(input: usize) {
+        //
     }
 }

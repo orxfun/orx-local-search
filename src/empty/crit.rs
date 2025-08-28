@@ -17,7 +17,6 @@ impl<P: Problem> Criterion for EmptyCriterion<P> {
     type Input<'i> = EmptyQueue;
 
     fn evaluate(
-        self,
         _: Self::Input<'_>,
         _: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {

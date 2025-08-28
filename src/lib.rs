@@ -12,6 +12,7 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod composed;
 mod crit;
 mod empty;
 mod eval_move;
