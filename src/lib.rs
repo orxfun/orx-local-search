@@ -23,3 +23,6 @@ mod neighborhood;
 mod objective;
 mod problem;
 mod symbolic;
+
+pub use objective::Objective;
+pub use problem::Problem;
