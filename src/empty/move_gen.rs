@@ -1,32 +1,29 @@
 use crate::{
-    crit::Criterion, eval_move::EvalMove, move_gen::MoveGenerator, neighborhood::Neighborhood,
-    problem::Problem,
+    crit::Criterion, empty::EmptyCriterion, eval_move::EvalMove, move_gen::MoveGenerator,
+    neighborhood::Neighborhood, problem::Problem,
 };
 use core::marker::PhantomData;
 
-pub struct EmptyMoveGenerator<'i, N, X>(PhantomData<&'i (N, X)>)
+pub struct EmptyMoveGenerator<'i, N>(PhantomData<&'i N>)
 where
-    N: Neighborhood,
-    X: Criterion<Problem = N::Problem>;
+    N: Neighborhood;
 
-impl<'i, N, X> Default for EmptyMoveGenerator<'i, N, X>
+impl<'i, N> Default for EmptyMoveGenerator<'i, N>
 where
     N: Neighborhood,
-    X: Criterion<Problem = N::Problem>,
 {
     fn default() -> Self {
         Self(PhantomData)
     }
 }
 
-impl<'i, N, X> MoveGenerator<'i> for EmptyMoveGenerator<'i, N, X>
+impl<'i, N> MoveGenerator<'i> for EmptyMoveGenerator<'i, N>
 where
     N: Neighborhood,
-    X: Criterion<Problem = N::Problem>,
 {
     type Neighborhood = N;
 
-    type X = X;
+    type X = EmptyCriterion<N::Problem>;
 
     fn moves<'a>(
         &'a mut self,
