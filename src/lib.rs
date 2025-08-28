@@ -13,6 +13,7 @@
 #![cfg_attr(not(test), no_std)]
 
 mod ls;
+mod r#move;
 mod objective;
 mod problem;
 mod symbolic;
