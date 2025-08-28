@@ -13,6 +13,7 @@
 #![cfg_attr(not(test), no_std)]
 
 mod crit;
+mod empty;
 mod eval_move;
 mod eval_soln;
 mod ls;

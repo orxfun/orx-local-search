@@ -6,7 +6,9 @@ pub trait Criterion: Symbolic {
 
     type Input<'i>: Queue + Copy;
 
-    fn evaluate(self, input: Self::Input<'_>, solution: &Soln<Self>) -> EvalSoln<Self::Problem>;
+    fn evaluate(
+        self,
+        input: Self::Input<'_>,
+        solution: &<Self::Problem as Problem>::Solution,
+    ) -> EvalSoln<Self::Problem>;
 }
-
-type Soln<X> = <<X as Criterion>::Problem as Problem>::Solution;
