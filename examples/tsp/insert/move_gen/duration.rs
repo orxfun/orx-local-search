@@ -11,9 +11,9 @@ use orx_local_search::{Criterion, EvalMove, MoveGenerator, Problem};
 use orx_meta::queue::NonEmptyQueue;
 
 #[derive(Default)]
-pub struct InsertMovesForDuration;
+pub struct InsertForDuration;
 
-impl<'i> MoveGenerator<'i> for InsertMovesForDuration {
+impl<'i> MoveGenerator<'i> for InsertForDuration {
     type Neighborhood = Insert;
 
     type X = Duration;

@@ -1,10 +1,32 @@
-use crate::{
-    composed::ComposedMoveGenerator, empty::EmptyMoveGenerator, move_gen::MoveGenerator,
-    neighborhood::Neighborhood,
-};
+use crate::{composed::ComposedMoveGenerator, move_gen::MoveGenerator, neighborhood::Neighborhood};
 use core::marker::PhantomData;
 
-pub struct LocalSearch<'i, N, M>
+// builder
+
+pub struct LocalSearch;
+
+impl LocalSearch {
+    pub fn on<N: Neighborhood>(self) -> LocalSearchOn<N> {
+        LocalSearchOn(PhantomData)
+    }
+}
+
+// empty
+
+pub struct LocalSearchOn<N: Neighborhood>(PhantomData<N>);
+
+impl<N: Neighborhood> LocalSearchOn<N> {
+    pub fn for_criterion<'i, M>(self) -> LocalSearchOf<'i, N, M>
+    where
+        M: MoveGenerator<'i, Neighborhood = N>,
+    {
+        Default::default()
+    }
+}
+
+// non-empty
+
+pub struct LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
     M: MoveGenerator<'i, Neighborhood = N>,
@@ -13,7 +35,7 @@ where
     phantom: PhantomData<&'i N>,
 }
 
-impl<'i, N, M> Default for LocalSearch<'i, N, M>
+impl<'i, N, M> Default for LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
     M: MoveGenerator<'i, Neighborhood = N>,
@@ -26,24 +48,18 @@ where
     }
 }
 
-impl<'i, N> LocalSearch<'i, N, EmptyMoveGenerator<'i, N>>
-where
-    N: Neighborhood,
-{
-    pub fn new() -> Self {
-        Default::default()
-    }
-}
-
-impl<'i, N, M> LocalSearch<'i, N, M>
+impl<'i, N, M> LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
     M: MoveGenerator<'i, Neighborhood = N>,
 {
-    pub fn compose<Q>(self) -> LocalSearch<'i, N, ComposedMoveGenerator<'i, M, Q>>
+    pub fn for_criterion<Q>(self) -> LocalSearchOf<'i, N, ComposedMoveGenerator<'i, M, Q>>
     where
         Q: MoveGenerator<'i, Neighborhood = N>,
     {
-        Default::default()
+        LocalSearchOf {
+            move_generator: ComposedMoveGenerator::new(self.move_generator, Q::default()),
+            phantom: PhantomData,
+        }
     }
 }

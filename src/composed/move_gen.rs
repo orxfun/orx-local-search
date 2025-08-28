@@ -19,6 +19,20 @@ where
     phantom: PhantomData<&'i ()>,
 }
 
+impl<'i, M1, M2> ComposedMoveGenerator<'i, M1, M2>
+where
+    M1: MoveGenerator<'i>,
+    M2: MoveGenerator<'i, Neighborhood = M1::Neighborhood>,
+{
+    pub(crate) fn new(m1: M1, m2: M2) -> Self {
+        Self {
+            m1,
+            m2,
+            phantom: PhantomData,
+        }
+    }
+}
+
 impl<'i, M1, M2> MoveGenerator<'i> for ComposedMoveGenerator<'i, M1, M2>
 where
     M1: MoveGenerator<'i>,
