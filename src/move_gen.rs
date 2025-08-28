@@ -3,17 +3,13 @@ use crate::{crit::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, pr
 pub trait MoveGenerator<'i>: Default {
     type Neighborhood: Neighborhood;
 
-    type X: Criterion<Problem = Prob<'i, Self>>;
+    type X: Criterion<Problem = <Self::Neighborhood as Neighborhood>::Problem>;
 
     fn moves<'a>(
         &'a mut self,
-        input: Input<'i, Self>,
-        solution: &'a Soln<'i, Self>,
+        input: <Self::X as Criterion>::Input<'i>,
+        solution: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
         'i: 'a;
 }
-
-type Prob<'i, M> = <<M as MoveGenerator<'i>>::Neighborhood as Neighborhood>::Problem;
-type Soln<'i, M> = <Prob<'i, M> as Problem>::Solution;
-type Input<'i, M> = <<M as MoveGenerator<'i>>::X as Criterion>::Input<'i>;
