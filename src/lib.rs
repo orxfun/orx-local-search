@@ -13,7 +13,8 @@
 #![cfg_attr(not(test), no_std)]
 
 mod composed;
-mod crit;
+mod criteria;
+mod criterion;
 mod eval_move;
 mod eval_soln;
 mod ls;
@@ -24,7 +25,7 @@ mod problem;
 mod solution;
 mod symbolic;
 
-pub use crit::Criterion;
+pub use criterion::Criterion;
 pub use eval_move::EvalMove;
 pub use eval_soln::EvalSoln;
 pub use ls::{LocalSearch, LocalSearchOf, LocalSearchOn};

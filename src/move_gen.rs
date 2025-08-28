@@ -1,4 +1,6 @@
-use crate::{crit::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem};
+use crate::{
+    criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
+};
 
 pub trait MoveGenerator<'i>: Default {
     type Neighborhood: Neighborhood;

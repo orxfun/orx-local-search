@@ -1,4 +1,4 @@
-use crate::{crit::Criterion, eval_soln::EvalSoln, objective::Objective, problem::Problem};
+use crate::{criterion::Criterion, eval_soln::EvalSoln, objective::Objective, problem::Problem};
 use core::marker::PhantomData;
 use orx_meta::queue::{NonEmptyQueue, Pair, Queue};
 

@@ -1,6 +1,6 @@
 use crate::{
     composed::{crit::ComposedCriteria, sorted_intersecting_iter::SortedIntersectingIter},
-    crit::Criterion,
+    criterion::Criterion,
     eval_move::EvalMove,
     move_gen::MoveGenerator,
     problem::Problem,
