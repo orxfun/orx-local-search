@@ -73,7 +73,16 @@ where
         mut value:
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
     ) -> Option<EvalMove<N>> {
-        None
+        let mut best_move = None;
+
+        for eval_move in self.move_generator.moves(input, solution) {
+            if eval_move.value < value {
+                value = eval_move.value;
+                best_move = Some(eval_move);
+            }
+        }
+
+        best_move
     }
 
     pub fn run(
