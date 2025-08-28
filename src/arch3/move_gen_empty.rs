@@ -1,4 +1,4 @@
-use crate::{MoveGenerator, Neighborhood, Problem};
+use crate::{EvalMove, MoveGenerator, Neighborhood, Problem};
 use core::marker::PhantomData;
 
 pub struct MoveGeneratorEmpty<'i, P, N>(PhantomData<&'i (P, N)>)
@@ -31,7 +31,7 @@ where
         &'a mut self,
         _: Self::Input,
         _: &'a <Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = crate::EvalMove<Self::Neighborhood>> + 'a
+    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
         'i: 'a,
     {
