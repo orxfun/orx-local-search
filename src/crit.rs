@@ -1,4 +1,4 @@
-use crate::{eval_soln::EvalSoln, objective::Objective, problem::Problem, symbolic::Symbolic};
+use crate::{eval_soln::EvalSoln, problem::Problem, symbolic::Symbolic};
 use orx_meta::queue::Queue;
 
 pub trait Criterion: Symbolic {
@@ -6,12 +6,7 @@ pub trait Criterion: Symbolic {
 
     type Input<'i>: Queue + Copy;
 
-    fn evaluate(
-        self,
-        input: Self::Input<'_>,
-        solution: &Solution<Self::Problem>,
-    ) -> EvalSoln<Self::Problem>;
+    fn evaluate(self, input: Self::Input<'_>, solution: &Soln<Self>) -> EvalSoln<Self::Problem>;
 }
 
-type ObjUnit<P> = <<P as Problem>::Objective as Objective>::Unit;
-type Solution<P> = <P as Problem>::Solution;
+type Soln<X> = <<X as Criterion>::Problem as Problem>::Solution;

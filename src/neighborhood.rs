@@ -6,9 +6,9 @@ pub trait Neighborhood: Symbolic {
 
     type Move: Ord + Eq + Debug;
 
-    fn neighborhood(
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = Self::Move>;
+    fn neighborhood(solution: &Soln<Self>) -> impl Iterator<Item = Self::Move>;
 
-    fn apply_move(mv: &Self::Move, solution: &mut <Self::Problem as Problem>::Solution);
+    fn apply_move(mv: &Self::Move, solution: &mut Soln<Self>);
 }
+
+type Soln<N> = <<N as Neighborhood>::Problem as Problem>::Solution;
