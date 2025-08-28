@@ -26,5 +26,6 @@ mod symbolic;
 
 pub use crit::Criterion;
 pub use eval_soln::EvalSoln;
+pub use neighborhood::Neighborhood;
 pub use objective::Objective;
 pub use problem::Problem;
