@@ -1,4 +1,7 @@
-use crate::{composed::ComposedMoveGenerator, move_gen::MoveGenerator, neighborhood::Neighborhood};
+use crate::{
+    Criterion, EvalMove, EvalSoln, Objective, Problem, Solution, composed::ComposedMoveGenerator,
+    move_gen::MoveGenerator, neighborhood::Neighborhood,
+};
 use core::marker::PhantomData;
 
 // builder
@@ -60,6 +63,51 @@ where
         LocalSearchOf {
             move_generator: ComposedMoveGenerator::new(self.move_generator, Q::default()),
             phantom: PhantomData,
+        }
+    }
+
+    fn next_best_move(
+        &mut self,
+        input: <M::X as Criterion>::Input<'i>,
+        solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+        mut value:
+            <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
+    ) -> Option<EvalMove<N>> {
+        None
+    }
+
+    pub fn run(
+        &mut self,
+        input: <M::X as Criterion>::Input<'i>,
+        initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+        initial_value: Option<
+            <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
+        >,
+    ) -> Solution<<M::Neighborhood as Neighborhood>::Problem> {
+        let initial_value = match initial_value {
+            Some(v) => {
+                debug_assert_eq!(
+                    &EvalSoln::Feasible(v),
+                    &<M::X as Criterion>::evaluate(input, &initial_solution)
+                );
+                EvalSoln::Feasible(v)
+            }
+            None => <M::X as Criterion>::evaluate(input, &initial_solution),
+        };
+
+        match initial_value {
+            EvalSoln::Infeasible => Solution::InfeasibleSolution {
+                solution: initial_solution,
+            },
+            EvalSoln::Feasible(mut value) => {
+                let mut solution = initial_solution;
+                while let Some(eval_move) = self.next_best_move(input, &solution, value) {
+                    N::apply_move(&eval_move.mv, &mut solution);
+                    value = eval_move.value;
+                }
+
+                Solution::LocalOptimum { solution, value }
+            }
         }
     }
 }

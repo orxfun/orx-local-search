@@ -21,6 +21,7 @@ mod move_gen;
 mod neighborhood;
 mod objective;
 mod problem;
+mod solution;
 mod symbolic;
 
 pub use crit::Criterion;
@@ -31,3 +32,4 @@ pub use move_gen::MoveGenerator;
 pub use neighborhood::Neighborhood;
 pub use objective::Objective;
 pub use problem::Problem;
+pub use solution::Solution;
