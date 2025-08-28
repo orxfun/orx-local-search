@@ -10,9 +10,9 @@ pub struct InsertMove {
 }
 
 #[derive(Default, Clone, Copy)]
-pub struct InsertNeighborhood;
+pub struct Insert;
 
-impl Neighborhood for InsertNeighborhood {
+impl Neighborhood for Insert {
     type Problem = Tsp;
 
     type Move = InsertMove;

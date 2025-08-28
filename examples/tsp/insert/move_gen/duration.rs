@@ -1,7 +1,7 @@
 use crate::{
     criteria::duration::{Duration, DurationMatrix},
     insert::{
-        neighborhood::{AllInsertMovesIter, InsertMove, InsertNeighborhood},
+        neighborhood::{AllInsertMovesIter, Insert, InsertMove},
         tour_after_move::TourAfterInsertIter,
     },
     tour::Tour,
@@ -14,7 +14,7 @@ use orx_meta::queue::NonEmptyQueue;
 pub struct InsertMovesForDuration;
 
 impl<'i> MoveGenerator<'i> for InsertMovesForDuration {
-    type Neighborhood = InsertNeighborhood;
+    type Neighborhood = Insert;
 
     type X = Duration;
 
@@ -57,7 +57,7 @@ impl<'a> DurationMoves<'a> {
 }
 
 impl<'a> Iterator for DurationMoves<'a> {
-    type Item = EvalMove<InsertNeighborhood>;
+    type Item = EvalMove<Insert>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.iter.next().map(|mv| {

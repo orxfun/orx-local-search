@@ -40,7 +40,7 @@ where
     N: Neighborhood,
     M: MoveGenerator<'i, Neighborhood = N>,
 {
-    fn compose<Q>() -> LocalSearch<'i, N, ComposedMoveGenerator<'i, M, Q>>
+    pub fn compose<Q>(self) -> LocalSearch<'i, N, ComposedMoveGenerator<'i, M, Q>>
     where
         Q: MoveGenerator<'i, Neighborhood = N>,
     {
