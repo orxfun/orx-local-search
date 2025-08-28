@@ -1,10 +1,8 @@
-use core::marker::PhantomData;
-
 use crate::{
-    composed::ComposedMoveGenerator, crit::Criterion, empty::EmptyMoveGenerator,
-    move_gen::MoveGenerator, neighborhood::Neighborhood,
+    composed::ComposedMoveGenerator, empty::EmptyMoveGenerator, move_gen::MoveGenerator,
+    neighborhood::Neighborhood,
 };
-use orx_meta::queue::EmptyQueue;
+use core::marker::PhantomData;
 
 pub struct LocalSearch<'i, N, M>
 where
