@@ -1,23 +1,36 @@
-mod candidate_move;
-mod composed_criteria;
-mod composed_move_generator;
-mod criterion;
-mod local_search;
-mod r#move;
-mod move_generator;
-mod objective_value;
-mod problem;
-mod result;
-mod sorted_intersecting_iterator;
+#![doc = include_str!("../README.md")]
+#![warn(
+    // missing_docs,
+    clippy::unwrap_in_result,
+    clippy::unwrap_used,
+    clippy::panic,
+    clippy::panic_in_result_fn,
+    clippy::float_cmp,
+    clippy::float_cmp_const,
+    clippy::missing_panics_doc,
+    clippy::todo
+)]
+#![cfg_attr(not(test), no_std)]
 
-pub use candidate_move::CandidateMove;
-pub use composed_criteria::ComposedCriteria;
-pub use criterion::{Criterion, InputOf, ObjectiveUnitOf, SolutionOf};
-pub use local_search::LocalSearch;
-pub use r#move::Move;
-pub use move_generator::MoveGenerator;
+mod composed;
+mod criteria;
+mod criterion;
+mod eval_move;
+mod eval_soln;
+mod ls;
+mod move_gen;
 mod neighborhood;
-pub use neighborhood::{CandidateMoveOf, Neighborhood};
-pub use objective_value::ObjectiveValue;
+mod objective;
+mod problem;
+mod solution;
+mod symbolic;
+
+pub use criterion::Criterion;
+pub use eval_move::EvalMove;
+pub use eval_soln::EvalSoln;
+pub use ls::{LocalSearch, LocalSearchOf, LocalSearchOn};
+pub use move_gen::MoveGenerator;
+pub use neighborhood::Neighborhood;
+pub use objective::Objective;
 pub use problem::Problem;
-pub use result::LocalSearchResult;
+pub use solution::Solution;

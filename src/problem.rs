@@ -1,7 +1,7 @@
-use crate::objective_value::ObjectiveValue;
+use crate::{objective::Objective, symbolic::Symbolic};
 
-pub trait Problem: 'static + Default + Clone + Copy {
-    type ObjectiveValue: ObjectiveValue;
+pub trait Problem: Symbolic {
+    type Objective: Objective;
 
     type Solution;
 }

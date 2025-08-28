@@ -5,7 +5,8 @@ edition = "2024"
 publish = ["artifactory"]
 
 [dependencies]
-orx-meta = { git = "https://github.com/orxfun/orx-meta" }
+# orx-meta = { git = "https://github.com/orxfun/orx-meta" }
+orx-meta = { path = "../orx-meta" }
 orx-self-or = { version = "1.2.0", registry = "artifactory" }
 
 
