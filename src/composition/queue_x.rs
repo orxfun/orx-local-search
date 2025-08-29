@@ -1,110 +1,110 @@
-use crate::{Criterion, EvalSoln, Objective, Problem};
-use core::marker::PhantomData;
-use orx_meta::queue::*;
+// use crate::{Criterion, EvalSoln, Objective, Problem};
+// use core::marker::PhantomData;
+// use orx_meta::queue::*;
 
-pub trait QueueX {
-    type Problem: Problem;
+// pub trait Criteria {
+//     type Problem: Problem;
 
-    type Front: Criterion<Problem = Self::Problem>;
+//     type Front: Criterion<Problem = Self::Problem>;
 
-    type Back: QueueX<Problem = Self::Problem>;
+//     type Back: Criteria<Problem = Self::Problem>;
 
-    type PushBack<Y>: QueueX<Problem = Self::Problem>
-    where
-        Y: Criterion<Problem = Self::Problem>;
+//     type PushBack<Y>: Criteria<Problem = Self::Problem>
+//     where
+//         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i>: Queue + Copy;
+//     type XInput<'i>: Queue + Copy;
 
-    fn x_evaluate(
-        input: Self::XInput<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem>;
-}
+//     fn evaluate(
+//         input: Self::XInput<'_>,
+//         solution: &<Self::Problem as Problem>::Solution,
+//     ) -> EvalSoln<Self::Problem>;
+// }
 
-#[derive(Default)]
-pub struct SingleX<F>(PhantomData<F>)
-where
-    F: Criterion;
+// #[derive(Default)]
+// pub struct SingleX<F>(PhantomData<F>)
+// where
+//     F: Criterion;
 
-impl<F> QueueX for SingleX<F>
-where
-    F: Criterion,
-{
-    type Problem = F::Problem;
+// impl<F> Criteria for SingleX<F>
+// where
+//     F: Criterion,
+// {
+//     type Problem = F::Problem;
 
-    type Front = F;
+//     type Front = F;
 
-    type Back = Self;
+//     type Back = Self;
 
-    type PushBack<Y>
-        = Self
-    where
-        Y: Criterion<Problem = Self::Problem>;
+//     type PushBack<Y>
+//         = Self
+//     where
+//         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i> = Single<F::Input<'i>>;
+//     type XInput<'i> = Single<F::Input<'i>>;
 
-    fn x_evaluate(
-        input: Self::XInput<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        F::evaluate(*input.front(), solution)
-    }
-}
+//     fn evaluate(
+//         input: Self::XInput<'_>,
+//         solution: &<Self::Problem as Problem>::Solution,
+//     ) -> EvalSoln<Self::Problem> {
+//         F::evaluate(*input.front(), solution)
+//     }
+// }
 
-#[derive(Default)]
-pub struct PairX<F, B>(PhantomData<(F, B)>)
-where
-    F: Criterion,
-    B: QueueX<Problem = F::Problem>;
+// #[derive(Default)]
+// pub struct PairX<F, B>(PhantomData<(F, B)>)
+// where
+//     F: Criterion,
+//     B: Criteria<Problem = F::Problem>;
 
-impl<F, B> QueueX for PairX<F, B>
-where
-    F: Criterion,
-    B: QueueX<Problem = F::Problem>,
-{
-    type Problem = F::Problem;
+// impl<F, B> Criteria for PairX<F, B>
+// where
+//     F: Criterion,
+//     B: Criteria<Problem = F::Problem>,
+// {
+//     type Problem = F::Problem;
 
-    type Front = F;
+//     type Front = F;
 
-    type Back = B;
+//     type Back = B;
 
-    type PushBack<Y>
-        = PairX<F, B::PushBack<Y>>
-    where
-        Y: Criterion<Problem = Self::Problem>;
+//     type PushBack<Y>
+//         = PairX<F, B::PushBack<Y>>
+//     where
+//         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i> = Pair<F::Input<'i>, B::XInput<'i>>;
+//     type XInput<'i> = Pair<F::Input<'i>, B::XInput<'i>>;
 
-    fn x_evaluate(
-        input: Self::XInput<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        let (in1, in2) = input.pop_front();
-        let eval1 = F::evaluate(in1, solution);
-        let eval2 = B::x_evaluate(in2, solution);
-        match (eval1, eval2) {
-            (EvalSoln::Feasible(val1), EvalSoln::Feasible(val2)) => EvalSoln::Feasible(
-                <<Self::Problem as Problem>::Objective as Objective>::compose(val1, val2),
-            ),
-            _ => EvalSoln::Infeasible,
-        }
-    }
-}
+//     fn evaluate(
+//         input: Self::XInput<'_>,
+//         solution: &<Self::Problem as Problem>::Solution,
+//     ) -> EvalSoln<Self::Problem> {
+//         let (in1, in2) = input.pop_front();
+//         let eval1 = F::evaluate(in1, solution);
+//         let eval2 = B::evaluate(in2, solution);
+//         match (eval1, eval2) {
+//             (EvalSoln::Feasible(val1), EvalSoln::Feasible(val2)) => EvalSoln::Feasible(
+//                 <<Self::Problem as Problem>::Objective as Objective>::compose(val1, val2),
+//             ),
+//             _ => EvalSoln::Infeasible,
+//         }
+//     }
+// }
 
-// impl Criterion for all x-queues
+// // impl Criterion for all x-queues
 
-impl<Q> Criterion for Q
-where
-    Q: QueueX + Default + Clone + Copy + 'static,
-{
-    type Problem = <Q as QueueX>::Problem;
+// impl<Q> Criterion for Q
+// where
+//     Q: Criteria + Default + Clone + Copy + 'static,
+// {
+//     type Problem = <Q as Criteria>::Problem;
 
-    type Input<'i> = <Q as QueueX>::XInput<'i>;
+//     type Input<'i> = <Q as Criteria>::XInput<'i>;
 
-    fn evaluate(
-        input: Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        <Q as QueueX>::x_evaluate(input, solution)
-    }
-}
+//     fn evaluate(
+//         input: Self::Input<'_>,
+//         solution: &<Self::Problem as Problem>::Solution,
+//     ) -> EvalSoln<Self::Problem> {
+//         <Q as Criteria>::evaluate(input, solution)
+//     }
+// }
