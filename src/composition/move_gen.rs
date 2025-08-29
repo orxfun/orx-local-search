@@ -1,11 +1,11 @@
-use crate::{criteria::Criteria, eval_move::EvalMove, move_gen::MoveGenerator, problem::Problem};
+use crate::{criteria::Criteria, eval_move::EvalMove, moves::Moves, problem::Problem};
 use core::marker::PhantomData;
 
 #[derive(Default)]
 pub struct ComposedMoveGenerator<'i, M1, M2>
 where
-    M1: MoveGenerator<'i>,
-    M2: MoveGenerator<'i, Neighborhood = M1::Neighborhood>,
+    M1: Moves<'i>,
+    M2: Moves<'i, Neighborhood = M1::Neighborhood>,
 {
     m1: M1,
     m2: M2,

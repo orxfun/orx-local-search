@@ -7,13 +7,13 @@ use crate::{
     tour::Tour,
 };
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, EvalMove, MoveGenerator, Problem};
+use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 use orx_meta::queue::NonEmptyQueue;
 
 #[derive(Default)]
 pub struct InsertForDuration;
 
-impl<'i> MoveGenerator<'i> for InsertForDuration {
+impl<'i> Moves<'i> for InsertForDuration {
     type Neighborhood = Insert;
 
     type X = Duration;

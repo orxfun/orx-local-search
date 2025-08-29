@@ -1,5 +1,5 @@
 use crate::{
-    Criteria, EvalMove, EvalSoln, Objective, Problem, Solution, move_gen::MoveGenerator,
+    Criteria, EvalMove, EvalSoln, Objective, Problem, Solution, moves::Moves,
     neighborhood::Neighborhood,
 };
 use core::marker::PhantomData;
@@ -21,7 +21,7 @@ pub struct LocalSearchOn<N: Neighborhood>(PhantomData<N>);
 impl<N: Neighborhood> LocalSearchOn<N> {
     pub fn for_criterion<'i, M>(self) -> LocalSearchOf<'i, N, M>
     where
-        M: MoveGenerator<'i, Neighborhood = N>,
+        M: Moves<'i, Neighborhood = N>,
     {
         Default::default()
     }
@@ -32,7 +32,7 @@ impl<N: Neighborhood> LocalSearchOn<N> {
 pub struct LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
-    M: MoveGenerator<'i, Neighborhood = N>,
+    M: Moves<'i, Neighborhood = N>,
 {
     move_generator: M,
     phantom: PhantomData<&'i N>,
@@ -41,7 +41,7 @@ where
 impl<'i, N, M> Default for LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
-    M: MoveGenerator<'i, Neighborhood = N>,
+    M: Moves<'i, Neighborhood = N>,
 {
     fn default() -> Self {
         Self {
@@ -54,7 +54,7 @@ where
 impl<'i, N, M> LocalSearchOf<'i, N, M>
 where
     N: Neighborhood,
-    M: MoveGenerator<'i, Neighborhood = N>,
+    M: Moves<'i, Neighborhood = N>,
 {
     // pub fn for_criterion<Q>(self) -> LocalSearchOf<'i, N, ComposedMoveGenerator<'i, M, Q>>
     // where

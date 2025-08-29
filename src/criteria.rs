@@ -1,6 +1,6 @@
 use crate::{Criterion, EvalSoln, Objective, Problem};
 use core::marker::PhantomData;
-use orx_meta::queue::*;
+use orx_meta::queue::{NonEmptyQueue, Pair, Single};
 
 pub trait Criteria {
     type Problem: Problem;
@@ -13,10 +13,10 @@ pub trait Criteria {
     where
         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i>: Queue + Copy;
+    type Input<'i>: NonEmptyQueue + Copy;
 
     fn evaluate(
-        input: Self::XInput<'_>,
+        input: Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem>;
 }
@@ -41,10 +41,10 @@ where
     where
         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i> = Single<F::Input<'i>>;
+    type Input<'i> = Single<F::Input<'i>>;
 
     fn evaluate(
-        input: Self::XInput<'_>,
+        input: Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
         F::evaluate(*input.front(), solution)
@@ -73,10 +73,10 @@ where
     where
         Y: Criterion<Problem = Self::Problem>;
 
-    type XInput<'i> = Pair<F::Input<'i>, B::XInput<'i>>;
+    type Input<'i> = Pair<F::Input<'i>, B::Input<'i>>;
 
     fn evaluate(
-        input: Self::XInput<'_>,
+        input: Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
         let (in1, in2) = input.pop_front();
