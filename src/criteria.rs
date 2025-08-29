@@ -10,6 +10,10 @@ pub trait Criteria: Symbolic {
     // where
     //     X2: Criterion<Problem = Self::Problem>;
 
+    type Compose<Y>: Criteria<Problem = Self::Problem>
+    where
+        Y: Criteria<Problem = Self::Problem>;
+
     fn evaluate(
         input: Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,

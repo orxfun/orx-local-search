@@ -19,6 +19,11 @@ where
 
     type Input<'i> = Pair<X1::Input<'i>, X2::Input<'i>>;
 
+    type Compose<Y>
+        = ComposedCriteria<X1, X2::Compose<Y>>
+    where
+        Y: Criteria<Problem = Self::Problem>;
+
     fn evaluate(
         input: Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
