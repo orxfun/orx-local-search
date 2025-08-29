@@ -1,6 +1,6 @@
 use crate::{
     composed::{crit::ComposedCriteria, sorted_intersecting_iter::SortedIntersectingIter},
-    criterion::Criterion,
+    criteria::Criteria,
     eval_move::EvalMove,
     move_gen::MoveGenerator,
     problem::Problem,
@@ -44,8 +44,8 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        input: <Self::X as Criterion>::Input<'i>,
-        solution: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
+        input: <Self::X as Criteria>::Input<'i>,
+        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
         'i: 'a,

@@ -1,5 +1,5 @@
 use crate::{
-    Criterion, EvalMove, EvalSoln, Objective, Problem, Solution, composed::ComposedMoveGenerator,
+    Criteria, EvalMove, EvalSoln, Objective, Problem, Solution, composed::ComposedMoveGenerator,
     move_gen::MoveGenerator, neighborhood::Neighborhood,
 };
 use core::marker::PhantomData;
@@ -68,7 +68,7 @@ where
 
     fn next_best_move(
         &mut self,
-        input: <M::X as Criterion>::Input<'i>,
+        input: <M::X as Criteria>::Input<'i>,
         solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         mut value:
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
@@ -87,7 +87,7 @@ where
 
     pub fn run(
         &mut self,
-        input: <M::X as Criterion>::Input<'i>,
+        input: <M::X as Criteria>::Input<'i>,
         initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         initial_value: Option<
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
@@ -97,11 +97,11 @@ where
             Some(v) => {
                 debug_assert_eq!(
                     &EvalSoln::Feasible(v),
-                    &<M::X as Criterion>::evaluate(input, &initial_solution)
+                    &<M::X as Criteria>::evaluate(input, &initial_solution)
                 );
                 EvalSoln::Feasible(v)
             }
-            None => <M::X as Criterion>::evaluate(input, &initial_solution),
+            None => <M::X as Criteria>::evaluate(input, &initial_solution),
         };
 
         match initial_value {

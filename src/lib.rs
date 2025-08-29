@@ -25,6 +25,7 @@ mod problem;
 mod solution;
 mod symbolic;
 
+pub use criteria::Criteria;
 pub use criterion::Criterion;
 pub use eval_move::EvalMove;
 pub use eval_soln::EvalSoln;

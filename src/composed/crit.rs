@@ -1,17 +1,17 @@
-use crate::{criterion::Criterion, eval_soln::EvalSoln, objective::Objective, problem::Problem};
+use crate::{criteria::Criteria, eval_soln::EvalSoln, objective::Objective, problem::Problem};
 use core::marker::PhantomData;
 use orx_meta::queue::{NonEmptyQueue, Pair};
 
 #[derive(Default, Clone, Copy)]
 pub struct ComposedCriteria<X1, X2>(PhantomData<(X1, X2)>)
 where
-    X1: Criterion,
-    X2: Criterion<Problem = X1::Problem>;
+    X1: Criteria,
+    X2: Criteria<Problem = X1::Problem>;
 
-impl<X1, X2> Criterion for ComposedCriteria<X1, X2>
+impl<X1, X2> Criteria for ComposedCriteria<X1, X2>
 where
-    X1: Criterion,
-    X2: Criterion<Problem = X1::Problem>,
+    X1: Criteria,
+    X2: Criteria<Problem = X1::Problem>,
 {
     type Problem = X1::Problem;
 

@@ -1,10 +1,10 @@
-use crate::{Criterion, eval_soln::EvalSoln, problem::Problem, symbolic::Symbolic};
+use crate::{eval_soln::EvalSoln, problem::Problem, symbolic::Symbolic};
 use orx_meta::queue::Queue;
 
 pub trait Criteria: Symbolic {
     type Problem: Problem;
 
-    type Input<'i>: Queue;
+    type Input<'i>: Queue + Copy;
 
     // type PushBackInput<'i, X2>: Queue + Copy
     // where
