@@ -27,6 +27,7 @@ mod objective;
 mod problem;
 mod queues;
 mod solution;
+mod sorted_intersecting_iter;
 mod symbolic;
 
 pub use criteria::Criteria;
