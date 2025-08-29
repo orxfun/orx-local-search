@@ -12,8 +12,6 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
-// mod composed;
-mod composition;
 mod criteria;
 mod criterion;
 mod eval_move;
@@ -25,7 +23,6 @@ mod moves;
 mod neighborhood;
 mod objective;
 mod problem;
-mod queues;
 mod solution;
 mod sorted_intersecting_iter;
 mod symbolic;
@@ -34,7 +31,7 @@ pub use criteria::Criteria;
 pub use criterion::Criterion;
 pub use eval_move::EvalMove;
 pub use eval_soln::EvalSoln;
-// pub use ls::{LocalSearch, LocalSearchOf, LocalSearchOn};
+pub use ls::{LocalSearch, LocalSearchOf, LocalSearchOn};
 pub use moves::Moves;
 pub use neighborhood::Neighborhood;
 pub use objective::Objective;
