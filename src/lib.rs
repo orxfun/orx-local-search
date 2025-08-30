@@ -17,7 +17,6 @@ mod criterion;
 mod eval_move;
 mod eval_soln;
 mod input_queue;
-// mod inputs;
 mod ls;
 mod move_gen;
 mod moves;
