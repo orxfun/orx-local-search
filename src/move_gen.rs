@@ -1,7 +1,7 @@
 use crate::{
     criteria::{Criteria, PairX, SingleX},
     eval_move::EvalMove,
-    inputs::Inputs,
+    input_queue::Inputs,
     moves::Moves,
     neighborhood::Neighborhood,
     problem::Problem,
@@ -72,7 +72,7 @@ where
     where
         'i: 'a,
     {
-        self.0.moves(input.front(), solution)
+        self.0.moves(*input.front(), solution)
     }
 }
 

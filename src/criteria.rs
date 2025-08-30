@@ -1,6 +1,6 @@
 use crate::{
     Criterion, EvalSoln, Objective, Problem,
-    inputs::{Input, InputPair, Inputs},
+    input_queue::{Inputs, PairOfInputs, SingleInput},
 };
 use core::marker::PhantomData;
 
@@ -43,13 +43,13 @@ where
     where
         Y: Criterion<Problem = Self::Problem>;
 
-    type Inputs<'i> = Input<F::Input<'i>>;
+    type Inputs<'i> = SingleInput<F::Input<'i>>;
 
     fn evaluate(
         input: Self::Inputs<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
-        F::evaluate(input.front(), solution)
+        F::evaluate(*input.front(), solution)
     }
 }
 
@@ -75,7 +75,7 @@ where
     where
         Y: Criterion<Problem = Self::Problem>;
 
-    type Inputs<'i> = InputPair<F::Input<'i>, B::Inputs<'i>>;
+    type Inputs<'i> = PairOfInputs<F::Input<'i>, B::Inputs<'i>>;
 
     fn evaluate(
         input: Self::Inputs<'_>,
