@@ -20,38 +20,32 @@ pub trait Criteria {
     ) -> EvalSoln<Self::Problem>;
 }
 
-pub trait Queue: Criteria {
-    type PushBack<X: Criterion<Problem = Self::Problem>>: Queue<Problem = Self::Problem>;
+pub trait CriteriaQueue: Criteria {
+    type PushBack<X: Criterion<Problem = Self::Problem>>: CriteriaQueue<Problem = Self::Problem>;
 
-    type Front: Criterion;
+    type Front: Criterion<Problem = Self::Problem>;
 
-    type Back: Queue;
-
-    fn len() -> usize;
+    type Back: CriteriaQueue;
 }
 
 // single
 
-pub struct Single<F>(PhantomData<F>)
+pub struct SingleCriterion<F>(PhantomData<F>)
 where
     F: Criterion;
 
-impl<F> Queue for Single<F>
+impl<F> CriteriaQueue for SingleCriterion<F>
 where
     F: Criterion,
 {
-    type PushBack<X: Criterion<Problem = Self::Problem>> = Pair<F, Single<X>>;
+    type PushBack<X: Criterion<Problem = Self::Problem>> = PairOfCriteria<F, SingleCriterion<X>>;
 
     type Front = F;
 
     type Back = Self;
-
-    fn len() -> usize {
-        1
-    }
 }
 
-impl<F> Criteria for Single<F>
+impl<F> Criteria for SingleCriterion<F>
 where
     F: Criterion,
 {
@@ -69,31 +63,27 @@ where
 
 // pair
 
-pub struct Pair<F, B>(PhantomData<(F, B)>)
+pub struct PairOfCriteria<F, B>(PhantomData<(F, B)>)
 where
     F: Criterion,
-    B: Queue + Criteria<Problem = F::Problem>;
+    B: CriteriaQueue + Criteria<Problem = F::Problem>;
 
-impl<F, B> Queue for Pair<F, B>
+impl<F, B> CriteriaQueue for PairOfCriteria<F, B>
 where
     F: Criterion,
-    B: Queue + Criteria<Problem = F::Problem>,
+    B: CriteriaQueue + Criteria<Problem = F::Problem>,
 {
-    type PushBack<X: Criterion<Problem = Self::Problem>> = Pair<F, B::PushBack<X>>;
+    type PushBack<X: Criterion<Problem = Self::Problem>> = PairOfCriteria<F, B::PushBack<X>>;
 
     type Front = F;
 
     type Back = B;
-
-    fn len() -> usize {
-        1 + B::len()
-    }
 }
 
-impl<F, B> Criteria for Pair<F, B>
+impl<F, B> Criteria for PairOfCriteria<F, B>
 where
     F: Criterion,
-    B: Queue + Criteria<Problem = F::Problem>,
+    B: CriteriaQueue + Criteria<Problem = F::Problem>,
 {
     type Problem = F::Problem;
 
