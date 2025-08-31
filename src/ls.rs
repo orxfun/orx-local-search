@@ -1,5 +1,5 @@
 use crate::{
-    composition::{Criteria, MoveGen, SingleMoveGen},
+    composition::{Criteria, EmptyInputs, InputBuilder, MoveGen, SingleMoveGen},
     criterion::Criterion,
     eval_move::EvalMove,
     eval_soln::EvalSoln,
@@ -54,6 +54,10 @@ where
         Q: Moves<'i, Neighborhood = M::Neighborhood>,
     {
         Default::default()
+    }
+
+    pub fn input_buidler(&self) -> InputBuilder<'i, <M::X as Criteria>::Input<'i>, EmptyInputs> {
+        InputBuilder::new()
     }
 
     fn next_best_move(
