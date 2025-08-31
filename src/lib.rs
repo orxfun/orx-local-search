@@ -12,9 +12,11 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod composition;
 mod criterion;
 mod eval_move;
 mod eval_soln;
+mod ls;
 mod moves;
 mod neighborhood;
 mod objective;
