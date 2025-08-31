@@ -25,7 +25,7 @@ fn main() {
 
     let initial_tour = Tour::example_solution();
 
-    let solution = ls.run(12, initial_tour, None);
+    // let solution = ls.run(12, initial_tour, None);
 }
 
 // Pair<Pair<Single<&DurationMatrix>, Single<&DurationMatrix>>, Single<&DurationMatrix>>

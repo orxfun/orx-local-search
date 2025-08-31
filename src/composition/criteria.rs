@@ -1,5 +1,5 @@
 use crate::{
-    composition::inputs::{InputsQueue, MultiInputsQueue, PairOfInputs, SingleInput},
+    composition::inputs::{InputsQueue, NonEmptyInputsQueue, PairOfInputs, SingleInput},
     criterion::Criterion,
     eval_soln::EvalSoln,
     objective::Objective,

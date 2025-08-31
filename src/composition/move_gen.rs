@@ -1,7 +1,7 @@
 use crate::{
     composition::{
         criteria::{Criteria, PairOfCrit, SingleCrit},
-        inputs::{InputsQueue, MultiInputsQueue},
+        inputs::NonEmptyInputsQueue,
         sorted_intersecting_iter::SortedIntersectingIter,
     },
     eval_move::EvalMove,
