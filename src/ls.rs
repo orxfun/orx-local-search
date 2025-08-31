@@ -1,91 +1,112 @@
-// use crate::{
-//     composition::{InputsQueue, MovesComposition, MovesQueue, SingleInput, SingleMoves},
-//     criterion::Criterion,
-//     eval_move::EvalMove,
-//     moves::Moves,
-//     neighborhood::Neighborhood,
-//     objective::Objective,
-//     problem::Problem,
-// };
-// use core::marker::PhantomData;
+use crate::{
+    composition::{Criteria, MoveGen, SingleMoveGen},
+    criterion::Criterion,
+    eval_move::EvalMove,
+    eval_soln::EvalSoln,
+    moves::Moves,
+    neighborhood::Neighborhood,
+    objective::Objective,
+    problem::Problem,
+    solution::Solution,
+};
+use core::marker::PhantomData;
 
-// // types
+// types
 
-// type InputOf<'i, M> = <<M as Moves<'i>>::X as Criterion>::Input<'i>;
+type InputOf<'i, M> = <<M as Moves<'i>>::X as Criterion>::Input<'i>;
 
-// // builder
+// builder
 
-// pub struct LocalSearch;
+pub struct LocalSearch;
 
-// impl LocalSearch {
-//     pub fn on<N: Neighborhood>(self) -> LocalSearchOn<N> {
-//         LocalSearchOn(PhantomData)
-//     }
-// }
+impl LocalSearch {
+    pub fn on<N: Neighborhood>(self) -> LocalSearchOn<N> {
+        LocalSearchOn(PhantomData)
+    }
+}
 
-// // empty
+// empty
 
-// pub struct LocalSearchOn<N: Neighborhood>(PhantomData<N>);
+pub struct LocalSearchOn<N: Neighborhood>(PhantomData<N>);
 
-// impl<N: Neighborhood> LocalSearchOn<N> {
-//     pub fn for_criterion<'i, M>(
-//         self,
-//     ) -> LocalSearchOf<'i, N, SingleMoves<'i, M>, SingleInput<'i, InputOf<'i, M>>>
-//     where
-//         M: Moves<'i, Neighborhood = N>,
-//     {
-//         LocalSearchOf {
-//             move_generator: MovesComposition::single(Default::default()),
-//             phantom: PhantomData,
-//         }
-//     }
-// }
+impl<N: Neighborhood> LocalSearchOn<N> {
+    pub fn for_criterion<'i, M>(self) -> LocalSearchOf<'i, SingleMoveGen<'i, M>>
+    where
+        M: Moves<'i, Neighborhood = N>,
+    {
+        Default::default()
+    }
+}
 
-// // non-empty
+// non-empty
 
-// pub struct LocalSearchOf<'i, N, M, I>
-// where
-//     N: Neighborhood,
-//     M: MovesQueue<'i>,
-//     I: InputsQueue<'i>,
-// {
-//     move_generator: M,
-//     phantom: PhantomData<&'i (N, I)>,
-// }
+#[derive(Default)]
+pub struct LocalSearchOf<'i, M>(M, PhantomData<&'i ()>)
+where
+    M: MoveGen<'i>;
 
-// impl<'i, N, M, I> LocalSearchOf<'i, N, M, I>
-// where
-//     N: Neighborhood,
-//     M: MovesQueue<'i>,
-//     I: InputsQueue<'i>,
-// {
-//     pub fn for_criterion<Q>(
-//         self,
-//     ) -> LocalSearchOf<'i, N, M::PushBack<Q>, I::PushBack<InputOf<'i, Q>>>
-//     where
-//         Q: Moves<'i, Neighborhood = N>,
-//     {
-//         LocalSearchOf {
-//             move_generator: self.move_generator.push_back(Q::default()),
-//             phantom: PhantomData,
-//         }
-//     }
+impl<'i, M> LocalSearchOf<'i, M>
+where
+    M: MoveGen<'i>,
+{
+    pub fn and<Q>(self) -> LocalSearchOf<'i, M::PushBack<Q>>
+    where
+        Q: Moves<'i, Neighborhood = M::Neighborhood>,
+    {
+        Default::default()
+    }
 
-//     fn next_best_move(
-//         &mut self,
-//         input: I,
-//         solution: &<N::Problem as Problem>::Solution,
-//         mut value: <<N::Problem as Problem>::Objective as Objective>::Unit,
-//     ) -> Option<EvalMove<N>> {
-//         let mut best_move = None;
+    fn next_best_move(
+        &mut self,
+        input: <M::X as Criteria>::Input<'i>,
+        solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+        mut value:
+            <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
+    ) -> Option<EvalMove<M::Neighborhood>> {
+        let mut best_move = None;
 
-//         // for eval_move in self.move_generator.moves(input, solution) {
-//         //     if eval_move.value < value {
-//         //         value = eval_move.value;
-//         //         best_move = Some(eval_move);
-//         //     }
-//         // }
+        for eval_move in self.0.moves(input, solution) {
+            if eval_move.value < value {
+                value = eval_move.value;
+                best_move = Some(eval_move);
+            }
+        }
 
-//         best_move
-//     }
-// }
+        best_move
+    }
+
+    pub fn run(
+        &mut self,
+        input: <M::X as Criteria>::Input<'i>,
+        initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+        initial_value: Option<
+            <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
+        >,
+    ) -> Solution<<M::Neighborhood as Neighborhood>::Problem> {
+        let initial_value = match initial_value {
+            Some(v) => {
+                debug_assert_eq!(
+                    &EvalSoln::Feasible(v),
+                    &<M::X as Criteria>::evaluate(input, &initial_solution)
+                );
+                EvalSoln::Feasible(v)
+            }
+            None => <M::X as Criteria>::evaluate(input, &initial_solution),
+        };
+
+        match initial_value {
+            EvalSoln::Infeasible => Solution::InfeasibleSolution {
+                solution: initial_solution,
+            },
+            EvalSoln::Feasible(mut value) => {
+                let mut solution = initial_solution;
+                while let Some(eval_move) = self.next_best_move(input, &solution, value) {
+                    <M::Neighborhood as Neighborhood>::apply_move(&eval_move.mv, &mut solution);
+                    value = eval_move.value;
+                }
+
+                Solution::LocalOptimum { solution, value }
+            }
+        }
+    }
+}

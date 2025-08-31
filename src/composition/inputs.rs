@@ -13,3 +13,19 @@ define_non_empty_queue!(
     Input,
     'i
 );
+
+impl<'i, F: Copy> Clone for SingleInput<'i, F> {
+    fn clone(&self) -> Self {
+        Self(self.0.clone(), self.1.clone())
+    }
+}
+
+impl<'i, F: Copy> Copy for SingleInput<'i, F> {}
+
+impl<'i, F: Copy, B: InputsQueue<'i> + Copy> Clone for PairOfInputs<'i, F, B> {
+    fn clone(&self) -> Self {
+        Self(self.0.clone(), self.1.clone(), self.2.clone())
+    }
+}
+
+impl<'i, F: Copy, B: InputsQueue<'i> + Copy> Copy for PairOfInputs<'i, F, B> {}

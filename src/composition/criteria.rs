@@ -27,7 +27,7 @@ pub trait Criteria {
 
     type Problem: Problem;
 
-    type Input<'i>: InputsQueue<'i>;
+    type Input<'i>: InputsQueue<'i> + Copy;
 
     fn evaluate(
         input: Self::Input<'_>,

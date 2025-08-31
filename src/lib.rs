@@ -21,3 +21,4 @@ mod moves;
 mod neighborhood;
 mod objective;
 mod problem;
+mod solution;

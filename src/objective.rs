@@ -1,7 +1,7 @@
 use core::fmt::Debug;
 
 pub trait Objective {
-    type Unit: PartialOrd + Debug;
+    type Unit: PartialOrd + Clone + Copy + Debug;
 
     fn identity() -> Self::Unit;
 
