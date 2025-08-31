@@ -79,6 +79,14 @@ where
         best_move
     }
 
+    pub fn evaluate(
+        &self,
+        input: <M::X as Criteria>::Input<'i>,
+        solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
+    ) -> EvalSoln<<<M as MoveGen<'i>>::Neighborhood as Neighborhood>::Problem> {
+        <M::X as Criteria>::evaluate(input, solution)
+    }
+
     pub fn run(
         &mut self,
         input: <M::X as Criteria>::Input<'i>,

@@ -1,4 +1,5 @@
 use crate::{objective::Objective, problem::Problem};
+use core::fmt::Debug;
 
 pub enum Solution<P: Problem> {
     LocalOptimum {
@@ -12,6 +13,30 @@ pub enum Solution<P: Problem> {
     InfeasibleSolution {
         solution: P::Solution,
     },
+}
+
+impl<P: Problem> Debug for Solution<P>
+where
+    P::Solution: Debug,
+{
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        match self {
+            Self::LocalOptimum { solution, value } => f
+                .debug_struct("LocalOptimum")
+                .field("solution", solution)
+                .field("value", value)
+                .finish(),
+            Self::FeasibleSolution { solution, value } => f
+                .debug_struct("FeasibleSolution")
+                .field("solution", solution)
+                .field("value", value)
+                .finish(),
+            Self::InfeasibleSolution { solution } => f
+                .debug_struct("InfeasibleSolution")
+                .field("solution", solution)
+                .finish(),
+        }
+    }
 }
 
 impl<P: Problem> Solution<P> {
