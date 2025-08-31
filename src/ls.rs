@@ -49,7 +49,7 @@ impl<'i, M> LocalSearchOf<'i, M>
 where
     M: MoveGen<'i>,
 {
-    pub fn and<Q>(self) -> LocalSearchOf<'i, M::PushBack<Q>>
+    pub fn for_criterion<Q>(self) -> LocalSearchOf<'i, M::PushBack<Q>>
     where
         Q: Moves<'i, Neighborhood = M::Neighborhood>,
     {

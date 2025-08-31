@@ -1,5 +1,8 @@
 use crate::{
-    criteria::duration::{Duration, DurationMatrix},
+    criteria::{
+        duration::{Duration, DurationMatrix},
+        duration3::{Duration3, DurationMatrix3},
+    },
     insert::{
         neighborhood::{AllInsertMovesIter, Insert, InsertMove},
         tour_after_move::TourAfterInsertIter,
@@ -10,12 +13,12 @@ use orx_iterable::Collection;
 use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 
 #[derive(Default)]
-pub struct InsertForDuration;
+pub struct InsertForDuration3;
 
-impl<'i> Moves<'i> for InsertForDuration {
+impl<'i> Moves<'i> for InsertForDuration3 {
     type Neighborhood = Insert;
 
-    type X = Duration;
+    type X = Duration3;
 
     fn moves<'a>(
         &'a mut self,
@@ -37,7 +40,7 @@ impl<'i> Moves<'i> for InsertForDuration {
 
 pub struct DurationMoves<'a> {
     tour: &'a Tour,
-    duration_matrix: &'a DurationMatrix,
+    duration_matrix: &'a DurationMatrix3,
     iter: AllInsertMovesIter,
 }
 
