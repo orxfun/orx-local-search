@@ -2,7 +2,7 @@ use crate::{
     criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
 };
 
-pub trait MoveGenerator<'i>: Default {
+pub trait Moves<'i>: Default {
     type Neighborhood: Neighborhood;
 
     type X: Criterion<Problem = <Self::Neighborhood as Neighborhood>::Problem>;

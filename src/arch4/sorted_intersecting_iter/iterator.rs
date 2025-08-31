@@ -1,7 +1,5 @@
-use crate::{
-    composed::sorted_intersecting_iter::composed_next::ComposedNext, eval_move::EvalMove,
-    neighborhood::Neighborhood,
-};
+use super::composed_next::ComposedNext;
+use crate::{eval_move::EvalMove, neighborhood::Neighborhood};
 
 pub struct SortedIntersectingIter<N, I1, I2>
 where

@@ -3,12 +3,12 @@ use orx_iterable::Collection;
 use orx_local_search::{Criterion, EvalSoln, Problem};
 
 #[derive(Default, Clone, Copy)]
-pub struct Duration;
+pub struct Duration2;
 
-impl Criterion for Duration {
+impl Criterion for Duration2 {
     type Problem = Tsp;
 
-    type Input<'i> = &'i DurationMatrix;
+    type Input<'i> = &'i DurationMatrix2;
 
     fn evaluate(
         duration_matrix: Self::Input<'_>,
@@ -18,9 +18,9 @@ impl Criterion for Duration {
     }
 }
 
-pub struct DurationMatrix(Vec<Vec<u64>>);
+pub struct DurationMatrix2(Vec<Vec<u64>>);
 
-impl DurationMatrix {
+impl DurationMatrix2 {
     pub fn new(matrix: Vec<Vec<u64>>) -> Self {
         Self(matrix)
     }

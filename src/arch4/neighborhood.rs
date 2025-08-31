@@ -1,7 +1,7 @@
-use crate::problem::Problem;
+use crate::{problem::Problem, symbolic::Symbolic};
 use core::fmt::Debug;
 
-pub trait Neighborhood {
+pub trait Neighborhood: Symbolic {
     type Problem: Problem;
 
     type Move: Ord + Eq + Debug;

@@ -1,19 +1,10 @@
 use crate::{
-    composition::{Criteria, EmptyInputs, InputBuilder, MoveGen, SingleMoveGen},
-    criterion::Criterion,
-    eval_move::EvalMove,
-    eval_soln::EvalSoln,
+    Criteria, EvalMove, EvalSoln, Objective, Problem, Solution,
+    move_gen::{MoveGenerator, SingleM},
     moves::Moves,
     neighborhood::Neighborhood,
-    objective::Objective,
-    problem::Problem,
-    solution::Solution,
 };
 use core::marker::PhantomData;
-
-// types
-
-type InputOf<'i, M> = <<M as Moves<'i>>::X as Criterion>::Input<'i>;
 
 // builder
 
@@ -30,7 +21,7 @@ impl LocalSearch {
 pub struct LocalSearchOn<N: Neighborhood>(PhantomData<N>);
 
 impl<N: Neighborhood> LocalSearchOn<N> {
-    pub fn for_criterion<'i, M>(self) -> LocalSearchOf<'i, SingleMoveGen<'i, M>>
+    pub fn for_criterion<'i, M>(self) -> LocalSearchOf<'i, N, SingleM<'i, M>>
     where
         M: Moves<'i, Neighborhood = N>,
     {
@@ -40,36 +31,53 @@ impl<N: Neighborhood> LocalSearchOn<N> {
 
 // non-empty
 
-#[derive(Default)]
-pub struct LocalSearchOf<'i, M>(M, PhantomData<&'i ()>)
+pub struct LocalSearchOf<'i, N, M>
 where
-    M: MoveGen<'i>;
-
-impl<'i, M> LocalSearchOf<'i, M>
-where
-    M: MoveGen<'i>,
+    N: Neighborhood,
+    M: MoveGenerator<'i, Neighborhood = N>,
 {
-    pub fn for_criterion<Q>(self) -> LocalSearchOf<'i, M::PushBack<Q>>
-    where
-        Q: Moves<'i, Neighborhood = M::Neighborhood>,
-    {
-        Default::default()
-    }
+    move_generator: M,
+    phantom: PhantomData<&'i N>,
+}
 
-    pub fn input_buidler(&self) -> InputBuilder<'i, <M::X as Criteria>::Input<'i>, EmptyInputs> {
-        InputBuilder::new()
+impl<'i, N, M> Default for LocalSearchOf<'i, N, M>
+where
+    N: Neighborhood,
+    M: MoveGenerator<'i, Neighborhood = N>,
+{
+    fn default() -> Self {
+        Self {
+            move_generator: Default::default(),
+            phantom: PhantomData,
+        }
+    }
+}
+
+impl<'i, N, M> LocalSearchOf<'i, N, M>
+where
+    N: Neighborhood,
+    M: MoveGenerator<'i, Neighborhood = N>,
+{
+    pub fn for_criterion<Q>(self) -> LocalSearchOf<'i, N, M::PushBack<Q>>
+    where
+        Q: Moves<'i, Neighborhood = N>,
+    {
+        LocalSearchOf {
+            move_generator: self.move_generator.push_back(Q::default()),
+            phantom: PhantomData,
+        }
     }
 
     fn next_best_move(
         &mut self,
-        input: <M::X as Criteria>::Input<'i>,
+        input: <M::X as Criteria>::Inputs<'i>,
         solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         mut value:
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
-    ) -> Option<EvalMove<M::Neighborhood>> {
+    ) -> Option<EvalMove<N>> {
         let mut best_move = None;
 
-        for eval_move in self.0.moves(input, solution) {
+        for eval_move in self.move_generator.moves(input, solution) {
             if eval_move.value < value {
                 value = eval_move.value;
                 best_move = Some(eval_move);
@@ -79,17 +87,9 @@ where
         best_move
     }
 
-    pub fn evaluate(
-        &self,
-        input: <M::X as Criteria>::Input<'i>,
-        solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
-    ) -> EvalSoln<<<M as MoveGen<'i>>::Neighborhood as Neighborhood>::Problem> {
-        <M::X as Criteria>::evaluate(input, solution)
-    }
-
     pub fn run(
         &mut self,
-        input: <M::X as Criteria>::Input<'i>,
+        input: <M::X as Criteria>::Inputs<'i>,
         initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         initial_value: Option<
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
@@ -113,7 +113,7 @@ where
             EvalSoln::Feasible(mut value) => {
                 let mut solution = initial_solution;
                 while let Some(eval_move) = self.next_best_move(input, &solution, value) {
-                    <M::Neighborhood as Neighborhood>::apply_move(&eval_move.mv, &mut solution);
+                    N::apply_move(&eval_move.mv, &mut solution);
                     value = eval_move.value;
                 }
 

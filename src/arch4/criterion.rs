@@ -1,6 +1,7 @@
-use crate::{eval_soln::EvalSoln, problem::Problem};
+use crate::{Criteria, eval_soln::EvalSoln, problem::Problem, symbolic::Symbolic};
+use orx_meta::queue::{NonEmptyQueue, Single};
 
-pub trait Criterion {
+pub trait Criterion: Symbolic {
     type Problem: Problem;
 
     type Input<'i>: Copy;

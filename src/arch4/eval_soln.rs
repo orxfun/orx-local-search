@@ -1,12 +1,13 @@
 use crate::{objective::Objective, problem::Problem};
 use core::fmt::Debug;
 
-type ObjUnit<P> = <<P as Problem>::Objective as Objective>::Unit;
-
+#[derive(Clone, Copy)]
 pub enum EvalSoln<P: Problem> {
     Infeasible,
     Feasible(ObjUnit<P>),
 }
+
+type ObjUnit<P> = <<P as Problem>::Objective as Objective>::Unit;
 
 impl<P: Problem> PartialEq for EvalSoln<P> {
     fn eq(&self, other: &Self) -> bool {

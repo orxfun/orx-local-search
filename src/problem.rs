@@ -1,6 +1,6 @@
-use crate::{objective::Objective, symbolic::Symbolic};
+use crate::objective::Objective;
 
-pub trait Problem: Symbolic {
+pub trait Problem {
     type Objective: Objective;
 
     type Solution;
