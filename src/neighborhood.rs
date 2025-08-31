@@ -4,7 +4,7 @@ use core::fmt::Debug;
 pub trait Neighborhood {
     type Problem: Problem;
 
-    type Move: PartialOrd + Eq + Debug;
+    type Move: Ord + Eq + Debug;
 
     fn neighborhood(
         solution: &<Self::Problem as Problem>::Solution,
