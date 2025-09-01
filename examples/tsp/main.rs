@@ -18,38 +18,34 @@ mod tour_cost;
 mod tsp;
 
 fn main() {
-    // let mut ls = LocalSearch
-    //     .on::<Insert>()
-    //     .for_criterion::<InsertForDuration>()
-    //     .for_criterion::<InsertForDuration2>()
-    //     .for_criterion::<InsertForDuration3>();
+    let mut ls = LocalSearch
+        .on::<Insert>()
+        .for_criterion::<InsertForDuration>()
+        .for_criterion::<InsertForDuration2>()
+        .for_criterion::<InsertForDuration3>();
 
-    // let initial_tour = Tour::example_solution();
+    let initial_tour = Tour::example_solution();
 
-    // let a = DurationMatrix::example_input();
-    // let b = DurationMatrix2::example_input();
-    // let c = DurationMatrix3::example_input();
+    let a = DurationMatrix::example_input();
+    let b = DurationMatrix2::example_input();
+    let c = DurationMatrix3::example_input();
 
-    // let input = ls
-    //     .input_buidler()
-    //     .push_back(&a)
-    //     .push_back(&b)
-    //     .push_back(&c)
-    //     .finish();
+    let input = ls
+        .input_buidler()
+        .push_back(&a)
+        .push_back(&b)
+        .push_back(&c)
+        .finish();
 
-    // let initial = ls.evaluate(input, &initial_tour);
-    // dbg!(initial);
+    let initial = ls.evaluate(&input, &initial_tour);
+    dbg!(initial);
 
-    // let optimal = ls.run(input, initial_tour, None);
+    let optimal = ls.run(&input, initial_tour, None);
 
-    // dbg!(&optimal);
+    dbg!(&optimal);
 
-    // let tour = optimal.into_local_optimum().unwrap().0;
+    let tour = optimal.into_local_optimum().unwrap().0;
 
-    // let r#final = ls.evaluate(input, &tour);
-    // dbg!(r#final);
+    let r#final = ls.evaluate(&input, &tour);
+    dbg!(r#final);
 }
-
-// Pair<Pair<Single<&DurationMatrix>, Single<&DurationMatrix>>, Single<&DurationMatrix>>
-
-// PairOfInputs<'_, &DurationMatrix, PairOfInputs<'_, &DurationMatrix2, SingleInput<'_, &DurationMatrix3>>>
