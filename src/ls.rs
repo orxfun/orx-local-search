@@ -1,6 +1,5 @@
 use crate::{
     composition::{Criteria, EmptyInputs, InputBuilder, MoveGen, SingleMoveGen},
-    criterion::Criterion,
     eval_move::EvalMove,
     eval_soln::EvalSoln,
     moves::Moves,
@@ -10,10 +9,6 @@ use crate::{
     solution::Solution,
 };
 use core::marker::PhantomData;
-
-// types
-
-type InputOf<'i, M> = <<M as Moves<'i>>::X as Criterion>::Input<'i>;
 
 // builder
 
@@ -56,7 +51,7 @@ where
         Default::default()
     }
 
-    pub fn input_buidler(&self) -> InputBuilder<'i, <M::X as Criteria>::Input<'i>, EmptyInputs> {
+    pub fn input_buidler(&self) -> InputBuilder<<M::X as Criteria>::Input<'i>, EmptyInputs> {
         InputBuilder::new()
     }
 
