@@ -6,7 +6,7 @@ pub trait Criterion {
     type Input<'i>: Copy;
 
     fn evaluate(
-        input: Self::Input<'_>,
+        input: &Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem>;
 }

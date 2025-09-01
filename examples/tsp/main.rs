@@ -37,19 +37,15 @@ fn main() {
         .push_back(&c)
         .finish();
 
-    let initial = ls.evaluate(input, &initial_tour);
+    let initial = ls.evaluate(&input, &initial_tour);
     dbg!(initial);
 
-    let optimal = ls.run(input, initial_tour, None);
+    let optimal = ls.run(&input, initial_tour, None);
 
     dbg!(&optimal);
 
     let tour = optimal.into_local_optimum().unwrap().0;
 
-    let r#final = ls.evaluate(input, &tour);
+    let r#final = ls.evaluate(&input, &tour);
     dbg!(r#final);
 }
-
-// Pair<Pair<Single<&DurationMatrix>, Single<&DurationMatrix>>, Single<&DurationMatrix>>
-
-// PairOfInputs<'_, &DurationMatrix, PairOfInputs<'_, &DurationMatrix2, SingleInput<'_, &DurationMatrix3>>>
