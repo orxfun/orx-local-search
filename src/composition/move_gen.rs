@@ -36,7 +36,7 @@ pub trait MoveGen<'i>: Default {
 
     fn moves<'a>(
         &'a mut self,
-        input: <Self::X as Criteria>::Input<'i>,
+        input: &<Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
@@ -69,13 +69,13 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        input: <Self::X as Criteria>::Input<'i>,
+        input: &<Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
         'i: 'a,
     {
-        self.0.moves(input.into_front(), solution)
+        self.0.moves(input.front(), solution)
     }
 }
 
@@ -107,13 +107,13 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        input: <Self::X as Criteria>::Input<'i>,
+        input: &<Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
         'i: 'a,
     {
-        let (in1, in2) = input.pop_front();
+        let (in1, in2) = input.front_back();
         let m1 = self.0.moves(in1, solution);
         let m2 = self.1.moves(in2, solution);
         SortedIntersectingIter::new(m1, m2)

@@ -11,7 +11,7 @@ impl Criterion for Duration2 {
     type Input<'i> = &'i DurationMatrix2;
 
     fn evaluate(
-        duration_matrix: Self::Input<'_>,
+        duration_matrix: &Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
         EvalSoln::Feasible(duration_matrix.tour_cost(solution))

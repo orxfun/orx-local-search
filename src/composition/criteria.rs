@@ -27,10 +27,10 @@ pub trait Criteria {
 
     type Problem: Problem;
 
-    type Input<'i>: InputsQueue<'i> + Copy;
+    type Input<'i>: InputsQueue<'i>;
 
     fn evaluate(
-        input: Self::Input<'_>,
+        input: &Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem>;
 }
@@ -59,10 +59,10 @@ where
     type Input<'i> = SingleInput<'i, F::Input<'i>>;
 
     fn evaluate(
-        input: Self::Input<'_>,
+        input: &Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
-        F::evaluate(input.into_front(), solution)
+        F::evaluate(input.front(), solution)
     }
 }
 
@@ -92,10 +92,10 @@ where
     type Input<'i> = PairOfInputs<'i, F::Input<'i>, B::Input<'i>>;
 
     fn evaluate(
-        input: Self::Input<'_>,
+        input: &Self::Input<'_>,
         solution: &<Self::Problem as Problem>::Solution,
     ) -> EvalSoln<Self::Problem> {
-        let (in1, in2) = input.pop_front();
+        let (in1, in2) = input.front_back();
         let eval1 = F::evaluate(in1, solution);
         let eval2 = B::evaluate(in2, solution);
         match (eval1, eval2) {

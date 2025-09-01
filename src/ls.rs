@@ -62,7 +62,7 @@ where
 
     fn next_best_move(
         &mut self,
-        input: <M::X as Criteria>::Input<'i>,
+        input: &<M::X as Criteria>::Input<'i>,
         solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         mut value:
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
@@ -81,7 +81,7 @@ where
 
     pub fn evaluate(
         &self,
-        input: <M::X as Criteria>::Input<'i>,
+        input: &<M::X as Criteria>::Input<'i>,
         solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
     ) -> EvalSoln<<<M as MoveGen<'i>>::Neighborhood as Neighborhood>::Problem> {
         <M::X as Criteria>::evaluate(input, solution)
@@ -89,7 +89,7 @@ where
 
     pub fn run(
         &mut self,
-        input: <M::X as Criteria>::Input<'i>,
+        input: &<M::X as Criteria>::Input<'i>,
         initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         initial_value: Option<
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
