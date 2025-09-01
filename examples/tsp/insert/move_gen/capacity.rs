@@ -42,11 +42,6 @@ pub struct CapacityMoves<'a> {
 }
 
 impl<'a> CapacityMoves<'a> {
-    pub fn new(input: &'a CapacityInput, tour: &'a Tour) -> Self {
-        let iter = AllInsertMovesIter::new(tour.iter().len());
-        Self { tour, input, iter }
-    }
-
     fn is_tour_feasible_after_move(&self, mv: &InsertMove) -> bool {
         let feasible_range = 0..self.input.vehicle_capacity as i64;
         let mut current_capacity = 0i64;

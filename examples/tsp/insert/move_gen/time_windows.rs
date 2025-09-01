@@ -42,11 +42,6 @@ pub struct TimeWindowsMoves<'a> {
 }
 
 impl<'a> TimeWindowsMoves<'a> {
-    pub fn new(input: &'a TimeWindowsInput, tour: &'a Tour) -> Self {
-        let iter = AllInsertMovesIter::new(tour.iter().len());
-        Self { tour, input, iter }
-    }
-
     fn tour_cost_after_move(&self, mv: &InsertMove) -> Option<u64> {
         let new_tour = TourAfterInsertIter::new(mv.clone(), self.tour);
         let first_city = new_tour.peek();

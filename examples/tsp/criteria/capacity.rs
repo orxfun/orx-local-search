@@ -27,13 +27,6 @@ pub struct CapacityInput {
 }
 
 impl CapacityInput {
-    pub fn new(vehicle_capacity: u64, city_capacity_delta: Vec<i64>) -> Self {
-        Self {
-            vehicle_capacity,
-            city_capacity_delta,
-        }
-    }
-
     pub fn is_tour_feasible(&self, tour: &Tour) -> bool {
         let feasible_range = 0..self.vehicle_capacity as i64;
         let mut current_capacity = 0i64;

@@ -21,10 +21,6 @@ impl Criterion for Duration {
 pub struct DurationMatrix(Vec<Vec<u64>>);
 
 impl DurationMatrix {
-    pub fn new(matrix: Vec<Vec<u64>>) -> Self {
-        Self(matrix)
-    }
-
     pub fn get(&self, from_city: usize, to_city: usize) -> u64 {
         self.0[from_city][to_city]
     }
