@@ -40,6 +40,22 @@ fn main() {
     let initial = ls.evaluate(&input, &initial_tour);
     dbg!(initial);
 
+    let optimal = ls.run(&input, initial_tour.clone(), None);
+
+    dbg!(&optimal);
+
+    let tour = optimal.into_local_optimum().unwrap().0;
+
+    let r#final = ls.evaluate(&input, &tour);
+    dbg!(r#final);
+
+    // alternatively
+
+    let input = (&duration_matrix, &capacity_input, &time_window_input).into();
+
+    let initial = ls.evaluate(&input, &initial_tour);
+    dbg!(initial);
+
     let optimal = ls.run(&input, initial_tour, None);
 
     dbg!(&optimal);
