@@ -19,7 +19,7 @@ impl<'i> Moves<'i> for InsertForDuration {
 
     fn moves<'a>(
         &'a mut self,
-        duration_matrix: &<Self::X as Criterion>::Input<'i>,
+        duration_matrix: &'i <Self::X as Criterion>::Input<'i>,
         tour: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where

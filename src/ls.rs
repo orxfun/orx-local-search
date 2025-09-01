@@ -1,6 +1,5 @@
 use crate::{
     composition::{Criteria, EmptyInputs, InputBuilder, MoveGen, SingleMoveGen},
-    criterion::Criterion,
     eval_move::EvalMove,
     eval_soln::EvalSoln,
     moves::Moves,
@@ -10,10 +9,6 @@ use crate::{
     solution::Solution,
 };
 use core::marker::PhantomData;
-
-// types
-
-type InputOf<'i, M> = <<M as Moves<'i>>::X as Criterion>::Input<'i>;
 
 // builder
 
@@ -56,13 +51,13 @@ where
         Default::default()
     }
 
-    pub fn input_buidler(&self) -> InputBuilder<'i, <M::X as Criteria>::Input<'i>, EmptyInputs> {
+    pub fn input_buidler(&self) -> InputBuilder<<M::X as Criteria>::Input<'i>, EmptyInputs> {
         InputBuilder::new()
     }
 
     fn next_best_move(
         &mut self,
-        input: &<M::X as Criteria>::Input<'i>,
+        input: &'i <M::X as Criteria>::Input<'i>,
         solution: &<<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         mut value:
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,
@@ -89,7 +84,7 @@ where
 
     pub fn run(
         &mut self,
-        input: &<M::X as Criteria>::Input<'i>,
+        input: &'i <M::X as Criteria>::Input<'i>,
         initial_solution: <<M::Neighborhood as Neighborhood>::Problem as Problem>::Solution,
         initial_value: Option<
             <<<M::Neighborhood as Neighborhood>::Problem as Problem>::Objective as Objective>::Unit,

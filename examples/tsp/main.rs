@@ -1,9 +1,9 @@
 use crate::{
-    criteria::{duration::DurationMatrix, duration2::DurationMatrix2, duration3::DurationMatrix3},
+    criteria::{capacity::CapacityInput, duration::DurationMatrix, time_windows::TimeWindowsInput},
     insert::{
         move_gen::{
-            duration::InsertForDuration, duration2::InsertForDuration2,
-            duration3::InsertForDuration3,
+            capacity::InsertForCapacity, duration::InsertForDuration,
+            time_windows::InsertForTimeWindows,
         },
         neighborhood::Insert,
     },
@@ -21,20 +21,20 @@ fn main() {
     let mut ls = LocalSearch
         .on::<Insert>()
         .for_criterion::<InsertForDuration>()
-        .for_criterion::<InsertForDuration2>()
-        .for_criterion::<InsertForDuration3>();
+        .for_criterion::<InsertForCapacity>()
+        .for_criterion::<InsertForTimeWindows>();
 
     let initial_tour = Tour::example_solution();
 
-    let a = DurationMatrix::example_input();
-    let b = DurationMatrix2::example_input();
-    let c = DurationMatrix3::example_input();
+    let duration_matrix = DurationMatrix::example_input();
+    let capacity_input = CapacityInput::example_input();
+    let time_window_input = TimeWindowsInput::example_input(&duration_matrix);
 
     let input = ls
         .input_buidler()
-        .push_back(&a)
-        .push_back(&b)
-        .push_back(&c)
+        .push_back(&duration_matrix)
+        .push_back(&capacity_input)
+        .push_back(&time_window_input)
         .finish();
 
     let initial = ls.evaluate(&input, &initial_tour);

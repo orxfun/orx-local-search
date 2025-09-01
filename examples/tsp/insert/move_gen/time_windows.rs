@@ -1,14 +1,39 @@
 use crate::{
-    criteria::TimeWindowsInput,
-    insert_neighborhood::{
-        r#move::Insert,
-        neighborhood::{AllInsertMovesIter, InsertNeighborhood},
-        tour_after_insert::TourAfterInsertIter,
+    criteria::time_windows::{TimeWindows, TimeWindowsInput},
+    insert::{
+        neighborhood::{AllInsertMovesIter, Insert, InsertMove},
+        tour_after_move::TourAfterInsertIter,
     },
     tour::Tour,
 };
 use orx_iterable::Collection;
-use orx_local_search::EvalMove;
+use orx_local_search::{Criterion, EvalMove, Moves, Problem};
+
+#[derive(Default)]
+pub struct InsertForTimeWindows;
+
+impl<'i> Moves<'i> for InsertForTimeWindows {
+    type Neighborhood = Insert;
+
+    type X = TimeWindows;
+
+    fn moves<'a>(
+        &'a mut self,
+        input: &'i <Self::X as Criterion>::Input<'i>,
+        tour: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
+    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+    where
+        'i: 'a,
+    {
+        TimeWindowsMoves {
+            iter: AllInsertMovesIter::new(tour.iter().len()),
+            input,
+            tour,
+        }
+    }
+}
+
+// moves iter
 
 pub struct TimeWindowsMoves<'a> {
     input: &'a TimeWindowsInput<'a>,
@@ -22,7 +47,7 @@ impl<'a> TimeWindowsMoves<'a> {
         Self { tour, input, iter }
     }
 
-    fn tour_cost_after_move(&self, mv: &Insert) -> Option<u64> {
+    fn tour_cost_after_move(&self, mv: &InsertMove) -> Option<u64> {
         let new_tour = TourAfterInsertIter::new(mv.clone(), self.tour);
         let first_city = new_tour.peek();
         self.input
@@ -31,7 +56,7 @@ impl<'a> TimeWindowsMoves<'a> {
 }
 
 impl<'a> Iterator for TimeWindowsMoves<'a> {
-    type Item = EvalMove<InsertNeighborhood>;
+    type Item = EvalMove<Insert>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

@@ -1,14 +1,39 @@
 use crate::{
-    criteria::CapacityInput,
-    insert_neighborhood::{
-        r#move::Insert,
-        neighborhood::{AllInsertMovesIter, InsertNeighborhood},
-        tour_after_insert::TourAfterInsertIter,
+    criteria::capacity::{Capacity, CapacityInput},
+    insert::{
+        neighborhood::{AllInsertMovesIter, Insert, InsertMove},
+        tour_after_move::TourAfterInsertIter,
     },
     tour::Tour,
 };
 use orx_iterable::Collection;
-use orx_local_search::EvalMove;
+use orx_local_search::{Criterion, EvalMove, Moves, Problem};
+
+#[derive(Default)]
+pub struct InsertForCapacity;
+
+impl<'i> Moves<'i> for InsertForCapacity {
+    type Neighborhood = Insert;
+
+    type X = Capacity;
+
+    fn moves<'a>(
+        &'a mut self,
+        input: &'i <Self::X as Criterion>::Input<'i>,
+        tour: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
+    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+    where
+        'i: 'a,
+    {
+        CapacityMoves {
+            iter: AllInsertMovesIter::new(tour.iter().len()),
+            input,
+            tour,
+        }
+    }
+}
+
+// moves iter
 
 pub struct CapacityMoves<'a> {
     input: &'a CapacityInput,
@@ -22,7 +47,7 @@ impl<'a> CapacityMoves<'a> {
         Self { tour, input, iter }
     }
 
-    fn is_tour_feasible_after_move(&self, mv: &Insert) -> bool {
+    fn is_tour_feasible_after_move(&self, mv: &InsertMove) -> bool {
         let feasible_range = 0..self.input.vehicle_capacity as i64;
         let mut current_capacity = 0i64;
         for city in TourAfterInsertIter::new(mv.clone(), self.tour) {
@@ -36,7 +61,7 @@ impl<'a> CapacityMoves<'a> {
 }
 
 impl<'a> Iterator for CapacityMoves<'a> {
-    type Item = EvalMove<InsertNeighborhood>;
+    type Item = EvalMove<Insert>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

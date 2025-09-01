@@ -14,7 +14,7 @@ pub trait Criteria {
 
     type PushBack<'i, X>: Criteria<
             Problem = Self::Problem,
-            Input<'i> = <Self::Input<'i> as InputsQueue<'i>>::PushBack<X::Input<'i>>,
+            Input<'i> = <Self::Input<'i> as InputsQueue>::PushBack<X::Input<'i>>,
         >
     where
         X: Criterion<Problem = Self::Problem>;
@@ -27,7 +27,7 @@ pub trait Criteria {
 
     type Problem: Problem;
 
-    type Input<'i>: InputsQueue<'i>;
+    type Input<'i>: InputsQueue;
 
     fn evaluate(
         input: &Self::Input<'_>,
@@ -56,7 +56,7 @@ where
 
     type Problem = F::Problem;
 
-    type Input<'i> = SingleInput<'i, F::Input<'i>>;
+    type Input<'i> = SingleInput<F::Input<'i>>;
 
     fn evaluate(
         input: &Self::Input<'_>,
@@ -89,7 +89,7 @@ where
 
     type Problem = F::Problem;
 
-    type Input<'i> = PairOfInputs<'i, F::Input<'i>, B::Input<'i>>;
+    type Input<'i> = PairOfInputs<F::Input<'i>, B::Input<'i>>;
 
     fn evaluate(
         input: &Self::Input<'_>,

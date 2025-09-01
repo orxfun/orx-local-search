@@ -1,9 +1,6 @@
-use crate::Tour;
-use crate::criteria::duration::DurationMatrix;
-use crate::tsp::Tsp;
+use crate::{criteria::duration::DurationMatrix, tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, ObjectiveUnitOf, SolutionOf};
-use orx_meta::queue::One;
+use orx_local_search::{Criterion, EvalSoln, Problem};
 use std::cmp::max;
 use std::collections::HashMap;
 
@@ -13,16 +10,16 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input<'i> = &'i TimeWindowInput<'i>;
-
-    type InputQueue<'i> = One<Self::Input<'i>>;
+    type Input<'i> = &'i TimeWindowsInput<'i>;
 
     fn evaluate(
-        self,
-        tour: &SolutionOf<Self>,
         input: &Self::Input<'_>,
-    ) -> Option<ObjectiveUnitOf<Self>> {
-        input.tour_cost(tour)
+        tour: &<Self::Problem as Problem>::Solution,
+    ) -> EvalSoln<Self::Problem> {
+        match input.tour_cost(tour) {
+            Some(cost) => EvalSoln::Feasible(cost),
+            None => EvalSoln::Infeasible,
+        }
     }
 }
 
@@ -38,7 +35,7 @@ impl TimeWindow {
     }
 }
 
-pub struct TimeWindowInput<'i> {
+pub struct TimeWindowsInput<'i> {
     duration_matrix: &'i DurationMatrix,
     penalty_per_late_minutes: u64,
     max_allowed_lateness: u64,
@@ -46,7 +43,7 @@ pub struct TimeWindowInput<'i> {
     start_time: u64,
 }
 
-impl<'i> TimeWindowInput<'i> {
+impl<'i> TimeWindowsInput<'i> {
     pub fn new(
         duration_matrix: &'i DurationMatrix,
         penalty_per_late_minutes: u64,
