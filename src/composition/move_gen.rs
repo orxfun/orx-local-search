@@ -36,7 +36,7 @@ pub trait MoveGen<'i>: Default {
 
     fn moves<'a>(
         &'a mut self,
-        input: &<Self::X as Criteria>::Input<'i>,
+        input: &'i <Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
@@ -69,7 +69,7 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        input: &<Self::X as Criteria>::Input<'i>,
+        input: &'i <Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
@@ -107,7 +107,7 @@ where
 
     fn moves<'a>(
         &'a mut self,
-        input: &<Self::X as Criteria>::Input<'i>,
+        input: &'i <Self::X as Criteria>::Input<'i>,
         solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where

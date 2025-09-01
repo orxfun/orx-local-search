@@ -8,7 +8,7 @@ pub struct Duration;
 impl Criterion for Duration {
     type Problem = Tsp;
 
-    type Input<'i> = &'i DurationMatrix;
+    type Input<'i> = DurationMatrix;
 
     fn evaluate(
         duration_matrix: &Self::Input<'_>,

@@ -26,15 +26,11 @@ fn main() {
 
     let initial_tour = Tour::example_solution();
 
-    let a = DurationMatrix::example_input();
-    let b = DurationMatrix2::example_input();
-    let c = DurationMatrix3::example_input();
-
     let input = ls
         .input_buidler()
-        .push_back(&a)
-        .push_back(&b)
-        .push_back(&c)
+        .push_back(DurationMatrix::example_input())
+        .push_back(DurationMatrix2::example_input())
+        .push_back(DurationMatrix3::example_input())
         .finish();
 
     let initial = ls.evaluate(&input, &initial_tour);

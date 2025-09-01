@@ -9,7 +9,7 @@ pub trait Moves<'i>: Default {
 
     fn moves<'a>(
         &'a mut self,
-        input: &<Self::X as Criterion>::Input<'i>,
+        input: &'i <Self::X as Criterion>::Input<'i>,
         solution: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
     ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
     where
