@@ -10,7 +10,7 @@ pub struct TimeWindows;
 impl Criterion for TimeWindows {
     type Problem = Tsp;
 
-    type Input<'i> = TimeWindowsInput<'i>;
+    type Input<'i> = &'i TimeWindowsInput<'i>;
 
     fn evaluate(
         input: &Self::Input<'_>,
