@@ -51,7 +51,7 @@ where
         Default::default()
     }
 
-    pub fn input_buidler(&self) -> InputBuilder<<M::X as Criteria>::Input<'i>, EmptyInputs> {
+    pub fn input_builder(&self) -> InputBuilder<<M::X as Criteria>::Input<'i>, EmptyInputs> {
         InputBuilder::new()
     }
 
