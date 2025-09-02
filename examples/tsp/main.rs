@@ -31,7 +31,7 @@ fn main() {
     let time_window_input = TimeWindowsInput::example_input(&duration_matrix);
 
     let input = ls
-        .input_buidler()
+        .input_builder()
         .push_back(&duration_matrix)
         .push_back(&capacity_input)
         .push_back(&time_window_input)
@@ -51,17 +51,17 @@ fn main() {
 
     // alternatively
 
-    let input = (&duration_matrix, &capacity_input, &time_window_input).into();
+    // let input = (&duration_matrix, &capacity_input, &time_window_input).into();
 
-    let initial = ls.evaluate(&input, &initial_tour);
-    dbg!(initial);
+    // let initial = ls.evaluate(&input, &initial_tour);
+    // dbg!(initial);
 
-    let optimal = ls.run(&input, initial_tour, None);
+    // let optimal = ls.run(&input, initial_tour, None);
 
-    dbg!(&optimal);
+    // dbg!(&optimal);
 
-    let tour = optimal.into_local_optimum().unwrap().0;
+    // let tour = optimal.into_local_optimum().unwrap().0;
 
-    let r#final = ls.evaluate(&input, &tour);
-    dbg!(r#final);
+    // let r#final = ls.evaluate(&input, &tour);
+    // dbg!(r#final);
 }

@@ -12,11 +12,11 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
-// mod composition;
+mod composition;
 mod criterion;
 mod eval_move;
 mod eval_soln;
-// mod ls;
+mod ls;
 mod moves;
 mod neighborhood;
 mod objective;
@@ -26,7 +26,7 @@ mod solution;
 pub use criterion::Criterion;
 pub use eval_move::EvalMove;
 pub use eval_soln::EvalSoln;
-// pub use ls::LocalSearch;
+pub use ls::LocalSearch;
 pub use moves::Moves;
 pub use neighborhood::Neighborhood;
 pub use objective::Objective;
