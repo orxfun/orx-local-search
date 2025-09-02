@@ -6,7 +6,7 @@ use crate::{
 };
 use orx_meta::define_queue;
 
-pub trait Criteria<P>
+pub trait CriterionUp<P>
 where
     P: Problem,
 {
@@ -18,7 +18,7 @@ where
 define_queue!(
     lifetimes => [];
     generics => [P: Problem];
-    elements => [Criteria<P>];
+    elements => [CriterionUp<P>];
     names => {
         traits: {
             queue: CritsQueue,
@@ -34,21 +34,21 @@ define_queue!(
     };
 );
 
-impl<P: Problem> Criteria<P> for EmptyCrits<P> {
+impl<P: Problem> CriterionUp<P> for EmptyCrits<P> {
     type Input<'i> = EmptyInputs;
     fn evaluate(_: &Self::Input<'_>, _: &<P as Problem>::Solution) -> EvalSoln<P> {
         EvalSoln::Infeasible
     }
 }
 
-impl<P: Problem, F: Criteria<P>> Criteria<P> for SingleCrit<F, P> {
+impl<P: Problem, F: CriterionUp<P>> CriterionUp<P> for SingleCrit<F, P> {
     type Input<'i> = SingleInput<F::Input<'i>>;
     fn evaluate(input: &Self::Input<'_>, solution: &<P as Problem>::Solution) -> EvalSoln<P> {
         F::evaluate(input.front(), solution)
     }
 }
 
-impl<P: Problem, F: Criteria<P>, B: CritsQueue<P>> Criteria<P> for PairOfCrits<F, B, P> {
+impl<P: Problem, F: CriterionUp<P>, B: CritsQueue<P>> CriterionUp<P> for PairOfCrits<F, B, P> {
     type Input<'i> = PairOfInputs<F::Input<'i>, B::Input<'i>>;
     fn evaluate(input: &Self::Input<'_>, solution: &<P as Problem>::Solution) -> EvalSoln<P> {
         let (in1, in2) = input.front_back();
