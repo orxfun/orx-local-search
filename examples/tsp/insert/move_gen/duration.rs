@@ -13,16 +13,12 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForDuration;
 
-impl<'i> Moves<'i, Tsp> for InsertForDuration {
-    type Neighborhood = Insert;
-
-    type X = Duration;
-
+impl<'i> Moves<'i, Tsp, Insert, Duration> for InsertForDuration {
     fn moves<'a>(
         &'a mut self,
-        duration_matrix: &'i <Self::X as Criterion<Tsp>>::Input<'i>,
+        duration_matrix: &'i <Duration as Criterion<Tsp>>::Input<'i>,
         tour: &'a <Tsp as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Tsp, Self::Neighborhood>> + 'a
+    ) -> impl Iterator<Item = EvalMove<Tsp, Insert>> + 'a
     where
         'i: 'a,
     {

@@ -1,12 +1,13 @@
 use crate::{
-    criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
+    composition3::criteria::CriterionUp, criterion::Criterion, eval_move::EvalMove,
+    neighborhood::Neighborhood, problem::Problem,
 };
 
-pub trait Moves<'i, P, N, X>: Default
+pub trait MovesUp<'i, P, N, X>: Default
 where
     P: Problem,
     N: Neighborhood<P>,
-    X: Criterion<P>,
+    X: CriterionUp<P>,
 {
     fn moves<'a>(
         &'a mut self,

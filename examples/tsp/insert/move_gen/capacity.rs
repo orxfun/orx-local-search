@@ -13,16 +13,12 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForCapacity;
 
-impl<'i> Moves<'i, Tsp> for InsertForCapacity {
-    type Neighborhood = Insert;
-
-    type X = Capacity;
-
+impl<'i> Moves<'i, Tsp, Insert, Capacity> for InsertForCapacity {
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criterion<Tsp>>::Input<'i>,
+        input: &'i <Capacity as Criterion<Tsp>>::Input<'i>,
         tour: &'a <Tsp as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Tsp, Self::Neighborhood>> + 'a
+    ) -> impl Iterator<Item = EvalMove<Tsp, Insert>> + 'a
     where
         'i: 'a,
     {
