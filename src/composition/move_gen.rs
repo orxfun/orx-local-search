@@ -13,62 +13,74 @@ use core::marker::PhantomData;
 
 // traits
 
-pub trait MoveGen<'i>: Default {
-    // queue
+pub trait MoveGen<'i, P, N>: Default
+where
+    P: Problem,
+    N: Neighborhood<P>,
+{
+    type X: Criteria<P>;
 
-    type PushBack<M>: MoveGen<'i, Neighborhood = Self::Neighborhood>
+    type Compose<M>: MoveGen<'i, P, N>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
-    // X = <Self::X as Criteria>::PushBack<'i, M::X>,
+        M: Moves<'i, P, N>;
 
-    type Front: Moves<'i, Neighborhood = Self::Neighborhood>;
-
-    type Back: MoveGen<'i, Neighborhood = Self::Neighborhood>;
-
-    // moves
-
-    type Neighborhood: Neighborhood;
-
-    type X: Criteria<Problem = <Self::Neighborhood as Neighborhood>::Problem>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criteria<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a;
 }
 
 // single
 
-#[derive(Default)]
-pub struct SingleMoveGen<'i, F>(F, PhantomData<&'i ()>)
+pub struct SingleMoveGen<'i, P, N, F>(F, PhantomData<&'i (P, N)>)
 where
-    F: Moves<'i>;
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>;
 
-impl<'i, F> MoveGen<'i> for SingleMoveGen<'i, F>
+impl<'i, P, N, F> Default for SingleMoveGen<'i, P, N, F>
 where
-    F: Moves<'i>,
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
 {
-    type PushBack<M>
-        = PairOfMoveGen<'i, F, SingleMoveGen<'i, M>>
+    fn default() -> Self {
+        Self(Default::default(), Default::default())
+    }
+}
+
+impl<'i, P, N, F> MoveGen<'i, P, N> for SingleMoveGen<'i, P, N, F>
+where
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+{
+    type X = SingleCrit<P, F::X>;
+
+    type Compose<M>
+        = PairOfMoveGen<'i, P, N, F, SingleMoveGen<'i, P, N, M>>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
+        M: Moves<'i, P, N>;
 
-    type Front = F;
-
-    type Back = Self;
-
-    type Neighborhood = F::Neighborhood;
-
-    type X = SingleCrit<F::X>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>,
+    {
+        PairOfMoveGen(self.0, SingleMoveGen(m, PhantomData), PhantomData)
+    }
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criteria<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a,
     {
@@ -78,35 +90,51 @@ where
 
 // pair
 
-#[derive(Default)]
-pub struct PairOfMoveGen<'i, F, B>(F, B, PhantomData<&'i ()>)
+pub struct PairOfMoveGen<'i, P, N, F, B>(F, B, PhantomData<&'i (P, N)>)
 where
-    F: Moves<'i>,
-    B: MoveGen<'i, Neighborhood = F::Neighborhood>;
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>;
 
-impl<'i, F, B> MoveGen<'i> for PairOfMoveGen<'i, F, B>
+impl<'i, P, N, F, B> Default for PairOfMoveGen<'i, P, N, F, B>
 where
-    F: Moves<'i>,
-    B: MoveGen<'i, Neighborhood = F::Neighborhood>,
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>,
 {
-    type PushBack<M>
-        = PairOfMoveGen<'i, F, B::PushBack<M>>
+    fn default() -> Self {
+        Self(Default::default(), Default::default(), Default::default())
+    }
+}
+
+impl<'i, P, N, F, B> MoveGen<'i, P, N> for PairOfMoveGen<'i, P, N, F, B>
+where
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>,
+{
+    type X = PairOfCrit<P, F::X, B::X>;
+
+    type Compose<M>
+        = PairOfMoveGen<'i, P, N, F, B::Compose<M>>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
+        M: Moves<'i, P, N>;
 
-    type Front = F;
-
-    type Back = B;
-
-    type Neighborhood = F::Neighborhood;
-
-    type X = PairOfCrit<F::X, B::X>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>,
+    {
+        PairOfMoveGen(self.0, self.1.compose(m), PhantomData)
+    }
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criteria<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a,
     {

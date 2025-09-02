@@ -13,7 +13,9 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForTimeWindows;
 
-impl<'i> Moves<'i, Tsp, Insert, TimeWindows> for InsertForTimeWindows {
+impl<'i> Moves<'i, Tsp, Insert> for InsertForTimeWindows {
+    type X = TimeWindows;
+
     fn moves<'a>(
         &'a mut self,
         input: &'i <TimeWindows as Criterion<Tsp>>::Input<'i>,

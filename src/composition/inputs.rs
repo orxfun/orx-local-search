@@ -1,19 +1,3 @@
-// use orx_meta::define_queue_old;
-
-// #[derive(Clone, Copy)]
-// pub enum Never {}
-
-// define_queue_old!(
-//     InputsQueue,
-//     NonEmptyInputsQueue,
-//     EmptyInputs,
-//     SingleInput,
-//     PairOfInputs,
-//     InputComposition,
-//     Never,
-//     InputBuilder
-// );
-
 use orx_meta::define_queue;
 
 define_queue!(

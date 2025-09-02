@@ -1,12 +1,45 @@
 use crate::{
-    Objective,
+    Criterion, Objective,
     composition3::inputs::{
         EmptyInputs, InputsQueue, NonEmptyInputsQueue, PairOfInputs, SingleInput,
     },
     eval_soln::EvalSoln,
     problem::Problem,
 };
+use core::marker::PhantomData;
 use orx_meta::define_queue;
+
+pub struct CriterionOf<P, C>
+where
+    P: Problem,
+    C: Criterion<P>,
+{
+    c: C,
+    phantom: PhantomData<P>,
+}
+impl<P, C> From<C> for CriterionOf<P, C>
+where
+    P: Problem,
+    C: Criterion<P>,
+{
+    fn from(c: C) -> Self {
+        Self {
+            c,
+            phantom: PhantomData,
+        }
+    }
+}
+impl<P, C> CriterionUp<P> for CriterionOf<P, C>
+where
+    P: Problem,
+    C: Criterion<P>,
+{
+    type Input<'i> = SingleInput<C::Input<'i>>;
+
+    fn evaluate(input: &Self::Input<'_>, solution: &<P as Problem>::Solution) -> EvalSoln<P> {
+        C::evaluate(input.front(), solution)
+    }
+}
 
 pub trait CriterionUp<P>
 where

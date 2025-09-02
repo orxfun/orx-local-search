@@ -1,32 +1,35 @@
 use super::composed_next::ComposedNext;
-use crate::{eval_move::EvalMove, neighborhood::Neighborhood};
+use crate::{Problem, eval_move::EvalMove, neighborhood::Neighborhood};
 
-pub struct SortedIntersectingIter<N, I1, I2>
+pub struct SortedIntersectingIter<P, N, I1, I2>
 where
-    N: Neighborhood,
-    I1: Iterator<Item = EvalMove<N>>,
-    I2: Iterator<Item = EvalMove<N>>,
+    P: Problem,
+    N: Neighborhood<P>,
+    I1: Iterator<Item = EvalMove<P, N>>,
+    I2: Iterator<Item = EvalMove<P, N>>,
 {
     iter1: I1,
     iter2: I2,
 }
 
-impl<N, I1, I2> SortedIntersectingIter<N, I1, I2>
+impl<P, N, I1, I2> SortedIntersectingIter<P, N, I1, I2>
 where
-    N: Neighborhood,
-    I1: Iterator<Item = EvalMove<N>>,
-    I2: Iterator<Item = EvalMove<N>>,
+    P: Problem,
+    N: Neighborhood<P>,
+    I1: Iterator<Item = EvalMove<P, N>>,
+    I2: Iterator<Item = EvalMove<P, N>>,
 {
     pub fn new(iter1: I1, iter2: I2) -> Self {
         Self { iter1, iter2 }
     }
 }
 
-impl<N, I1, I2> Iterator for SortedIntersectingIter<N, I1, I2>
+impl<P, N, I1, I2> Iterator for SortedIntersectingIter<P, N, I1, I2>
 where
-    N: Neighborhood,
-    I1: Iterator<Item = EvalMove<N>>,
-    I2: Iterator<Item = EvalMove<N>>,
+    P: Problem,
+    N: Neighborhood<P>,
+    I1: Iterator<Item = EvalMove<P, N>>,
+    I2: Iterator<Item = EvalMove<P, N>>,
 {
     type Item = I1::Item;
 

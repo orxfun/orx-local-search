@@ -9,98 +9,87 @@ use core::marker::PhantomData;
 
 // traits
 
-pub trait Criteria {
+pub trait Criteria<P>
+where
+    P: Problem,
+{
     // queue
 
-    type PushBack<'i, X>: Criteria<
-            Problem = Self::Problem,
-            Input<'i> = <Self::Input<'i> as InputsQueue>::PushBack<X::Input<'i>>,
-        >
+    type PushBack<'i, X>: Criteria<P, Input<'i> = <Self::Input<'i> as InputsQueue>::PushBack<X::Input<'i>>>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
-    type Front: Criterion<Problem = Self::Problem>;
+    type Front: Criterion<P>;
 
-    type Back: Criteria<Problem = Self::Problem>;
+    type Back: Criteria<P>;
 
     // criterion
 
-    type Problem: Problem;
-
     type Input<'i>: InputsQueue;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem>;
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
 }
 
 // single
 
-pub struct SingleCrit<F>(PhantomData<F>)
+pub struct SingleCrit<P, F>(PhantomData<(P, F)>)
 where
-    F: Criterion;
+    P: Problem,
+    F: Criterion<P>;
 
-impl<F> Criteria for SingleCrit<F>
+impl<P, F> Criteria<P> for SingleCrit<P, F>
 where
-    F: Criterion,
+    P: Problem,
+    F: Criterion<P>,
 {
     type PushBack<'i, X>
-        = PairOfCrit<F, SingleCrit<X>>
+        = PairOfCrit<P, F, SingleCrit<P, X>>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
     type Front = F;
 
     type Back = Self;
 
-    type Problem = F::Problem;
-
     type Input<'i> = SingleInput<F::Input<'i>>;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P> {
         F::evaluate(input.front(), solution)
     }
 }
 
 // pair
 
-pub struct PairOfCrit<F, B>(PhantomData<(F, B)>)
+pub struct PairOfCrit<P, F, B>(PhantomData<(P, F, B)>)
 where
-    F: Criterion,
-    B: Criteria<Problem = F::Problem>;
+    P: Problem,
+    F: Criterion<P>,
+    B: Criteria<P>;
 
-impl<F, B> Criteria for PairOfCrit<F, B>
+impl<P, F, B> Criteria<P> for PairOfCrit<P, F, B>
 where
-    F: Criterion,
-    B: Criteria<Problem = F::Problem>,
+    P: Problem,
+    F: Criterion<P>,
+    B: Criteria<P>,
 {
     type PushBack<'i, X>
-        = PairOfCrit<F, B::PushBack<'i, X>>
+        = PairOfCrit<P, F, B::PushBack<'i, X>>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
     type Front = F;
 
     type Back = B;
 
-    type Problem = F::Problem;
-
     type Input<'i> = PairOfInputs<F::Input<'i>, B::Input<'i>>;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P> {
         let (in1, in2) = input.front_back();
         let eval1 = F::evaluate(in1, solution);
         let eval2 = B::evaluate(in2, solution);
         match (eval1, eval2) {
             (EvalSoln::Feasible(val1), EvalSoln::Feasible(val2)) => {
-                let val = <<F::Problem as Problem>::Objective as Objective>::compose(val1, val2);
+                let val = <P::Objective as Objective>::compose(val1, val2);
                 EvalSoln::Feasible(val)
             }
             _ => EvalSoln::Infeasible,

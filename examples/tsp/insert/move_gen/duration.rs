@@ -13,7 +13,9 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForDuration;
 
-impl<'i> Moves<'i, Tsp, Insert, Duration> for InsertForDuration {
+impl<'i> Moves<'i, Tsp, Insert> for InsertForDuration {
+    type X = Duration;
+
     fn moves<'a>(
         &'a mut self,
         duration_matrix: &'i <Duration as Criterion<Tsp>>::Input<'i>,
