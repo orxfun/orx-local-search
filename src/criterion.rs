@@ -1,12 +1,10 @@
 use crate::{eval_soln::EvalSoln, problem::Problem};
 
-pub trait Criterion {
-    type Problem: Problem;
-
+pub trait Criterion<P>
+where
+    P: Problem,
+{
     type Input<'i>;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem>;
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
 }

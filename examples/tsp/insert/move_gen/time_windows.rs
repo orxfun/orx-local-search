@@ -5,6 +5,7 @@ use crate::{
         tour_after_move::TourAfterInsertIter,
     },
     tour::Tour,
+    tsp::Tsp,
 };
 use orx_iterable::Collection;
 use orx_local_search::{Criterion, EvalMove, Moves, Problem};
@@ -12,16 +13,16 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForTimeWindows;
 
-impl<'i> Moves<'i> for InsertForTimeWindows {
+impl<'i> Moves<'i, Tsp> for InsertForTimeWindows {
     type Neighborhood = Insert;
 
     type X = TimeWindows;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criterion>::Input<'i>,
-        tour: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criterion<Tsp>>::Input<'i>,
+        tour: &'a <Tsp as Problem>::Solution,
+    ) -> impl Iterator<Item = EvalMove<Tsp, Self::Neighborhood>> + 'a
     where
         'i: 'a,
     {
@@ -51,7 +52,7 @@ impl<'a> TimeWindowsMoves<'a> {
 }
 
 impl<'a> Iterator for TimeWindowsMoves<'a> {
-    type Item = EvalMove<Insert>;
+    type Item = EvalMove<Tsp, Insert>;
 
     fn next(&mut self) -> Option<Self::Item> {
         loop {

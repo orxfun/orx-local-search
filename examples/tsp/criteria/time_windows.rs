@@ -7,15 +7,10 @@ use std::collections::HashMap;
 #[derive(Default, Clone, Copy)]
 pub struct TimeWindows;
 
-impl Criterion for TimeWindows {
-    type Problem = Tsp;
-
+impl Criterion<Tsp> for TimeWindows {
     type Input<'i> = &'i TimeWindowsInput<'i>;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        tour: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
+    fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
         match input.tour_cost(tour) {
             Some(cost) => EvalSoln::Feasible(cost),
             None => EvalSoln::Infeasible,

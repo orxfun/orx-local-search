@@ -1,14 +1,13 @@
 use crate::problem::Problem;
 use core::fmt::Debug;
 
-pub trait Neighborhood {
-    type Problem: Problem;
-
+pub trait Neighborhood<P>
+where
+    P: Problem,
+{
     type Move: Ord + Eq + Debug;
 
-    fn neighborhood(
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = Self::Move>;
+    fn neighborhood(solution: &P::Solution) -> impl Iterator<Item = Self::Move>;
 
-    fn apply_move(mv: &Self::Move, solution: &mut <Self::Problem as Problem>::Solution);
+    fn apply_move(mv: &Self::Move, solution: &mut P::Solution);
 }

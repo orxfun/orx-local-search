@@ -5,15 +5,10 @@ use orx_local_search::{Criterion, EvalSoln, Problem};
 #[derive(Default, Clone, Copy)]
 pub struct Capacity;
 
-impl Criterion for Capacity {
-    type Problem = Tsp;
-
+impl Criterion<Tsp> for Capacity {
     type Input<'i> = &'i CapacityInput;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        tour: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
+    fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
         match input.is_tour_feasible(tour) {
             true => EvalSoln::Feasible(0),
             false => EvalSoln::Infeasible,

@@ -12,8 +12,8 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
-mod composition;
-mod composition2;
+// mod composition;
+// mod composition2;
 mod criterion;
 mod eval_move;
 mod eval_soln;

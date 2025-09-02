@@ -5,16 +5,14 @@ use orx_local_search::{Criterion, EvalSoln, Problem};
 #[derive(Default, Clone, Copy)]
 pub struct Duration;
 
-impl Criterion for Duration {
-    type Problem = Tsp;
-
+impl Criterion<Tsp> for Duration {
     type Input<'i> = &'i DurationMatrix;
 
     fn evaluate(
         duration_matrix: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        EvalSoln::Feasible(duration_matrix.tour_cost(solution))
+        tour: &<Tsp as Problem>::Solution,
+    ) -> EvalSoln<Tsp> {
+        EvalSoln::Feasible(duration_matrix.tour_cost(tour))
     }
 }
 

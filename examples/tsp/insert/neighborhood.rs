@@ -12,18 +12,14 @@ pub struct InsertMove {
 #[derive(Default, Clone, Copy)]
 pub struct Insert;
 
-impl Neighborhood for Insert {
-    type Problem = Tsp;
-
+impl Neighborhood<Tsp> for Insert {
     type Move = InsertMove;
 
-    fn neighborhood(
-        tour: &<Self::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = Self::Move> {
+    fn neighborhood(tour: &<Tsp as Problem>::Solution) -> impl Iterator<Item = Self::Move> {
         AllInsertMovesIter::new(tour.iter().len())
     }
 
-    fn apply_move(mv: &Self::Move, tour: &mut <Self::Problem as Problem>::Solution) {
+    fn apply_move(mv: &Self::Move, tour: &mut <Tsp as Problem>::Solution) {
         match mv.current_position.cmp(&mv.target_position) {
             Ordering::Equal => {}
             Ordering::Less => {

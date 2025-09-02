@@ -2,16 +2,19 @@ use crate::{
     criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
 };
 
-pub trait Moves<'i>: Default {
-    type Neighborhood: Neighborhood;
+pub trait Moves<'i, P>: Default
+where
+    P: Problem,
+{
+    type Neighborhood: Neighborhood<P>;
 
-    type X: Criterion<Problem = <Self::Neighborhood as Neighborhood>::Problem>;
+    type X: Criterion<P>;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criterion>::Input<'i>,
-        solution: &'a <<Self::X as Criterion>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criterion<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, Self::Neighborhood>> + 'a
     where
         'i: 'a;
 }
