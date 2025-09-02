@@ -1,7 +1,7 @@
 use crate::problem::Problem;
 use core::fmt::Debug;
 
-pub trait Neighborhood: Default + 'static {
+pub trait Neighborhood {
     type Problem: Problem;
 
     type Move: Ord + Eq + Debug;
