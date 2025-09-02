@@ -16,13 +16,10 @@ use core::marker::PhantomData;
 pub trait MoveGen<'i>: Default {
     // queue
 
-    type PushBack<M>: MoveGen<
-            'i,
-            Neighborhood = Self::Neighborhood,
-            X = <Self::X as Criteria>::PushBack<'i, M::X>,
-        >
+    type PushBack<M>: MoveGen<'i, Neighborhood = Self::Neighborhood>
     where
         M: Moves<'i, Neighborhood = Self::Neighborhood>;
+    // X = <Self::X as Criteria>::PushBack<'i, M::X>,
 
     type Front: Moves<'i, Neighborhood = Self::Neighborhood>;
 
