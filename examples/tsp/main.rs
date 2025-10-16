@@ -19,7 +19,7 @@ mod tour_cost;
 mod tsp;
 
 fn main() {
-    let mut ls = LocalSearch::<Tsp, Insert, _>::new()
+    let mut alg = LocalSearch::<Tsp, Insert, _>::new()
         .with::<InsertForDuration>()
         .with::<InsertForCapacity>()
         .with::<InsertForTimeWindows>();
@@ -30,38 +30,38 @@ fn main() {
     let capacity_input = CapacityInput::example_input();
     let time_window_input = TimeWindowsInput::example_input(&duration_matrix);
 
-    let input = ls
+    let input = alg
         .input_builder()
         .push(&duration_matrix)
         .push(&capacity_input)
         .push(&time_window_input)
         .finish();
 
-    let initial = ls.evaluate(&input, &initial_tour);
+    let initial = alg.evaluate(&input, &initial_tour);
     dbg!(initial);
 
-    let optimal = ls.run(&input, initial_tour.clone(), None);
+    let optimal = alg.run(&input, initial_tour.clone(), None);
 
     dbg!(&optimal);
 
     let tour = optimal.into_local_optimum().unwrap().0;
 
-    let r#final = ls.evaluate(&input, &tour);
+    let r#final = alg.evaluate(&input, &tour);
     dbg!(r#final);
 
     // alternatively
 
     let input = (&duration_matrix, &capacity_input, &time_window_input).into();
 
-    let initial = ls.evaluate(&input, &initial_tour);
+    let initial = alg.evaluate(&input, &initial_tour);
     dbg!(initial);
 
-    let optimal = ls.run(&input, initial_tour, None);
+    let optimal = alg.run(&input, initial_tour, None);
 
     dbg!(&optimal);
 
     let tour = optimal.into_local_optimum().unwrap().0;
 
-    let r#final = ls.evaluate(&input, &tour);
+    let r#final = alg.evaluate(&input, &tour);
     dbg!(r#final);
 }
