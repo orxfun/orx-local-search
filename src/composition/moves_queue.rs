@@ -1,6 +1,9 @@
 use crate::{
-    Criterion, EvalMove, Neighborhood, Problem,
-    composition::criteria_queue::{Criteria, CriteriaQueue, CriterionX, EmptyCriteria},
+    EvalMove, Neighborhood, Problem,
+    composition::{
+        criteria_queue::{Criteria, CriteriaQueue, CriterionX, EmptyCriteria},
+        sorted_intersecting_iter::SortedIntersectingIter,
+    },
 };
 
 pub trait MovesX<'i, P, N>
@@ -64,6 +67,8 @@ where
     where
         'i: 'a,
     {
-        core::iter::empty()
+        let m1 = self.f.moves(inputs.front(), solution);
+        let m2 = self.b.moves(inputs.back(), solution);
+        SortedIntersectingIter::new(m1, m2)
     }
 }
