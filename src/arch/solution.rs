@@ -47,13 +47,6 @@ impl<P: Problem> Solution<P> {
         }
     }
 
-    pub fn is_infeasible(&self) -> bool {
-        match self {
-            Self::InfeasibleSolution { solution: _ } => true,
-            _ => false,
-        }
-    }
-
     pub fn is_local_optimum(&self) -> bool {
         matches!(
             self,

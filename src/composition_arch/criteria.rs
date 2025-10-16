@@ -1,5 +1,8 @@
 use crate::{
-    composition::inputs::{InputsQueue, NonEmptyInputsQueue, PairOfInputs, SingleInput},
+    composition::{
+        EmptyInputs,
+        inputs::{InputsQueue, PairOfInputs},
+    },
     criterion::Criterion,
     eval_soln::EvalSoln,
     objective::Objective,
@@ -28,6 +31,40 @@ where
     type Input<'i>: InputsQueue;
 
     fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
+}
+
+// empty
+
+pub struct EmptyCriterion;
+
+impl<P> Criterion<P> for EmptyCriterion
+where
+    P: Problem,
+{
+    type Input<'i> = ();
+
+    fn evaluate(_: &Self::Input<'_>, _: &<P as Problem>::Solution) -> EvalSoln<P> {
+        EvalSoln::Feasible(<P::Objective as Objective>::identity())
+    }
+}
+impl<P> Criteria<P> for EmptyCriterion
+where
+    P: Problem,
+{
+    type PushBack<'i, X>
+        = SingleCrit<P, X>
+    where
+        X: Criterion<P>;
+
+    type Front = Self;
+
+    type Back = Self;
+
+    type Input<'i> = EmptyInputs;
+
+    fn evaluate(_: &Self::Input<'_>, _: &<P as Problem>::Solution) -> EvalSoln<P> {
+        EvalSoln::Feasible(<P::Objective as Objective>::identity())
+    }
 }
 
 // single

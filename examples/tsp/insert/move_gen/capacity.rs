@@ -24,6 +24,7 @@ impl<'i> Moves<'i, Tsp, Insert> for InsertForCapacity {
     where
         'i: 'a,
     {
+        let input = *input.value();
         CapacityMoves {
             iter: AllInsertMovesIter::new(tour.iter().len()),
             input,

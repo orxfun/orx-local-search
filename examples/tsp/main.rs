@@ -8,8 +8,9 @@ use crate::{
         neighborhood::Insert,
     },
     tour::Tour,
+    tsp::Tsp,
 };
-use orx_local_search::LocalSearch;
+// use orx_local_search::LocalSearch;
 
 mod criteria;
 mod insert;
@@ -18,11 +19,10 @@ mod tour_cost;
 mod tsp;
 
 fn main() {
-    // let mut ls = LocalSearch
-    //     .on::<Insert>()
-    //     .for_criterion::<InsertForDuration>()
-    //     .for_criterion::<InsertForCapacity>()
-    //     .for_criterion::<InsertForTimeWindows>();
+    // let mut ls = LocalSearch::<Tsp, Insert, _>::new()
+    //     .with::<InsertForDuration>()
+    //     .with::<InsertForCapacity>()
+    //     .with::<InsertForTimeWindows>();
 
     // let initial_tour = Tour::example_solution();
 
@@ -49,7 +49,7 @@ fn main() {
     // let r#final = ls.evaluate(&input, &tour);
     // dbg!(r#final);
 
-    // alternatively
+    // // alternatively
 
     // let input = (&duration_matrix, &capacity_input, &time_window_input).into();
 

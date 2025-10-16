@@ -1,7 +1,6 @@
 use crate::{
     composition::{
-        criteria::{Criteria, PairOfCrit, SingleCrit},
-        inputs::NonEmptyInputsQueue,
+        criteria::{Criteria, EmptyCriterion, PairOfCrit, SingleCrit},
         sorted_intersecting_iter::SortedIntersectingIter,
     },
     eval_move::EvalMove,
@@ -35,6 +34,42 @@ where
     ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a;
+}
+
+// empty
+
+#[derive(Default)]
+pub struct EmptyMoveGen;
+
+impl<'i, P, N> MoveGen<'i, P, N> for EmptyMoveGen
+where
+    P: Problem,
+    N: Neighborhood<P>,
+{
+    type X = EmptyCriterion;
+
+    type Compose<M>
+        = SingleMoveGen<'i, P, N, M>
+    where
+        M: Moves<'i, P, N>;
+
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>,
+    {
+        SingleMoveGen(m, PhantomData)
+    }
+
+    fn moves<'a>(
+        &'a mut self,
+        _: &'i <Self::X as Criteria<P>>::Input<'i>,
+        _: &'a <P as Problem>::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
+    where
+        'i: 'a,
+    {
+        core::iter::empty()
+    }
 }
 
 // single
@@ -138,9 +173,8 @@ where
     where
         'i: 'a,
     {
-        let (in1, in2) = input.front_back();
-        let m1 = self.0.moves(in1, solution);
-        let m2 = self.1.moves(in2, solution);
+        let m1 = self.0.moves(input.front(), solution);
+        let m2 = self.1.moves(input.back(), solution);
         SortedIntersectingIter::new(m1, m2)
     }
 }

@@ -1,7 +1,7 @@
-use crate::problem::Problem;
+use super::problem::Problem;
 use core::fmt::Debug;
 
-pub trait Neighborhood<P>
+pub trait Neighborhood<P>: 'static
 where
     P: Problem,
 {

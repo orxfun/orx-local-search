@@ -1,6 +1,6 @@
 use crate::{criteria::duration::DurationMatrix, tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, EvalSoln, Problem};
+use orx_local_search::{Criterion, EvalSoln, Input, Problem};
 use std::cmp::max;
 use std::collections::HashMap;
 
@@ -8,10 +8,10 @@ use std::collections::HashMap;
 pub struct TimeWindows;
 
 impl Criterion<Tsp> for TimeWindows {
-    type Input<'i> = &'i TimeWindowsInput<'i>;
+    type Input<'i> = Input<&'i TimeWindowsInput<'i>>;
 
     fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
-        match input.tour_cost(tour) {
+        match input.value().tour_cost(tour) {
             Some(cost) => EvalSoln::Feasible(cost),
             None => EvalSoln::Infeasible,
         }

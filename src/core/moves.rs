@@ -1,4 +1,4 @@
-use crate::{
+use super::{
     criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
 };
 

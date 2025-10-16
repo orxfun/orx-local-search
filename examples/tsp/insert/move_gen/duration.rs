@@ -24,6 +24,7 @@ impl<'i> Moves<'i, Tsp, Insert> for InsertForDuration {
     where
         'i: 'a,
     {
+        let duration_matrix = *duration_matrix.value();
         DurationMoves {
             iter: AllInsertMovesIter::new(tour.iter().len()),
             duration_matrix,

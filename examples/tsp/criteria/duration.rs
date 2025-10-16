@@ -1,18 +1,18 @@
 use crate::{tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, EvalSoln, Problem};
+use orx_local_search::{Criterion, EvalSoln, Input, Problem};
 
 #[derive(Default, Clone, Copy)]
 pub struct Duration;
 
 impl Criterion<Tsp> for Duration {
-    type Input<'i> = &'i DurationMatrix;
+    type Input<'i> = Input<&'i DurationMatrix>;
 
     fn evaluate(
         duration_matrix: &Self::Input<'_>,
         tour: &<Tsp as Problem>::Solution,
     ) -> EvalSoln<Tsp> {
-        EvalSoln::Feasible(duration_matrix.tour_cost(tour))
+        EvalSoln::Feasible(duration_matrix.value().tour_cost(tour))
     }
 }
 

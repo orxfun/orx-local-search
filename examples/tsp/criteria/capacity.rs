@@ -1,15 +1,15 @@
 use crate::{tour::Tour, tsp::Tsp};
 use orx_iterable::Collection;
-use orx_local_search::{Criterion, EvalSoln, Problem};
+use orx_local_search::{Criterion, EvalSoln, Input, Problem};
 
 #[derive(Default, Clone, Copy)]
 pub struct Capacity;
 
 impl Criterion<Tsp> for Capacity {
-    type Input<'i> = &'i CapacityInput;
+    type Input<'i> = Input<&'i CapacityInput>;
 
     fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
-        match input.is_tour_feasible(tour) {
+        match input.value().is_tour_feasible(tour) {
             true => EvalSoln::Feasible(0),
             false => EvalSoln::Infeasible,
         }
