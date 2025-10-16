@@ -12,6 +12,7 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod algorithm;
 mod composition;
 mod core;
 
