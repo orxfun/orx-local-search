@@ -1,4 +1,4 @@
-use crate::{objective::Objective, problem::Problem};
+use super::{objective::Objective, problem::Problem};
 use core::fmt::Debug;
 
 pub enum Solution<P: Problem> {
@@ -44,13 +44,6 @@ impl<P: Problem> Solution<P> {
         match self {
             Self::InfeasibleSolution { solution: _ } => false,
             _ => true,
-        }
-    }
-
-    pub fn is_infeasible(&self) -> bool {
-        match self {
-            Self::InfeasibleSolution { solution: _ } => true,
-            _ => false,
         }
     }
 

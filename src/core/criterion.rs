@@ -1,4 +1,4 @@
-use crate::{eval_soln::EvalSoln, problem::Problem};
+use super::{eval_soln::EvalSoln, problem::Problem};
 
 pub trait Criterion<P>
 where

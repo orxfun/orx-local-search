@@ -1,4 +1,4 @@
-use crate::{neighborhood::Neighborhood, objective::Objective, problem::Problem};
+use super::{neighborhood::Neighborhood, objective::Objective, problem::Problem};
 
 pub struct EvalMove<P, N>
 where

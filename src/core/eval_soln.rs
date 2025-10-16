@@ -1,4 +1,4 @@
-use crate::{objective::Objective, problem::Problem};
+use super::{objective::Objective, problem::Problem};
 use core::fmt::Debug;
 
 type ObjUnit<P> = <<P as Problem>::Objective as Objective>::Unit;

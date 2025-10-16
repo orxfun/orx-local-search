@@ -1,121 +1,126 @@
 use crate::{
+    EvalMove, Moves, Neighborhood, Problem,
     composition::{
-        criteria::{Criteria, PairOfCrit, SingleCrit},
-        inputs::NonEmptyInputsQueue,
+        criteria::{Criteria, EmptyCriterion, PairOfCrit},
         sorted_intersecting_iter::SortedIntersectingIter,
     },
-    eval_move::EvalMove,
-    moves::Moves,
-    neighborhood::Neighborhood,
-    problem::Problem,
 };
 use core::marker::PhantomData;
 
 // traits
 
-pub trait MoveGen<'i>: Default {
-    // queue
+pub trait MoveGen<'i, P, N>: Default
+where
+    P: Problem,
+    N: Neighborhood<P>,
+{
+    type X: Criteria<P>;
 
-    type PushBack<M>: MoveGen<
-            'i,
-            Neighborhood = Self::Neighborhood,
-            X = <Self::X as Criteria>::PushBack<'i, M::X>,
-        >
+    type Compose<M>: MoveGen<'i, P, N>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
+        M: Moves<'i, P, N>;
 
-    type Front: Moves<'i, Neighborhood = Self::Neighborhood>;
-
-    type Back: MoveGen<'i, Neighborhood = Self::Neighborhood>;
-
-    // moves
-
-    type Neighborhood: Neighborhood;
-
-    type X: Criteria<Problem = <Self::Neighborhood as Neighborhood>::Problem>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>;
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criteria<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a;
 }
 
-// single
+// empty
 
 #[derive(Default)]
-pub struct SingleMoveGen<'i, F>(F, PhantomData<&'i ()>)
-where
-    F: Moves<'i>;
+pub struct EmptyMoveGen;
 
-impl<'i, F> MoveGen<'i> for SingleMoveGen<'i, F>
+impl<'i, P, N> MoveGen<'i, P, N> for EmptyMoveGen
 where
-    F: Moves<'i>,
+    P: Problem,
+    N: Neighborhood<P>,
 {
-    type PushBack<M>
-        = PairOfMoveGen<'i, F, SingleMoveGen<'i, M>>
+    type X = EmptyCriterion;
+
+    type Compose<M>
+        = PairOfMoveGen<'i, P, N, M, Self>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
+        M: Moves<'i, P, N>;
 
-    type Front = F;
-
-    type Back = Self;
-
-    type Neighborhood = F::Neighborhood;
-
-    type X = SingleCrit<F::X>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>,
+    {
+        PairOfMoveGen(m, self, PhantomData)
+    }
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        _: &'i <Self::X as Criteria<P>>::Input<'i>,
+        _: &'a <P as Problem>::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a,
     {
-        self.0.moves(input.front(), solution)
+        core::iter::empty()
     }
 }
 
 // pair
 
-#[derive(Default)]
-pub struct PairOfMoveGen<'i, F, B>(F, B, PhantomData<&'i ()>)
+pub struct PairOfMoveGen<'i, P, N, F, B>(F, B, PhantomData<&'i (P, N)>)
 where
-    F: Moves<'i>,
-    B: MoveGen<'i, Neighborhood = F::Neighborhood>;
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>;
 
-impl<'i, F, B> MoveGen<'i> for PairOfMoveGen<'i, F, B>
+impl<'i, P, N, F, B> Default for PairOfMoveGen<'i, P, N, F, B>
 where
-    F: Moves<'i>,
-    B: MoveGen<'i, Neighborhood = F::Neighborhood>,
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>,
 {
-    type PushBack<M>
-        = PairOfMoveGen<'i, F, B::PushBack<M>>
+    fn default() -> Self {
+        Self(Default::default(), Default::default(), Default::default())
+    }
+}
+
+impl<'i, P, N, F, B> MoveGen<'i, P, N> for PairOfMoveGen<'i, P, N, F, B>
+where
+    P: Problem,
+    N: Neighborhood<P>,
+    F: Moves<'i, P, N>,
+    B: MoveGen<'i, P, N>,
+{
+    type X = PairOfCrit<P, F::X, B::X>;
+
+    type Compose<M>
+        = PairOfMoveGen<'i, P, N, F, B::Compose<M>>
     where
-        M: Moves<'i, Neighborhood = Self::Neighborhood>;
+        M: Moves<'i, P, N>;
 
-    type Front = F;
-
-    type Back = B;
-
-    type Neighborhood = F::Neighborhood;
-
-    type X = PairOfCrit<F::X, B::X>;
+    fn compose<M>(self, m: M) -> Self::Compose<M>
+    where
+        M: Moves<'i, P, N>,
+    {
+        PairOfMoveGen(self.0, self.1.compose(m), PhantomData)
+    }
 
     fn moves<'a>(
         &'a mut self,
-        input: &'i <Self::X as Criteria>::Input<'i>,
-        solution: &'a <<Self::X as Criteria>::Problem as Problem>::Solution,
-    ) -> impl Iterator<Item = EvalMove<Self::Neighborhood>> + 'a
+        input: &'i <Self::X as Criteria<P>>::Input<'i>,
+        solution: &'a P::Solution,
+    ) -> impl Iterator<Item = EvalMove<P, N>> + 'a
     where
         'i: 'a,
     {
-        let (in1, in2) = input.front_back();
-        let m1 = self.0.moves(in1, solution);
-        let m2 = self.1.moves(in2, solution);
+        let m1 = self.0.moves(input.front(), solution);
+        let m2 = self.1.moves(input.back(), solution);
         SortedIntersectingIter::new(m1, m2)
     }
 }

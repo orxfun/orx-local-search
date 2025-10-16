@@ -1,106 +1,97 @@
 use crate::{
-    composition::inputs::{InputsQueue, NonEmptyInputsQueue, PairOfInputs, SingleInput},
-    criterion::Criterion,
-    eval_soln::EvalSoln,
-    objective::Objective,
-    problem::Problem,
+    Criterion, EvalSoln, Objective, Problem,
+    composition::inputs::{EmptyInputs, Inputs, InputsQueue},
 };
 use core::marker::PhantomData;
 
 // traits
 
-pub trait Criteria {
+pub trait Criteria<P>
+where
+    P: Problem,
+{
     // queue
 
-    type PushBack<'i, X>: Criteria<
-            Problem = Self::Problem,
-            Input<'i> = <Self::Input<'i> as InputsQueue>::PushBack<X::Input<'i>>,
-        >
+    type PushBack<'i, X>: Criteria<P, Input<'i> = <Self::Input<'i> as InputsQueue>::PushBack<X::Input<'i>>>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
-    type Front: Criterion<Problem = Self::Problem>;
+    type Front: Criterion<P>;
 
-    type Back: Criteria<Problem = Self::Problem>;
+    type Back: Criteria<P>;
 
     // criterion
 
-    type Problem: Problem;
-
     type Input<'i>: InputsQueue;
 
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem>;
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
 }
 
-// single
+// empty
 
-pub struct SingleCrit<F>(PhantomData<F>)
-where
-    F: Criterion;
+pub struct EmptyCriterion;
 
-impl<F> Criteria for SingleCrit<F>
+impl<P> Criterion<P> for EmptyCriterion
 where
-    F: Criterion,
+    P: Problem,
+{
+    type Input<'i> = ();
+
+    fn evaluate(_: &Self::Input<'_>, _: &<P as Problem>::Solution) -> EvalSoln<P> {
+        EvalSoln::Feasible(<P::Objective as Objective>::identity())
+    }
+}
+impl<P> Criteria<P> for EmptyCriterion
+where
+    P: Problem,
 {
     type PushBack<'i, X>
-        = PairOfCrit<F, SingleCrit<X>>
+        = PairOfCrit<P, X, Self>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
-    type Front = F;
+    type Front = Self;
 
     type Back = Self;
 
-    type Problem = F::Problem;
+    type Input<'i> = EmptyInputs;
 
-    type Input<'i> = SingleInput<F::Input<'i>>;
-
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        F::evaluate(input.front(), solution)
+    fn evaluate(_: &Self::Input<'_>, _: &<P as Problem>::Solution) -> EvalSoln<P> {
+        EvalSoln::Feasible(<P::Objective as Objective>::identity())
     }
 }
 
 // pair
 
-pub struct PairOfCrit<F, B>(PhantomData<(F, B)>)
+pub struct PairOfCrit<P, F, B>(PhantomData<(P, F, B)>)
 where
-    F: Criterion,
-    B: Criteria<Problem = F::Problem>;
+    P: Problem,
+    F: Criterion<P>,
+    B: Criteria<P>;
 
-impl<F, B> Criteria for PairOfCrit<F, B>
+impl<P, F, B> Criteria<P> for PairOfCrit<P, F, B>
 where
-    F: Criterion,
-    B: Criteria<Problem = F::Problem>,
+    P: Problem,
+    F: Criterion<P>,
+    B: Criteria<P>,
 {
     type PushBack<'i, X>
-        = PairOfCrit<F, B::PushBack<'i, X>>
+        = PairOfCrit<P, F, B::PushBack<'i, X>>
     where
-        X: Criterion<Problem = Self::Problem>;
+        X: Criterion<P>;
 
     type Front = F;
 
     type Back = B;
 
-    type Problem = F::Problem;
+    type Input<'i> = Inputs<F::Input<'i>, B::Input<'i>>;
 
-    type Input<'i> = PairOfInputs<F::Input<'i>, B::Input<'i>>;
-
-    fn evaluate(
-        input: &Self::Input<'_>,
-        solution: &<Self::Problem as Problem>::Solution,
-    ) -> EvalSoln<Self::Problem> {
-        let (in1, in2) = input.front_back();
-        let eval1 = F::evaluate(in1, solution);
-        let eval2 = B::evaluate(in2, solution);
+    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P> {
+        let eval1 = F::evaluate(input.front(), solution);
+        let eval2 = B::evaluate(input.back(), solution);
         match (eval1, eval2) {
             (EvalSoln::Feasible(val1), EvalSoln::Feasible(val2)) => {
-                let val = <<F::Problem as Problem>::Objective as Objective>::compose(val1, val2);
+                let val = <P::Objective as Objective>::compose(val1, val2);
                 EvalSoln::Feasible(val)
             }
             _ => EvalSoln::Infeasible,

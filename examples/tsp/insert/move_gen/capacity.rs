@@ -13,7 +13,9 @@ use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 #[derive(Default)]
 pub struct InsertForCapacity;
 
-impl<'i> Moves<'i, Tsp, Insert, Capacity> for InsertForCapacity {
+impl<'i> Moves<'i, Tsp, Insert> for InsertForCapacity {
+    type X = Capacity;
+
     fn moves<'a>(
         &'a mut self,
         input: &'i <Capacity as Criterion<Tsp>>::Input<'i>,
