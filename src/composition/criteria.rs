@@ -1,6 +1,6 @@
 use crate::{
     Criterion, EvalSoln, Objective, Problem,
-    composition::inputs::{EmptyInputs, InputsQueue, PairOfInputs},
+    composition::inputs::{EmptyInputs, Inputs, InputsQueue},
 };
 use core::marker::PhantomData;
 
@@ -84,7 +84,7 @@ where
 
     type Back = B;
 
-    type Input<'i> = PairOfInputs<F::Input<'i>, B::Input<'i>>;
+    type Input<'i> = Inputs<F::Input<'i>, B::Input<'i>>;
 
     fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P> {
         let eval1 = F::evaluate(input.front(), solution);
