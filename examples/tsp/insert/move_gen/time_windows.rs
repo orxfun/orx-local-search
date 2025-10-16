@@ -8,13 +8,13 @@ use crate::{
     tsp::Tsp,
 };
 use orx_iterable::Collection;
-use orx_local_search::{Criteria1, Criterion, EvalMove, Moves, Problem};
+use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 
 #[derive(Default)]
 pub struct InsertForTimeWindows;
 
 impl<'i> Moves<'i, Tsp, Insert> for InsertForTimeWindows {
-    type X = Criteria1<Tsp, TimeWindows>;
+    type X = TimeWindows;
 
     fn moves<'a>(
         &'a mut self,
@@ -24,7 +24,6 @@ impl<'i> Moves<'i, Tsp, Insert> for InsertForTimeWindows {
     where
         'i: 'a,
     {
-        let input = *input.value().value();
         TimeWindowsMoves {
             iter: AllInsertMovesIter::new(tour.iter().len()),
             input,
