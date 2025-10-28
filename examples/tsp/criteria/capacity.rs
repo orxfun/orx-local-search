@@ -8,7 +8,11 @@ pub struct Capacity;
 impl Criterion<Tsp> for Capacity {
     type Input<'i> = &'i CapacityInput;
 
-    fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
+    fn evaluate(
+        &self,
+        input: &Self::Input<'_>,
+        tour: &<Tsp as Problem>::Solution,
+    ) -> EvalSoln<Tsp> {
         match input.is_tour_feasible(tour) {
             true => EvalSoln::Feasible(0),
             false => EvalSoln::Infeasible,
@@ -34,7 +38,7 @@ impl CapacityInput {
         true
     }
 
-    pub fn example_input() -> Self {
+    pub fn example() -> Self {
         Self {
             vehicle_capacity: 15,
             city_capacity_delta: vec![7, 6, -6, 4, -8, -3],

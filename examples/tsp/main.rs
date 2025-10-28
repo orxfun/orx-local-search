@@ -1,69 +1,51 @@
-// use crate::{
-//     criteria::{capacity::CapacityInput, duration::DurationMatrix, time_windows::TimeWindowsInput},
-//     insert::{
-//         move_gen::{
-//             capacity::InsertForCapacity, duration::InsertForDuration,
-//             time_windows::InsertForTimeWindows,
-//         },
-//         neighborhood::Insert,
-//     },
-//     tour::Tour,
-//     tsp::Tsp,
-// };
-// use orx_local_search::LocalSearch;
+use crate::criteria::{
+    capacity::{Capacity, CapacityInput},
+    duration::{Duration, DurationMatrix},
+    time_windows::{TimeWindows, TimeWindowsInput},
+};
+use crate::tour::Tour;
+use orx_local_search::LocalSearch;
 
-// mod criteria;
-// mod insert;
-// mod tour;
-// mod tour_cost;
-// mod tsp;
+mod criteria;
+mod insert;
+mod tour;
+mod tour_cost;
+mod tsp;
 
-// fn main() {
-//     let mut alg = LocalSearch::<Tsp, Insert, _>::new()
-//         .with::<InsertForDuration>()
-//         .with::<InsertForCapacity>()
-//         .with::<InsertForTimeWindows>();
+fn main() {
+    let initial_tour = Tour::example_solution();
+    println!("initial-tour = {initial_tour:?}");
 
-//     let initial_tour = Tour::example_solution();
+    let duration_matrix = DurationMatrix::example();
+    let capacity_input = CapacityInput::example();
+    let time_window_input = TimeWindowsInput::example(&duration_matrix);
 
-//     let duration_matrix = DurationMatrix::example_input();
-//     let capacity_input = CapacityInput::example_input();
-//     let time_window_input = TimeWindowsInput::example_input(&duration_matrix);
+    let mut alg = LocalSearch::new(Duration.insert())
+        .and_with(Capacity.insert())
+        .and_with(TimeWindows.insert());
 
-//     let input = alg
-//         .input_builder()
-//         .push(&duration_matrix)
-//         .push(&capacity_input)
-//         .push(&time_window_input)
-//         .finish();
+    // using input builder
 
-//     let initial = alg.evaluate(&input, &initial_tour);
-//     dbg!(initial);
+    let input = alg
+        .input_builder()
+        .push(&duration_matrix)
+        .push(&capacity_input)
+        .push(&time_window_input)
+        .finish();
 
-//     let optimal = alg.run(&input, initial_tour.clone(), None);
+    let initial = alg.evaluate(&input, &initial_tour);
+    println!("initial-cost = {initial:?}");
 
-//     dbg!(&optimal);
+    let solution = alg.run(&input, initial_tour.clone(), None);
+    println!("solution = {solution:?}");
 
-//     let tour = optimal.into_local_optimum().unwrap().0;
+    // alternatively using tuple
 
-//     let r#final = alg.evaluate(&input, &tour);
-//     dbg!(r#final);
+    let input = (&duration_matrix, &capacity_input, &time_window_input).into();
 
-//     // alternatively
+    let initial = alg.evaluate(&input, &initial_tour);
+    println!("initial-cost = {initial:?}");
 
-//     let input = (&duration_matrix, &capacity_input, &time_window_input).into();
-
-//     let initial = alg.evaluate(&input, &initial_tour);
-//     dbg!(initial);
-
-//     let optimal = alg.run(&input, initial_tour, None);
-
-//     dbg!(&optimal);
-
-//     let tour = optimal.into_local_optimum().unwrap().0;
-
-//     let r#final = alg.evaluate(&input, &tour);
-//     dbg!(r#final);
-// }
-
-fn main() {}
+    let solution = alg.run(&input, initial_tour, None);
+    println!("solution = {solution:?}");
+}

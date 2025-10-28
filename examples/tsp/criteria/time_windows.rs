@@ -10,7 +10,11 @@ pub struct TimeWindows;
 impl Criterion<Tsp> for TimeWindows {
     type Input<'i> = &'i TimeWindowsInput<'i>;
 
-    fn evaluate(input: &Self::Input<'_>, tour: &<Tsp as Problem>::Solution) -> EvalSoln<Tsp> {
+    fn evaluate(
+        &self,
+        input: &Self::Input<'_>,
+        tour: &<Tsp as Problem>::Solution,
+    ) -> EvalSoln<Tsp> {
         match input.tour_cost(tour) {
             Some(cost) => EvalSoln::Feasible(cost),
             None => EvalSoln::Infeasible,
@@ -104,7 +108,7 @@ impl<'i> TimeWindowsInput<'i> {
         }
     }
 
-    pub fn example_input(duration_matrix: &'i DurationMatrix) -> Self {
+    pub fn example(duration_matrix: &'i DurationMatrix) -> Self {
         let windows = HashMap::<usize, TimeWindow>::from_iter([
             (1, TimeWindow::new(400, 500)),
             (3, TimeWindow::new(550, 850)),

@@ -21,7 +21,7 @@ where
     N: Neighborhood<P>,
     M: Moves<'i, P, N>,
 {
-    pub fn new(criterion: M::X, move_generator: M) -> Self {
+    pub fn new((criterion, move_generator): (M::X, M)) -> Self {
         Self {
             criteria: CriteriaSingle::new(criterion),
             move_gen: MoveGenSingle::new(move_generator),
@@ -38,8 +38,7 @@ where
 {
     pub fn and_with<Q>(
         self,
-        criterion: Q::X,
-        move_generator: Q,
+        (criterion, move_generator): (Q::X, Q),
     ) -> LocalSearch<'i, P, N, M::PushBack<Q>>
     where
         Q: Moves<'i, P, N>,

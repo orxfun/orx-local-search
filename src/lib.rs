@@ -15,3 +15,6 @@
 mod algorithm;
 mod composition;
 mod core;
+
+pub use algorithm::LocalSearch;
+pub use core::*;

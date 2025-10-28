@@ -2,7 +2,7 @@ use super::{
     criterion::Criterion, eval_move::EvalMove, neighborhood::Neighborhood, problem::Problem,
 };
 
-pub trait Moves<'i, P, N>: Default
+pub trait Moves<'i, P, N>
 where
     P: Problem,
     N: Neighborhood<P>,
