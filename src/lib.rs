@@ -12,9 +12,9 @@
 )]
 #![cfg_attr(not(test), no_std)]
 
+mod algorithm;
 mod composition;
 mod core;
-mod ls;
 
+pub use algorithm::LocalSearch;
 pub use core::*;
-pub use ls::LocalSearch;

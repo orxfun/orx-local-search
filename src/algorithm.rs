@@ -1,40 +1,32 @@
-use crate::{
-    EvalMove, EvalSoln, Moves, Neighborhood, Objective, Problem, Solution,
-    composition::{Criteria, EmptyInputs, EmptyMoveGen, InputBuilder, MoveGen},
+use crate::composition::{
+    CriteriaQueue, CriteriaSingle, InputBuilder, MoveGenQueue, MoveGenSingle,
 };
+use crate::core::{EvalMove, EvalSoln, Moves, Neighborhood, Objective, Problem, Solution};
 use core::marker::PhantomData;
 
 pub struct LocalSearch<'i, P, N, M>
 where
     P: Problem,
     N: Neighborhood<P>,
-    M: MoveGen<'i, P, N>,
+    M: MoveGenQueue<'i, P, N>,
 {
+    criteria: M::X,
     move_gen: M,
     phantom: PhantomData<&'i (P, N)>,
 }
 
-impl<'i, P, N, M> Default for LocalSearch<'i, P, N, M>
+impl<'i, P, N, M> LocalSearch<'i, P, N, MoveGenSingle<'i, P, N, M>>
 where
     P: Problem,
     N: Neighborhood<P>,
-    M: MoveGen<'i, P, N>,
+    M: Moves<'i, P, N>,
 {
-    fn default() -> Self {
+    pub fn new((criterion, move_generator): (M::X, M)) -> Self {
         Self {
-            move_gen: Default::default(),
+            criteria: CriteriaSingle::new(criterion),
+            move_gen: MoveGenSingle::new(move_generator),
             phantom: PhantomData,
         }
-    }
-}
-
-impl<'i, P, N> LocalSearch<'i, P, N, EmptyMoveGen>
-where
-    P: Problem,
-    N: Neighborhood<P>,
-{
-    pub fn new() -> Self {
-        Self::default()
     }
 }
 
@@ -42,35 +34,41 @@ impl<'i, P, N, M> LocalSearch<'i, P, N, M>
 where
     P: Problem,
     N: Neighborhood<P>,
-    M: MoveGen<'i, P, N>,
+    M: MoveGenQueue<'i, P, N>,
 {
-    pub fn with<Q>(self) -> LocalSearch<'i, P, N, M::Compose<Q>>
+    pub fn and_with<Q>(
+        self,
+        (criterion, move_generator): (Q::X, Q),
+    ) -> LocalSearch<'i, P, N, M::PushBack<Q>>
     where
         Q: Moves<'i, P, N>,
     {
+        let criteria = self.criteria.push(criterion);
+        let move_gen = self.move_gen.push(move_generator);
         LocalSearch {
-            move_gen: self.move_gen.compose(Q::default()),
+            criteria,
+            move_gen,
             phantom: PhantomData,
         }
     }
 
-    pub fn input_builder(&self) -> InputBuilder<<M::X as Criteria<P>>::Input<'i>, EmptyInputs> {
-        InputBuilder::new()
+    pub fn input_builder(&self) -> InputBuilder<<M::X as CriteriaQueue<P>>::Input<'i>> {
+        Default::default()
     }
 
     // algorithm
 
     pub fn evaluate(
         &self,
-        input: &<M::X as Criteria<P>>::Input<'i>,
+        input: &<M::X as CriteriaQueue<P>>::Input<'i>,
         solution: &P::Solution,
     ) -> EvalSoln<P> {
-        <M::X as Criteria<P>>::evaluate(input, solution)
+        self.criteria.evaluate(input, solution)
     }
 
     fn next_best_move(
         &mut self,
-        input: &'i <M::X as Criteria<P>>::Input<'i>,
+        input: &'i <M::X as CriteriaQueue<P>>::Input<'i>,
         solution: &P::Solution,
         mut value: <P::Objective as Objective>::Unit,
     ) -> Option<EvalMove<P, N>> {
@@ -88,7 +86,7 @@ where
 
     pub fn run(
         &mut self,
-        input: &'i <M::X as Criteria<P>>::Input<'i>,
+        input: &'i <M::X as CriteriaQueue<P>>::Input<'i>,
         initial_solution: P::Solution,
         initial_value: Option<<P::Objective as Objective>::Unit>,
     ) -> Solution<P> {
@@ -96,11 +94,11 @@ where
             Some(v) => {
                 debug_assert_eq!(
                     &EvalSoln::Feasible(v),
-                    &<M::X as Criteria<P>>::evaluate(input, &initial_solution)
+                    &self.criteria.evaluate(input, &initial_solution)
                 );
                 EvalSoln::Feasible(v)
             }
-            None => <M::X as Criteria<P>>::evaluate(input, &initial_solution),
+            None => self.criteria.evaluate(input, &initial_solution),
         };
 
         match initial_value {

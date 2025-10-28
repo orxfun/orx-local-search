@@ -10,7 +10,16 @@ use crate::{
 use orx_iterable::Collection;
 use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 
-#[derive(Default)]
+// extend criteria
+
+impl TimeWindows {
+    pub fn insert(self) -> (Self, InsertForTimeWindows) {
+        (self, InsertForTimeWindows)
+    }
+}
+
+// move gen
+
 pub struct InsertForTimeWindows;
 
 impl<'i> Moves<'i, Tsp, Insert> for InsertForTimeWindows {

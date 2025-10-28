@@ -10,7 +10,16 @@ use crate::{
 use orx_iterable::Collection;
 use orx_local_search::{Criterion, EvalMove, Moves, Problem};
 
-#[derive(Default)]
+// extend criteria
+
+impl Capacity {
+    pub fn insert(self) -> (Self, InsertForCapacity) {
+        (self, InsertForCapacity)
+    }
+}
+
+// move gen
+
 pub struct InsertForCapacity;
 
 impl<'i> Moves<'i, Tsp, Insert> for InsertForCapacity {

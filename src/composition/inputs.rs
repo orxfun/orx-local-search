@@ -1,4 +1,4 @@
 orx_meta::define_queue!(
-    queue => [ InputsQueue ; EmptyInputs, Inputs ];
+    queue => [ InputsQueue ; SingleInput, Inputs ];
     builder => InputBuilder;
 );

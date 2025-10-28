@@ -1,4 +1,4 @@
-use crate::{EvalMove, Neighborhood, Objective, Problem};
+use crate::core::{EvalMove, Neighborhood, Objective, Problem};
 use core::cmp::Ordering::*;
 
 pub enum ComposedNext<P, N>

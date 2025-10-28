@@ -9,6 +9,7 @@ impl Criterion<Tsp> for Duration {
     type Input<'i> = &'i DurationMatrix;
 
     fn evaluate(
+        &self,
         duration_matrix: &Self::Input<'_>,
         tour: &<Tsp as Problem>::Solution,
     ) -> EvalSoln<Tsp> {
@@ -35,7 +36,7 @@ impl DurationMatrix {
         cost
     }
 
-    pub fn example_input() -> Self {
+    pub fn example() -> Self {
         Self(vec![
             vec![0, 30, 60, 20, 5, 120],
             vec![20, 0, 10, 50, 80, 70],

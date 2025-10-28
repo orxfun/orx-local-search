@@ -6,5 +6,5 @@ where
 {
     type Input<'i>;
 
-    fn evaluate(input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
+    fn evaluate(&self, input: &Self::Input<'_>, solution: &P::Solution) -> EvalSoln<P>;
 }
