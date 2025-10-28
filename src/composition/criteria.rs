@@ -40,6 +40,19 @@ where
     phantom: PhantomData<P>,
 }
 
+impl<P, F> CriteriaSingle<P, F>
+where
+    P: Problem,
+    F: Criterion<P>,
+{
+    pub fn new(front: F) -> Self {
+        Self {
+            front,
+            phantom: PhantomData,
+        }
+    }
+}
+
 impl<P, F> CriteriaQueue<P> for CriteriaSingle<P, F>
 where
     P: Problem,

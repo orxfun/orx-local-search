@@ -1,4 +1,6 @@
-use crate::composition::{CriteriaQueue, InputBuilder, MoveGenQueue, MoveGenSingle};
+use crate::composition::{
+    CriteriaQueue, CriteriaSingle, InputBuilder, MoveGenQueue, MoveGenSingle,
+};
 use crate::core::{EvalMove, EvalSoln, Moves, Neighborhood, Objective, Problem, Solution};
 use core::marker::PhantomData;
 
@@ -8,6 +10,7 @@ where
     N: Neighborhood<P>,
     M: MoveGenQueue<'i, P, N>,
 {
+    criteria: M::X,
     move_gen: M,
     phantom: PhantomData<&'i (P, N)>,
 }
@@ -18,8 +21,9 @@ where
     N: Neighborhood<P>,
     M: Moves<'i, P, N>,
 {
-    pub fn new(move_generator: M) -> Self {
+    pub fn new(criterion: M::X, move_generator: M) -> Self {
         Self {
+            criteria: CriteriaSingle::new(criterion),
             move_gen: MoveGenSingle::new(move_generator),
             phantom: PhantomData,
         }
@@ -32,12 +36,18 @@ where
     N: Neighborhood<P>,
     M: MoveGenQueue<'i, P, N>,
 {
-    pub fn and_with<X>(self, move_generator: X) -> LocalSearch<'i, P, N, M::PushBack<X>>
+    pub fn and_with<Q>(
+        self,
+        criterion: Q::X,
+        move_generator: Q,
+    ) -> LocalSearch<'i, P, N, M::PushBack<Q>>
     where
-        X: Moves<'i, P, N>,
+        Q: Moves<'i, P, N>,
     {
+        let criteria = self.criteria.push(criterion);
         let move_gen = self.move_gen.push(move_generator);
         LocalSearch {
+            criteria,
             move_gen,
             phantom: PhantomData,
         }

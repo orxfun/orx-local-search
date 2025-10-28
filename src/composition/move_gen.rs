@@ -13,7 +13,7 @@ where
 {
     type X: CriteriaQueue<P>;
 
-    type PushBack<M>: MoveGenQueue<'i, P, N>
+    type PushBack<M>: MoveGenQueue<'i, P, N, X = <Self::X as CriteriaQueue<P>>::PushBack<'i, M::X>>
     where
         M: Moves<'i, P, N>;
 
