@@ -59,13 +59,13 @@ where
 
     // algorithm
 
-    // pub fn evaluate(
-    //     &self,
-    //     input: &<M::X as CriteriaQueue<P>>::Input<'i>,
-    //     solution: &P::Solution,
-    // ) -> EvalSoln<P> {
-    //     <M::X as CriteriaQueue<P>>::evaluate(input, solution)
-    // }
+    pub fn evaluate(
+        &self,
+        input: &<M::X as CriteriaQueue<P>>::Input<'i>,
+        solution: &P::Solution,
+    ) -> EvalSoln<P> {
+        self.criteria.evaluate(input, solution)
+    }
 
     fn next_best_move(
         &mut self,
@@ -91,18 +91,16 @@ where
         initial_solution: P::Solution,
         initial_value: Option<<P::Objective as Objective>::Unit>,
     ) -> Solution<P> {
-        // let initial_value = match initial_value {
-        //     Some(v) => {
-        //         debug_assert_eq!(
-        //             &EvalSoln::Feasible(v),
-        //             &<M::X as CriteriaQueue<P>>::evaluate(input, &initial_solution)
-        //         );
-        //         EvalSoln::Feasible(v)
-        //     }
-        //     None => <M::X as CriteriaQueue<P>>::evaluate(input, &initial_solution),
-        // };
-        let v = initial_value.unwrap();
-        let initial_value: EvalSoln<P> = EvalSoln::Feasible(v);
+        let initial_value = match initial_value {
+            Some(v) => {
+                debug_assert_eq!(
+                    &EvalSoln::Feasible(v),
+                    &self.criteria.evaluate(input, &initial_solution)
+                );
+                EvalSoln::Feasible(v)
+            }
+            None => self.criteria.evaluate(input, &initial_solution),
+        };
 
         match initial_value {
             EvalSoln::Infeasible => Solution::InfeasibleSolution {
